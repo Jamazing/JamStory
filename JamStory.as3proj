@@ -4,10 +4,10 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\Code.swf" />
+    <movie path="dist\JamStory-Snapshot-Proto-1-1.swf" />
     <movie fps="30" />
-    <movie width="800" />
-    <movie height="600" />
+    <movie width="550" />
+    <movie height="400" />
     <movie version="10" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />
