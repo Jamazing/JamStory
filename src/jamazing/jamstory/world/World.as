@@ -1,19 +1,22 @@
-package vanchizzle 
+//	Copyright 2012 Jamazing Games
+//	Author: Ivan Mateev
+//	
+//	The World object that holds all level data
+
+package jamazing.jamstory.world 
 {
+	import jamazing.jamstory.object.BaseObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	/**
-	 * This holds all level objects
-	 * @author Ivan
-	 */
-	public class WorldObject extends Sprite
+	
+	public class World extends Sprite
 	{
 		private var levelContainer:Array;											// This will contain the level objects
 		
-		private var PlayeObjectPlaceHolderVariable:PlayerPlaceHolderClass;			// This will be of type player object later on
+		private var PlayeObjectPlaceHolderVariable:*;			// This will be of type player object later on
 
 		// Constructor
-		public function WorldObject(var PlayerObjectReference:PlayerPlaceHolderClass=null) 
+		public function World(PlayerObjectReference:*=null) 
 		{
 			levelContainer = new Array();				// Construct an array
 			
@@ -23,7 +26,7 @@ package vanchizzle
 		}
 
 		// This adds the player to the world
-		public function AddPlayerObject(var PlayerObjectReference:PlayerPlaceHolderClass):void
+		public function AddPlayerObject(PlayerObjectReference:*):void
 		{
 			if (PlayerObjectReference != null)							// If a player object has been passed ...
 			{
@@ -32,7 +35,7 @@ package vanchizzle
 		}
 
 		// This loads a level, based on a list of objects
-		public function LoadLevelObjects(... args:GenericWorldObject):void
+		public function LoadLevelObjects(... args):void
 		{
 			for (var i:int = 0; i < args.lenght; i++)
 			{
