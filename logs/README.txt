@@ -12,3 +12,5 @@ I will write how to properly use this git and such like, and how we will impleme
 soon.
 
 Gordon
+
+APPENDED AFTER DIRECTORY TEST
