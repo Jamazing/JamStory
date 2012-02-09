@@ -11,7 +11,7 @@ package jamazing.jamstory.util
 	{
 		
 		public static const GRAVITY:Number = 6;
-		public static const FRICTION:Number = 0.003;
+		public static const FRICTION:Number = 0.995;
 		
 		public function Physics() 
 		{

@@ -11,7 +11,7 @@ package jamazing.jamstory.world
 	
 	public class World extends Sprite
 	{
-		private var levelContainer:Array;											// This will contain the level objects
+		p var levelContainer:Array;											// This will contain the level objects
 		
 		private var PlayeObjectPlaceHolderVariable:*;			// This will be of type player object later on
 
