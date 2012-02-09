@@ -7,7 +7,8 @@ package jamazing.jamstory
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import jamazing.jamstory.util.KeyHandler;
+	import jamazing.jamstory.entity.Player;
+	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.world.World;
 	import jamazing.jamstory.object.BaseObject;
 	import jamazing.jamstory.object.LevelTransition;
@@ -15,6 +16,8 @@ package jamazing.jamstory
 	
 	public class Main extends Sprite 
 	{
+		
+		private var player:Player;
 		
 		public function Main():void 
 		{
@@ -26,11 +29,12 @@ package jamazing.jamstory
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
+			player = new Player();
+		
+			var keys:Keys = new Keys(stage);
 			
-			//var world:World = new World();
-			var keyhandler:KeyHandler = new KeyHandler(stage);
-			var baseObject:BaseObject = new BaseObject();
-			var levelTransition:LevelTransition = new LevelTransition();
+			addChild(player);
+			
 		}
 		
 	}
