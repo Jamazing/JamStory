@@ -82,7 +82,7 @@ package jamazing.jamstory.util
 		//	Returns true if all keys are pressed.
 		public static function allDown(...keyCodes):Boolean
 		{
-			for (var i:int; i < keyCodes.length; ++i){
+			for (var i:int = 0; i < keyCodes.length; ++i){
 				if (! (keys[keyCodes[i]]) ){
 					return false;
 				}
@@ -95,12 +95,12 @@ package jamazing.jamstory.util
 		//	Returns false if no keys are pressed.
 		public static function anyDown(...keyCodes):Boolean
 		{
-			for (var i:int; i < keyCodes.length; ++i){
+			for (var i:int = 0; i < keyCodes.length; ++i){
 				if ((keys[keyCodes[i]])){
-					return false;
+					return true;
 				}
 			}
-			return true;
+			return false;
 		}
 		
 	}	
