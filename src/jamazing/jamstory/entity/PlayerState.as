@@ -12,22 +12,29 @@ package jamazing.jamstory.entity
 		/* The following are the possible states of a player */
 		public static const Idle:int = 0;
 		public static const Walk:int = 1;
-		public static const Jog:int = 2;
-		public static const Run:int = 3;
-		public static const Slide:int = 4;
-		public static const JumpUp:int = 5;
+		public static const Run:int = 2;
+		public static const Slide:int = 3;	//Obsolete
+		public static const JumpUp:int = 4;
+		public static const Stuck:int = 5;
 		public static const FallDown:int = 6;
 		/* states end here */
+		
 		
 		// This controls what state is the player currently in
 		private var stateStatus:int;
 		
 		// Constructor: default, one parameter
 		// Usualy will imply that the player is in idle stance at creation, but can be specified otherwise as well
-		private function PlayerState(var input:int = PlayerState.Idle)
+		public function PlayerState(input:int = PlayerState.Idle)
 		{
 			// A player's status is defined by the input parameter
 			StateStatus = input;
+			
+		}
+		
+		public function isMovement():Boolean
+		{
+			return stateStatus == Run || stateStatus == Walk;
 		}
 		
 		// Function: isProperStatus, private, one paramater[int]
@@ -42,7 +49,7 @@ package jamazing.jamstory.entity
 		// Setter: StateStatus, one paramater[int]
 		// Sets the value of stateStatus; includes error checking
 		// NOTE: This is to avoid errors in future builds
-		public function set StateStatus(value:int):int
+		public function set StateStatus(value:int)
 		{
 			if (!isProperStatus(value))								// If the provided status is invalid
 			{
