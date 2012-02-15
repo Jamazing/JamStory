@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<info>
+		<name></name>
+		<id></id>
+	</info>
+	<art>
+		<background></background>
+		<platforms></platforms>
+		<player></player>
+	</art>
+	
+	<level>
+		<info>
+			<width>1000</width>
+			<height>1000</height>
+			<playerstart>200</playerstart>
+		</info>
+		
+		<statics>
+			
+			<obj>
+				<id>1</id>
+				<x>100</x>
+				<y>350</y>
+			</obj>
+			
+			<obj>
+				<id>2</id>
+				<x>200</x>
+				<y>300</y>
+			</obj>
+			
+			<obj>
+				<id>3</id>
+				<x>300</x>
+				<y>350</y>
+			</obj>
+			
+		</statics>
+		
+	</level>
+	
+	
+</data>

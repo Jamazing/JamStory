@@ -18,7 +18,6 @@ package jamazing.jamstory
 	
 	public class Main extends Sprite 
 	{
-		
 		private var player:Player;
 		private var platforms:Array;
 		private var bouncyJelly:Platform;
