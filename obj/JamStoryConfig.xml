@@ -16,16 +16,16 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'09/02/2012'</value>
+      <value>'14/02/2012'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>C:\Users\Gordon\Documents\University\Jamazing\JamStory\src</path-element>
-      <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
+      <path-element>\\vmwfil03\students$\1107140\Documents\SmartGit 2.1\bin\JamStory\src</path-element>
+      <path-element>C:\Program Files\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
   </compiler>
   <file-specs>
-    <path-element>C:\Users\Gordon\Documents\University\Jamazing\JamStory\src\jamazing\jamstory\Main.as</path-element>
+    <path-element>\\vmwfil03\students$\1107140\Documents\SmartGit 2.1\bin\JamStory\src\jamazing\jamstory\Main.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>
