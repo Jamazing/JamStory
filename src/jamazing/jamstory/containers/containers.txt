@@ -1,0 +1,22 @@
+Containers Package
+(containers)
+
+This package is designed for grouping the different sections of the display easily.
+Inside, are the child display objects it controlls.
+
+Currently there are three types (no inheritance) of container:
+	World Container
+	Background Container
+	Overlay Container
+	
+The World contains the main display, designed to be moved left and right with the player at the center
+	It will be changing ever frame and has bounds between the level start and end
+	Contains the level objects and Player
+	Likely to need re-worked in newer versions
+	
+The Background contains the flat background, and any little interesting background things.
+	It will rarely change
+	
+The Overlay is the ui overlay that is the same throughout the game
+	Things like a timer, score, jam left, level name etc will all be stored here
+	Anything that pops up over the game - splash screens etc should also be handled by this
