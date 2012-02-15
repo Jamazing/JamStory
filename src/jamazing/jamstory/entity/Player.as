@@ -1,5 +1,5 @@
 //	Copyright 2012 Jamazing Games©
-//	Author: Gordon D Mckendrick
+//	Author: Gordon D Mckendrick, Stefan Hristov
 //
 //	Player Object
 //	Represents the player in the level
@@ -7,43 +7,72 @@
 
 package jamazing.jamstory.entity 
 {
+	import flash.display.ActionScriptVersion;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import jamazing.jamstory.util.Physics;
-	import jamazing.jamstory.util.Keys;
+	import jamazing.jamstory.util.Keys;	
 	
-	
-		
 	//	Class: Player
 	//	Represents the player entity that the user controls
 	public class Player extends Sprite
 	{
+		/* Constants start here */
+		static private const TWELVE:Number = 12;
+		static private const MOVE_OFFSET:Number = 12;	// This controls by how many pixels will the player object displace when movement is initiated		
+		static private const GLOBAL_ACC_INTERVAL:Number = 10;
+		static private const JUMP_SPEED:Number = 12;
+		static private const IDLE_JUMP_OFFSET:Number = 50;
+		static private const JUMP_MODIFIER:Number = 12;
+		/* until here */
+
+		
+		/* The following control image drawing */
 		[Embed(source = "../../../../resources/jamjar.png")]
 		private var JamJar:Class;
-	
 		public var jamjar:Bitmap;
+		/* until here */
 		
+		
+		/* The following will controll the movement and location */
+		private var xLocation:Number;
+		private var yLocation:Number;
+		
+		private var currentState:PlayerState;
+		/* until here */
+
+		/* The following will controll acceleration */
+		private var accelerationInterval:int = GLOBAL_ACC_INTERVAL;			// TODO: Move this to constructor in late build
+		/* until here */
+		
+		
+		/* The following will be changed/removed */
 		public var air:Number;
 		public var xForce:Number;	//	Horizontal force applied in this frame. +ve is right
 		public var xSpeed:Number;	//	Horizontal speed.
 		public var yForce:Number;	//	Vertical force applied in this frame. +is down 
 		public var ySpeed:Number;	//	Vertical speed.
+		
 		public var mass:int;	//	Mass of the player object
-		public var jumping:Boolean;	//	True if the player is jumping
 		public var friction:int;
-		public var stuck:Boolean;
+		
 		public var stuck_count:int;
+
+		public var jumping:Boolean;	//	True if the player is jumping
+		public var stuck:Boolean;
+		/* until here */
 		
 		//	Constructor: default
 		//	Ensure stage is initialised before initialising the player
 		public function Player() 
 		{
-			super();
-			if (stage){
-				onInit();
-			}else {
-				addEventListener(Event.ADDED_TO_STAGE, onInit);
+			super();											// Call base class constructor
+			
+			if (stage){											// If stage has been initialized ...
+				onInit();											// ... initialize player object
+			}else {												// ... or else ...
+				addEventListener(Event.ADDED_TO_STAGE, onInit);		// ... wait for the stage to initialize and then initialize player.
 			}
 
 		}
@@ -51,7 +80,8 @@ package jamazing.jamstory.entity
 		//	Listener: onInit (Event = null)
 		//	Initialises the player once it's been added to the stage properly
 		private function onInit(e:Event = null):void 
-		{
+		{			
+			/* [TODO: These will have to go] */
 			air = 1;
 			xForce = 0;
 			xSpeed = 0;
@@ -59,25 +89,46 @@ package jamazing.jamstory.entity
 			ySpeed = 0;
 			mass = 10;
 			friction = 0;
+			/* [TILL HERE] */
+			
+			// These create the sprite...
 			jamjar = new JamJar();
 			jamjar.width = 50;
 			jamjar.height = 50;
-			jamjar.x = -width/2;
-			jamjar.y = -height / 2;
-			addChild(jamjar);
+			addChild(jamjar); // ... and attach it to the player
+
+			// These control where the player will spawn, relative to the stage
+			x = stage.stageWidth / 10;
+			y = stage.stageHeight/2;// / 20;
+
+			// These control where the center of the player is
+			xLocation = x + jamjar.width / 2;
+			yLocation = y + jamjar.height / 2;
 			
-			x = stage.stageWidth / 2;
-			y = stage.stageHeight / 2;
+			// Initialize the player state
+			currentState = new PlayerState();
 			
+			// Initialize per-frame logic
 			addEventListener(Event.ENTER_FRAME, onTick);
 		}
+		
+		private var jumpTargetYOffset;
 		
 		//	Function: jump
 		//	Makes the player jump by applying a force upwards
 		public function jump():void
-		{
+		{			
+			jumpTargetYOffset -= JUMP_SPEED;
+				
+			y -= JUMP_SPEED;
+			
+			if (jumpTargetYOffset <= 0)
+				currentState.StateStatus = PlayerState.FallDown; 
+			
+			/*
 			yForce -= 450;
 			jumping = true;
+			*/
 		}
 		
 		//	Function: bounce
@@ -88,39 +139,78 @@ package jamazing.jamstory.entity
 		}
 		
 		//	Function: move (int)
-		//	Moves the player by applying a horizontal force
-		public function move(horizontalForce:Number):void
+		//	[TODO: Document this properly], do drift
+		public function move(xOffset:Number):void
 		{
-			if (!stuck){
-				xForce += horizontalForce;
-			}else {
-				xForce += horizontalForce / 5;
+			if (currentState.StateStatus == PlayerState.Idle)
+			{
+				currentState.StateStatus = PlayerState.Walk;
 			}
+
+			if (currentState.StateStatus == PlayerState.Walk)
+			{
+				if(accelerationInterval == 0)
+				{
+					currentState.StateStatus++;
+					accelerationInterval = GLOBAL_ACC_INTERVAL;
+				}
+				else
+				{
+					accelerationInterval--;
+				}
+			}
+			x += xOffset * currentState.StateStatus;
+			
 		}
+
 		
 		//	Listener: onTick (Event)
 		//	Runs the update code once per frame
 		private function onTick(e:Event):void
 		{
+			if (currentState.isMovement() && !(Keys.isDown(Keys.A) || Keys.isDown(Keys.D))) //Keys.allDown(Keys.A, Keys.D))
+			{
+				currentState.StateStatus -= 1;		
+			}
 
 			if (Keys.isDown(Keys.A)) {
-				move(-12);
+				move(-MOVE_OFFSET);
 			}
 			if (Keys.isDown(Keys.D)){
-				move(12);
+				move(MOVE_OFFSET);
 			}
+			
+			if (Keys.isDown(Keys.W))
+			{
+				if (currentState.StateStatus < PlayerState.JumpUp)
+				{
+					jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;
+					currentState.StateStatus = PlayerState.JumpUp;
+				}
+			}
+
+			if(currentState.StateStatus == PlayerState.JumpUp)
+				jump();
+
+			/*
 			if ((Keys.isDown(Keys.W)) && (!jumping) && (Math.abs(ySpeed) < 1)) {
 				jump();
 			}
-			xSpeed = xSpeed * (Physics.FRICTION / friction);
-			if (stuck) {
-				ySpeed *= 0.85
-			}
+			*/
+
 			
+			//xSpeed = xSpeed * (Physics.FRICTION / friction);
+
+			//if (stuck) {
+			//	ySpeed *= 0.85
+			//}
+			
+			/*
 			updateSpeed();
 			updatePosition();
 			xForce = 0;
 			yForce = 0;
+			*/
 		}
 		
 		//	Function: updateSpeed
