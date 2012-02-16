@@ -9,6 +9,7 @@ package jamazing.jamstory.containers
 	import flash.net.URLRequest;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.text.TextField;
 	import jamazing.jamstory.object.Platform;
 	
 	import jamazing.jamstory.entity.Player;
@@ -81,26 +82,21 @@ package jamazing.jamstory.containers
 		public function loadLevel():void
 		{
 			var loader:URLLoader = new URLLoader();
-			//loader.load(new URLRequest("./extern/level.xml"));
+			loader.load(new URLRequest("./extern/level.xml"));
 			
-			//loader.addEventListener(Event.COMPLETE, onLoadXML);
+			loader.addEventListener(Event.COMPLETE, onLoadXML);
 		}
 		
 		
 		public function onLoadXML(e:Event):void
 		{
-			trace("test");
 			var xml:XML = new XML(e.target.data);
-			trace(xml);
-			var statics:XMLList = xml.data.level.statics;
-			trace(statics);
-			for each (var p:XML in statics) {
-				trace(p);
-				//var platform:Platform = new Platform(p.x, p.y, p.width, p.height);
-				//levelContainer.push(platform);
-				//addChild(platform);
+			var statics:XMLList = xml.level.statics.obj;
+			for each(var p:XML in statics) {
+				var platform = new Platform(p.x, p.y, p.width, p.height);
+				levelContainer.push(platform);
+				addChild(platform);
 			}
-			
 		}
 		
 		

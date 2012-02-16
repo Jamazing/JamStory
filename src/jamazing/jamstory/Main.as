@@ -31,6 +31,7 @@ package jamazing.jamstory
 			world = new World()
 			var keys:Keys = new Keys(stage);
 			
+			trace("start");
 			//	Children
 			addChild(world);
 			

@@ -96,8 +96,8 @@ package jamazing.jamstory.entity
 			
 			// These create the sprite...
 			jamjar = new JamJar();
-			jamjar.width = 50;
-			jamjar.height = 50;
+			jamjar.width = 75;
+			jamjar.height = 75;
 			addChild(jamjar); // ... and attach it to the player
 			jamjar.x = 0;
 			jamjar.y = 0;

@@ -5,9 +5,6 @@
 		<id></id>
 	</info>
 	<art>
-		<background></background>
-		<platforms></platforms>
-		<player></player>
 	</art>
 	
 	<level>
@@ -20,27 +17,31 @@
 		<statics>
 			
 			<obj>
-				<id>1</id>
-				<x>100</x>
-				<y>350</y>
-				<width>100</width>
+				<x>0</x>
+				<y>275</y>
+				<width>2000</width>
 				<height>200</height>
 			</obj>
 			
 			<obj>
-				<id>2</id>
-				<x>200</x>
-				<y>300</y>
+				<x>0</x>
+				<y>150</y>
 				<width>100</width>
-				<height>200</height>
+				<height>20</height>
+			</obj>s
+			
+			<obj>
+				<x>125</x>
+				<y>100</y>
+				<width>100</width>
+				<height>20</height>
 			</obj>
 			
 			<obj>
-				<id>3</id>
-				<x>300</x>
-				<y>350</y>
+				<x>250</x>
+				<y>50</y>
 				<width>100</width>
-				<height>200</height>
+				<height>20</height>
 			</obj>
 			
 		</statics>
