@@ -33,25 +33,14 @@ package jamazing.jamstory.containers
 		//	Initialises this, once the stage reference has been formed
 		public function onInit(e:Event = null):void
 		{
-			
-			//	HACKY CODE
-			//	Graphics for setting the registration point artificially
-			//	Allows 0,0 to be the bottom left, and then height to be a height from ground
-			graphics.beginFill(0xFF0000, 0.8);
-			graphics.drawCircle(0, 0, 50);
-			graphics.endFill();
-			//	END OF HACKY CODE
-			
-			
-			trace("world loaded");
 			//	Memory Allocations
 			levelContainer = new Array();
 			player = new Player();
 			loadLevel();
 			
-
-			
-			//	Child Objects
+			//	Variable Initialisation
+			x = 0;
+			y = stage.stageHeight;
 			
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -118,9 +107,6 @@ package jamazing.jamstory.containers
 				levelContainer.push(platform);
 				addChild(platform);
 			}
-			
-			x = 0;
-			y = stage.stageHeight;
 			
 			//	Add the player
 			addChild(player);

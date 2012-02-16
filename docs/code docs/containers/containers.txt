@@ -10,12 +10,14 @@ Currently there are three types (no inheritance) of container:
 	Overlay Container
 	
 The World contains the main display, designed to be moved left and right with the player at the center
-	It will be changing ever frame and has bounds between the level start and end
-	Contains the level objects and Player
-	Likely to need re-worked in newer versions
+	Contains the player and all "main game" options
+		These are loaded in from level files during initialisation
+	The co-ordinates for the reference point, are at the bottom left (0,0)
+	Heights in the level.xml file are loaded as heights from the ground, so no negatives are needed.
 	
 The Background contains the flat background, and any little interesting background things.
-	It will rarely change
+	A static background that will rarely change.
+		Currently has no real functionality, other than ensuring the background is at the back of the scene
 	
 The Overlay is the ui overlay that is the same throughout the game
 	Things like a timer, score, jam left, level name etc will all be stored here

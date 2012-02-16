@@ -1,0 +1,17 @@
+World Class
+(containers package - jamazing.jamstory.containers)
+
+Purpose:
+	The world class is in charge of the various main-game objects; such as the platforms and the player.
+	It handles the main screen movements and loading of the level files
+	
+Listeners:
+	onLoadXml
+		Loads the level xml file; turning the data within into in-game objects.
+		In future this should be changed to a level-loader object at startup - that sends the data to the world to initialise it.
+			This should be changed soon to read a player-start point
+			Which would allow easy changes in level design.
+		Currently this can handle static platform objects
+			Heights are relative to the ground (100 = 100 from the ground, not 100 below)
+				(for easier work on our producer)
+			Reference points for each platform are in the center
