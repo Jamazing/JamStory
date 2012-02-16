@@ -18,8 +18,8 @@ package jamazing.jamstory.containers
 	{
 		private var levelContainer:Array;	// This will contain the level objects
 		public var player:Player;			//	The player object
-		public var endX:Number;			//	x value for the end of the level
-		public var endY:Number;			//	y value for the ceiling of the level
+		public var length:Number;			//	x value for the end of the level
+		public var ceiling:Number;			//	y value for the ceiling of the level
 		
 		// Constructor
 		public function World() 
@@ -38,22 +38,27 @@ package jamazing.jamstory.containers
 			player = new Player();
 			loadLevel();
 			
-			//	Variable Initialisations
-			endX = 5000;
-			endY = 0;
-			x = stage.stageWidth / 2;
-			y = stage.stageHeight / 2;
-			
-			//	Self graphics stuff
-			graphics.beginFill(0x0066FF,0);
-			graphics.drawRect( -stage.stageWidth, -stage.stageHeight, stage.stageWidth * 2, stage.stageHeight * 2);
+			//	HACKY CODE
+			//	Graphics for setting the registration point artificially
+			//	Allows 0,0 to be the bottom left, and then height to be a height from ground
+			graphics.beginFill(0x000000, 0.0);
+			graphics.drawCircle(0, 0, 10);
 			graphics.endFill();
+			//	END OF HACKY CODE
 			
+			//	Variable Initialisations
+			length = 0;
+			ceiling = 0;
+			
+			
+			x = -(stage.stageWidth / 2);
+			y = (stage.stageHeight / 2);
+			player.x = stage.stageWidth/2;
+			player.y = stage.stageHeight/2 + 200;
 			
 			//	Child Objects
 			addChild(player);
-			player.x = 0;
-			player.y = 0;
+			
 			
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -67,13 +72,19 @@ package jamazing.jamstory.containers
 		{
 			//	Update the world x and y so the player is always centered
 			//		Check the player is in bounds on the x-direction
-			if (player.x < (endX-stage.stageWidth/2)){
+			if ((player.x < (length - stage.stageWidth / 2))
+				&& (player.x > stage.stageWidth/2)){
 				this.x = (stage.stageWidth / 2) - player.x;
+			}else {
+				trace("playerx: " + player.x.toString() + ", max: " + (length - stage.stageWidth / 2) + ", min: " + (stage.stageWidth / 2) );
 			}
+			
 			//		Check the player is in bounds on the y-direction
-			if (player.y > (endY - stage.stageHeight / 2)) {
-				this.y = (stage.stageHeight / 2) - player.y;
+			if (player.y > (ceiling - stage.stageHeight / 2)) {
+				this.y = (stage.stageHeight / 2) - player.y +200;
 			}
+			
+			//	Ensure the player stays in bounds
 		}
 		
 		
@@ -91,12 +102,21 @@ package jamazing.jamstory.containers
 		public function onLoadXML(e:Event):void
 		{
 			var xml:XML = new XML(e.target.data);
+			//	loading the main data
+			var info:XMLList = xml.level.info;
+			for each (var i:XML in info) {
+				length = i.width;
+				ceiling = i.height;
+			}
+			
+			//	loading the platforms
 			var statics:XMLList = xml.level.statics.obj;
-			for each(var p:XML in statics) {
+			for each (var p:XML in statics) {
 				var platform = new Platform(p.x, p.y, p.width, p.height);
 				levelContainer.push(platform);
 				addChild(platform);
 			}
+			
 		}
 		
 		

@@ -32,6 +32,7 @@ package jamazing.jamstory.containers
 			staticBG = new bgImage();
 			staticBG.width = stage.stageWidth;
 			staticBG.height = stage.stageHeight;
+			staticBG.alpha = 0.5;
 			
 			//	Children
 			addChild(staticBG);
