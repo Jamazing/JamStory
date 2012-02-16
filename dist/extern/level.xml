@@ -23,18 +23,24 @@
 				<id>1</id>
 				<x>100</x>
 				<y>350</y>
+				<width>100</width>
+				<height>200</height>
 			</obj>
 			
 			<obj>
 				<id>2</id>
 				<x>200</x>
 				<y>300</y>
+				<width>100</width>
+				<height>200</height>
 			</obj>
 			
 			<obj>
 				<id>3</id>
 				<x>300</x>
 				<y>350</y>
+				<width>100</width>
+				<height>200</height>
 			</obj>
 			
 		</statics>

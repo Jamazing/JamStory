@@ -5,10 +5,13 @@
 
 package jamazing.jamstory.containers
 {
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import jamazing.jamstory.object.BaseObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import jamazing.jamstory.object.Platform;
+	
+	import jamazing.jamstory.entity.Player;
 	
 	public class World extends Sprite
 	{
@@ -17,11 +20,10 @@ package jamazing.jamstory.containers
 		public var endX:Number;			//	x value for the end of the level
 		public var endY:Number;			//	y value for the ceiling of the level
 		
-		
 		// Constructor
 		public function World() 
 		{
-			if (stage) onInit;
+			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
 
@@ -33,13 +35,24 @@ package jamazing.jamstory.containers
 			//	Memory Allocations
 			levelContainer = new Array();
 			player = new Player();
+			loadLevel();
 			
 			//	Variable Initialisations
-			endX = -500;
+			endX = 5000;
 			endY = 0;
+			x = stage.stageWidth / 2;
+			y = stage.stageHeight / 2;
+			
+			//	Self graphics stuff
+			graphics.beginFill(0x0066FF);
+			graphics.drawRect( -stage.stageWidth, -stage.stageHeight, stage.stageWidth * 2, stage.stageHeight * 2);
+			graphics.endFill();
+			
 			
 			//	Child Objects
 			addChild(player);
+			player.x = 0;
+			player.y = 0;
 			
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -49,25 +62,45 @@ package jamazing.jamstory.containers
 		
 		//	Listener: onTick
 		//	Listens for the new frame, and sets the x and y to keep the player in the center of the stage
-		public function onTick(e:Event)
+		public function onTick(e:Event):void
 		{
 			//	Update the world x and y so the player is always centered
 			//		Check the player is in bounds on the x-direction
 			if (player.x < (endX-stage.stageWidth/2)){
-				this.x = (stage.stageWidth / 2) + player.x;
+				this.x = (stage.stageWidth / 2) - player.x;
 			}
 			//		Check the player is in bounds on the y-direction
 			if (player.y > (endY - stage.stageHeight / 2)) {
-				this.y = (stage.stageHeight / 2) + player.y;
+				this.y = (stage.stageHeight / 2) - player.y;
 			}
 		}
 		
 		
-		//	Function: loadLEvel()
+		//	Function: loadLevel()
 		//	Loads the level data into objects
 		public function loadLevel():void
 		{
-			var xml:XML = new XML(new URLRequest("./extern/level.xml"));
+			var loader:URLLoader = new URLLoader();
+			//loader.load(new URLRequest("./extern/level.xml"));
+			
+			//loader.addEventListener(Event.COMPLETE, onLoadXML);
+		}
+		
+		
+		public function onLoadXML(e:Event):void
+		{
+			trace("test");
+			var xml:XML = new XML(e.target.data);
+			trace(xml);
+			var statics:XMLList = xml.data.level.statics;
+			trace(statics);
+			for each (var p:XML in statics) {
+				trace(p);
+				//var platform:Platform = new Platform(p.x, p.y, p.width, p.height);
+				//levelContainer.push(platform);
+				//addChild(platform);
+			}
+			
 		}
 		
 		

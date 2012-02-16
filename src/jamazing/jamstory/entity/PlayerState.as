@@ -49,7 +49,7 @@ package jamazing.jamstory.entity
 		// Setter: StateStatus, one paramater[int]
 		// Sets the value of stateStatus; includes error checking
 		// NOTE: This is to avoid errors in future builds
-		public function set StateStatus(value:int)
+		public function set StateStatus(value:int):void
 		{
 			if (!isProperStatus(value))								// If the provided status is invalid
 			{

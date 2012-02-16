@@ -8,7 +8,6 @@ package src.jamazing.jamstorytesting.containers
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import jamazing.jamstory.containers.World;
 
 	//	Class: WorldTest
 	public class WorldTest extends Sprite

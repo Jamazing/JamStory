@@ -11,7 +11,6 @@ package jamazing.jamstory.entity
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import jamazing.jamstory.util.Physics;
 	import jamazing.jamstory.util.Keys;	
 	
 	//	Class: Player
@@ -27,7 +26,6 @@ package jamazing.jamstory.entity
 		static private const JUMP_MODIFIER:Number = 12;
 		/* until here */
 
-		
 		/* The following control image drawing */
 		[Embed(source = "../../../../resources/jamjar.png")]
 		private var JamJar:Class;
@@ -63,6 +61,10 @@ package jamazing.jamstory.entity
 		public var stuck:Boolean;
 		/* until here */
 		
+		private var jumpTargetYOffset:int;	//	<- this was mixed in with the methods, I've moved it here
+										//		assuming it was a mistake. If not, feel free to move it back. Gordon
+		
+		
 		//	Constructor: default
 		//	Ensure stage is initialised before initialising the player
 		public function Player() 
@@ -76,6 +78,7 @@ package jamazing.jamstory.entity
 			}
 
 		}
+		
 		
 		//	Listener: onInit (Event = null)
 		//	Initialises the player once it's been added to the stage properly
@@ -96,6 +99,8 @@ package jamazing.jamstory.entity
 			jamjar.width = 50;
 			jamjar.height = 50;
 			addChild(jamjar); // ... and attach it to the player
+			jamjar.x = 0;
+			jamjar.y = 0;
 
 			// These control where the player will spawn, relative to the stage
 			x = stage.stageWidth / 10;
@@ -110,9 +115,9 @@ package jamazing.jamstory.entity
 			
 			// Initialize per-frame logic
 			addEventListener(Event.ENTER_FRAME, onTick);
+			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
 		
-		private var jumpTargetYOffset;
 		
 		//	Function: jump
 		//	Makes the player jump by applying a force upwards
@@ -131,12 +136,14 @@ package jamazing.jamstory.entity
 			*/
 		}
 		
+		
 		//	Function: bounce
 		//	Makes the player jump by applying a force upwards
 		public function bounce():void
 		{
 			yForce = -(Math.abs(yForce) * 1.2) - 200;
 		}
+		
 		
 		//	Function: move (int)
 		//	[TODO: Document this properly], do drift
@@ -213,21 +220,6 @@ package jamazing.jamstory.entity
 			*/
 		}
 		
-		//	Function: updateSpeed
-		//	Works out and applies the speed based on the forces
-		private function updateSpeed():void
-		{
-			xSpeed += Physics.calcAcceleration(xForce, mass);
-			ySpeed += Physics.calcAcceleration(yForce, mass);
-		}
-		
-		//	Function updatePosition
-		//	Updates the player positions based on their current speed
-		private function updatePosition():void
-		{
-			x += xSpeed;
-			y += ySpeed;
-		}
 		
 		
 		
