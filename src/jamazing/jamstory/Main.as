@@ -10,13 +10,16 @@ package jamazing.jamstory
 	import jamazing.jamstory.containers.World;
 	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.containers.Background;
+	import jamazing.jamstory.containers.Overlay;
 	
 	//	Class: Main
 	public class Main extends Sprite 
 	{
 		
-		private var world:World;	//	World container
-		private var background:Background;
+		private var background:Background;	//	Background container
+		private var world:World;			//	World container
+		private var overlay:Overlay;		//	UI Overlay container
+		
 		
 		//	Constructor: default
 		public function Main():void 
@@ -30,14 +33,17 @@ package jamazing.jamstory
 		private function onInit(e:Event = null):void 
 		{	
 			//	Memory Allocation
-			world = new World()
 			background = new Background();
+			world = new World()
+			overlay = new Overlay();
+			
 			
 			var keys:Keys = new Keys(stage);
 			
 			//	Children
 			addChild(background);
 			addChild(world);
+			addChild(overlay);
 			
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
