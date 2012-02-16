@@ -103,7 +103,7 @@ package jamazing.jamstory.containers
 			//	loading the platforms
 			var statics:XMLList = xml.level.statics.obj;
 			for each (var p:XML in statics) {
-				var platform:Platform = new Platform(p.x, -p.y, p.width, p.height);
+				var platform:Platform = new Platform(p.x, -p.y, p.width, p.height, p.colour);
 				levelContainer.push(platform);
 				addChild(platform);
 			}

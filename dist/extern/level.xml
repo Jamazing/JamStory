@@ -19,6 +19,7 @@
 			<obj>
 				<x>550</x>
 				<y>0</y>
+				<colour>0xFF0000</colour>
 				<width>1550</width>
 				<height>100</height>
 			</obj>
@@ -26,6 +27,7 @@
 			<obj>
 				<x>250</x>
 				<y>100</y>
+				<colour>0xFFFF00</colour>
 				<width>100</width>
 				<height>20</height>
 			</obj>
@@ -33,6 +35,7 @@
 			<obj>
 				<x>360</x>
 				<y>120</y>
+				<colour>0xFF00FF</colour>
 				<width>100</width>
 				<height>20</height>
 			</obj>
@@ -40,6 +43,7 @@
 			<obj>
 				<x>600</x>
 				<y>150</y>
+				<colour>0xFF0000</colour>
 				<width>100</width>
 				<height>20</height>
 			</obj>
