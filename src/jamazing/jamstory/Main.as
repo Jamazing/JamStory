@@ -9,12 +9,14 @@ package jamazing.jamstory
 	import flash.events.Event;
 	import jamazing.jamstory.containers.World;
 	import jamazing.jamstory.util.Keys;
+	import jamazing.jamstory.containers.Background;
 	
 	//	Class: Main
 	public class Main extends Sprite 
 	{
 		
 		private var world:World;	//	World container
+		private var background:Background;
 		
 		//	Constructor: default
 		public function Main():void 
@@ -29,10 +31,12 @@ package jamazing.jamstory
 		{	
 			//	Memory Allocation
 			world = new World()
+			background = new Background();
+			
 			var keys:Keys = new Keys(stage);
 			
-			trace("start");
 			//	Children
+			addChild(background);
 			addChild(world);
 			
 			//	Event Listeners

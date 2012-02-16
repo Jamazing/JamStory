@@ -45,7 +45,7 @@ package jamazing.jamstory.containers
 			y = stage.stageHeight / 2;
 			
 			//	Self graphics stuff
-			graphics.beginFill(0x0066FF);
+			graphics.beginFill(0x0066FF,0);
 			graphics.drawRect( -stage.stageWidth, -stage.stageHeight, stage.stageWidth * 2, stage.stageHeight * 2);
 			graphics.endFill();
 			
