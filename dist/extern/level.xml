@@ -9,21 +9,24 @@
 	
 	<level>
 		<info>
-			<width>1000</width>
+			<width>1200</width>
 			<height>1000</height>
 			<playerstart>200</playerstart>
 		</info>
 		
+		<!--Static Objects such as platforms-->
 		<statics>
 			
+			<!--Screen Base for running on-->
 			<obj>
 				<x>550</x>
 				<y>0</y>
 				<colour>0xFF0000</colour>
-				<width>1550</width>
+				<width>1750</width>
 				<height>100</height>
 			</obj>
 			
+			<!--Platforms for jumping on-->
 			<obj>
 				<x>250</x>
 				<y>100</y>
@@ -33,7 +36,7 @@
 			</obj>
 			
 			<obj>
-				<x>360</x>
+				<x>425</x>
 				<y>120</y>
 				<colour>0xFF00FF</colour>
 				<width>100</width>
@@ -46,6 +49,23 @@
 				<colour>0xFF0000</colour>
 				<width>100</width>
 				<height>20</height>
+			</obj>
+			
+			<!--Columns for jumping along-->
+			<obj>
+				<x>750</x>
+				<y>100</y>
+				<colour>0xFF0000</colour>
+				<width>150</width>
+				<height>200</height>
+			</obj>
+			
+			<obj>
+				<x>900</x>
+				<y>150</y>
+				<colour>0xFF0000</colour>
+				<width>75</width>
+				<height>250</height>
 			</obj>
 			
 		</statics>

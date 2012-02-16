@@ -26,7 +26,7 @@ package jamazing.jamstory.object
 			
 			//	Extra graphics for the top of the platform
 			graphics.beginFill((this.colour)*0.8);
-			graphics.drawRect( (-5*width / 8), (-2*height / 6)-(height/2), (5*width/4), (2*height/3));
+			graphics.drawRect( (-5*width / 8), (-height/2) - 7.5, (5*width/4), 15);
 			graphics.endFill();
 			
 			this.width = width;
