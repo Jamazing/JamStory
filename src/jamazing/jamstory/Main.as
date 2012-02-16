@@ -29,6 +29,7 @@ package jamazing.jamstory
 		//	Initialises the game once the stage is initialised
 		private function onInit(e:Event = null):void 
 		{	
+			trace("main started");
 			//	Memory Allocation
 			world = new World()
 			background = new Background();

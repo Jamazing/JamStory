@@ -33,32 +33,25 @@ package jamazing.jamstory.containers
 		//	Initialises this, once the stage reference has been formed
 		public function onInit(e:Event = null):void
 		{
+			
+			//	HACKY CODE
+			//	Graphics for setting the registration point artificially
+			//	Allows 0,0 to be the bottom left, and then height to be a height from ground
+			graphics.beginFill(0xFF0000, 0.8);
+			graphics.drawCircle(0, 0, 50);
+			graphics.endFill();
+			//	END OF HACKY CODE
+			
+			
+			trace("world loaded");
 			//	Memory Allocations
 			levelContainer = new Array();
 			player = new Player();
 			loadLevel();
 			
-			//	HACKY CODE
-			//	Graphics for setting the registration point artificially
-			//	Allows 0,0 to be the bottom left, and then height to be a height from ground
-			graphics.beginFill(0x000000, 0.0);
-			graphics.drawCircle(0, 0, 10);
-			graphics.endFill();
-			//	END OF HACKY CODE
-			
-			//	Variable Initialisations
-			length = 0;
-			ceiling = 0;
-			
-			
-			x = -(stage.stageWidth / 2);
-			y = (stage.stageHeight / 2);
-			player.x = stage.stageWidth/2;
-			player.y = stage.stageHeight/2 + 200;
+
 			
 			//	Child Objects
-			addChild(player);
-			
 			
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -75,16 +68,22 @@ package jamazing.jamstory.containers
 			if ((player.x < (length - stage.stageWidth / 2))
 				&& (player.x > stage.stageWidth/2)){
 				this.x = (stage.stageWidth / 2) - player.x;
-			}else {
-				trace("playerx: " + player.x.toString() + ", max: " + (length - stage.stageWidth / 2) + ", min: " + (stage.stageWidth / 2) );
 			}
 			
 			//		Check the player is in bounds on the y-direction
 			if (player.y > (ceiling - stage.stageHeight / 2)) {
-				this.y = (stage.stageHeight / 2) - player.y +200;
+				this.y = (stage.stageHeight / 2) - player.y;
 			}
 			
 			//	Ensure the player stays in bounds
+			if (player.x < 0) {
+				player.x = 0;
+			}else if (player.x > length-100) {
+				player.x = length-100;
+			}
+			
+			
+			
 		}
 		
 		
@@ -94,14 +93,17 @@ package jamazing.jamstory.containers
 		{
 			var loader:URLLoader = new URLLoader();
 			loader.load(new URLRequest("./extern/level.xml"));
-			
+			 
 			loader.addEventListener(Event.COMPLETE, onLoadXML);
 		}
 		
 		
+		//	Listener: onLoadXML
+		//	Fires when the level XML has finished loading
 		public function onLoadXML(e:Event):void
 		{
 			var xml:XML = new XML(e.target.data);
+			
 			//	loading the main data
 			var info:XMLList = xml.level.info;
 			for each (var i:XML in info) {
@@ -112,10 +114,19 @@ package jamazing.jamstory.containers
 			//	loading the platforms
 			var statics:XMLList = xml.level.statics.obj;
 			for each (var p:XML in statics) {
-				var platform = new Platform(p.x, p.y, p.width, p.height);
+				var platform:Platform = new Platform(p.x, -p.y, p.width, p.height);
 				levelContainer.push(platform);
 				addChild(platform);
 			}
+			
+			x = 0;
+			y = stage.stageHeight;
+			
+			//	Add the player
+			addChild(player);
+			
+			player.x = 50;
+			player.y = -135;
 			
 		}
 		
