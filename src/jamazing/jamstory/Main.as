@@ -1,4 +1,4 @@
-//	Copyright 2012 Jamazing Games©
+﻿//	Copyright 2012 Jamazing Games©
 //	Author: Gordon Mckendrick
 //
 //	Main class for the JamStory game
@@ -11,7 +11,7 @@ package jamazing.jamstory
 	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.containers.Background;
 	import jamazing.jamstory.containers.Overlay;
-	
+	// test commit
 	//	Class: Main
 	public class Main extends Sprite 
 	{
