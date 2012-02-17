@@ -11,6 +11,7 @@ package jamazing.jamstory.containers
 	import flash.events.Event;
 	import flash.text.TextField;
 	import jamazing.jamstory.object.Platform;
+	import jamazing.jamstory.util.Keys;
 	
 	import jamazing.jamstory.entity.Player;
 	
@@ -71,7 +72,12 @@ package jamazing.jamstory.containers
 				player.x = length-100;
 			}
 			
-			
+			if (Keys.isDown(Keys.Z)) {
+				toggleZoom(true);
+			}
+			if (Keys.isDown(Keys.X)) {
+				toggleZoom(false);
+			}
 			
 		}
 		
@@ -122,7 +128,7 @@ package jamazing.jamstory.containers
 		public function toggleZoom(isZoomed:Boolean):void
 		{
 			if (isZoomed) {
-				setZoom(0.8);
+				setZoom(0.6);
 			}else {
 				setZoom(1);
 			}

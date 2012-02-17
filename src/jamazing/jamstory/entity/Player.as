@@ -12,6 +12,7 @@ package jamazing.jamstory.entity
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import jamazing.jamstory.util.Keys;	
+	import jamazing.jamstory.entity.PlayerTarget;
 	
 	//	Class: Player
 	//	Represents the player entity that the user controls
@@ -36,7 +37,6 @@ package jamazing.jamstory.entity
 		/* The following will controll the movement and location */
 		private var xLocation:Number;
 		private var yLocation:Number;
-		
 		private var currentState:PlayerState;
 		/* until here */
 
@@ -50,19 +50,18 @@ package jamazing.jamstory.entity
 		public var xForce:Number;	//	Horizontal force applied in this frame. +ve is right
 		public var xSpeed:Number;	//	Horizontal speed.
 		public var yForce:Number;	//	Vertical force applied in this frame. +is down 
-		public var ySpeed:Number;	//	Vertical speed.
-		
+		public var ySpeed:Number;	//	Vertical speed. 
 		public var mass:int;	//	Mass of the player object
 		public var friction:int;
-		
 		public var stuck_count:int;
-
 		public var jumping:Boolean;	//	True if the player is jumping
 		public var stuck:Boolean;
 		/* until here */
 		
 		private var jumpTargetYOffset:int;	//	<- this was mixed in with the methods, I've moved it here
-										//		assuming it was a mistake. If not, feel free to move it back. Gordon
+											//		assuming it was a mistake. If not, feel free to move it back. Gordon
+									
+		private var reticule:PlayerTarget;
 		
 		
 		//	Constructor: default
@@ -72,9 +71,9 @@ package jamazing.jamstory.entity
 			super();											// Call base class constructor
 			
 			if (stage){											// If stage has been initialized ...
-				onInit();											// ... initialize player object
+				onInit();										// ... initialize player object
 			}else {												// ... or else ...
-				addEventListener(Event.ADDED_TO_STAGE, onInit);		// ... wait for the stage to initialize and then initialize player.
+				addEventListener(Event.ADDED_TO_STAGE, onInit);	// ... wait for the stage to initialize and then initialize player.
 			}
 
 		}
@@ -93,6 +92,9 @@ package jamazing.jamstory.entity
 			mass = 10;
 			friction = 0;
 			/* [TILL HERE] */
+			
+			reticule = new PlayerTarget();
+			addChild(reticule);
 			
 			// These create the sprite...
 			jamjar = new JamJar();
@@ -129,11 +131,6 @@ package jamazing.jamstory.entity
 			
 			if (jumpTargetYOffset <= 0)
 				currentState.StateStatus = PlayerState.FallDown; 
-			
-			/*
-			yForce -= 450;
-			jumping = true;
-			*/
 		}
 		
 		
@@ -198,26 +195,6 @@ package jamazing.jamstory.entity
 
 			if(currentState.StateStatus == PlayerState.JumpUp)
 				jump();
-
-			/*
-			if ((Keys.isDown(Keys.W)) && (!jumping) && (Math.abs(ySpeed) < 1)) {
-				jump();
-			}
-			*/
-
-			
-			//xSpeed = xSpeed * (Physics.FRICTION / friction);
-
-			//if (stuck) {
-			//	ySpeed *= 0.85
-			//}
-			
-			/*
-			updateSpeed();
-			updatePosition();
-			xForce = 0;
-			yForce = 0;
-			*/
 		}
 		
 		

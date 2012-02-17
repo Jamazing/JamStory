@@ -11,6 +11,7 @@ package jamazing.jamstory
 	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.containers.Background;
 	import jamazing.jamstory.containers.Overlay;
+	import jamazing.jamstory.entity.PlayerTarget;
 	// test commit
 	//	Class: Main
 	public class Main extends Sprite 
@@ -19,7 +20,6 @@ package jamazing.jamstory
 		private var background:Background;	//	Background container
 		private var world:World;			//	World container
 		private var overlay:Overlay;		//	UI Overlay container
-		
 		
 		//	Constructor: default
 		public function Main():void 
