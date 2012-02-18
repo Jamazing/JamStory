@@ -10,9 +10,12 @@ package jamazing.jamstory.entity
 	import flash.display.ActionScriptVersion;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.geom.Point;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import jamazing.jamstory.util.Keys;	
 	import jamazing.jamstory.entity.PlayerTarget;
+	import jamazing.jamstory.util.Resource;
 	
 	//	Class: Player
 	//	Represents the player entity that the user controls
@@ -28,8 +31,6 @@ package jamazing.jamstory.entity
 		/* until here */
 
 		/* The following control image drawing */
-		[Embed(source = "../../../../resources/jamjar.png")]
-		private var JamJar:Class;
 		public var jamjar:Bitmap;
 		/* until here */
 		
@@ -58,24 +59,23 @@ package jamazing.jamstory.entity
 		public var stuck:Boolean;
 		/* until here */
 		
-		private var jumpTargetYOffset:int;	//	<- this was mixed in with the methods, I've moved it here
-											//		assuming it was a mistake. If not, feel free to move it back. Gordon
-									
+		private var jumpTargetYOffset:int;
+		
+		//	Throwing related
 		private var reticule:PlayerTarget;
+		private var throwPower:Number;
+		private var charging:Boolean;
 		
 		
 		//	Constructor: default
 		//	Ensure stage is initialised before initialising the player
 		public function Player() 
 		{
-			super();											// Call base class constructor
-			
-			if (stage){											// If stage has been initialized ...
-				onInit();										// ... initialize player object
-			}else {												// ... or else ...
-				addEventListener(Event.ADDED_TO_STAGE, onInit);	// ... wait for the stage to initialize and then initialize player.
-			}
+			super();	//	Call base class constructor
 
+			//	Wait for the stage to initialize and then initialize player.
+			if (stage) onInit();									
+			else addEventListener(Event.ADDED_TO_STAGE, onInit);	
 		}
 		
 		
@@ -83,7 +83,7 @@ package jamazing.jamstory.entity
 		//	Initialises the player once it's been added to the stage properly
 		private function onInit(e:Event = null):void 
 		{			
-			/* [TODO: These will have to go] */
+			//	!!! Temporary - Remove once no longer referenced
 			air = 1;
 			xForce = 0;
 			xSpeed = 0;
@@ -91,13 +91,16 @@ package jamazing.jamstory.entity
 			ySpeed = 0;
 			mass = 10;
 			friction = 0;
-			/* [TILL HERE] */
+			//	!!!
 			
+			//	Initialise the reticule
+			//	!!! Temporary - remove once aiming functionality is moved over
 			reticule = new PlayerTarget();
 			addChild(reticule);
+			//	!!!
 			
 			// These create the sprite...
-			jamjar = new JamJar();
+			jamjar = new Resource.CHARACTER_IMAGE();
 			jamjar.width = 75;
 			jamjar.height = 75;
 			addChild(jamjar); 	// ... and attach it to the player
@@ -116,8 +119,10 @@ package jamazing.jamstory.entity
 			currentState = new PlayerState();
 			
 			// Initialize per-frame logic
-			addEventListener(Event.ENTER_FRAME, onTick);
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
+			addEventListener(Event.ENTER_FRAME, onTick);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
 		
@@ -195,8 +200,30 @@ package jamazing.jamstory.entity
 
 			if(currentState.StateStatus == PlayerState.JumpUp)
 				jump();
+				
+			updateThrow();
 		}
 		
+		//	Listener: onMouseDown
+		//	When the mouse is held down, the power of the next through increases
+		private function onMouseDown(e:MouseEvent):void
+		{
+			
+		}
+		
+		//	Listener: onMouseUp
+		//	When the mouse is released, the player should throw
+		private function onMouseDown(e:MouseEvent):void
+		{
+			
+		}
+		
+		//	Function: updateThrow()
+		//	Performs helper functionality for updating how the throw works
+		private function updateThrow():void
+		{
+			
+		}
 		
 		//	Function: getAimingAngle
 		//	Returns the angle at which the player is aiming
@@ -217,7 +244,10 @@ package jamazing.jamstory.entity
 	
 		//	Function: throwJam()
 		//	Throws the currently selected jam, at the angle you're pointing to
-
+		private function throwJam():void
+		{
+			
+		}
 		
 		
 		

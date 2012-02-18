@@ -129,7 +129,7 @@ package jamazing.jamstory.entity
 			jam.x = 0;
 			jam.y = 0;
 			jamSpeed = power / 3;
-			dispatchEvent(new PlayerEvent("THROW", x, y, rotation, jamSpeed);
+			dispatchEvent(new PlayerEvent("THROW", x, y, rotation, jamSpeed));
 			
 			power = 0;
 			charging = false;

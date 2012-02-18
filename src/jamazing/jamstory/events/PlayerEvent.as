@@ -22,7 +22,7 @@ package jamazing.jamstory.events
 		public var magnitude:Number;
 		
 		//	Constructor: default
-		public function PlayerEvent(type:String,x:Number, y:Number, angle:Number, magnitude:Number bubbles:Boolean = true, cancelable:Boolean = false) 
+		public function PlayerEvent(type:String,x:Number, y:Number, angle:Number, magnitude:Number, bubbles:Boolean = true, cancelable:Boolean = false) 
 		{
 			this.x = x;
 			this.y = y;
