@@ -5,6 +5,7 @@
 
 package jamazing.jamstory.containers
 {
+	import flash.display.Shape;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.display.Sprite;
@@ -129,6 +130,21 @@ package jamazing.jamstory.containers
 		private function onThrow(e:PlayerEvent):void
 		{
 			trace("Player Event Caught: THROW");
+			var throwable:Shape = new Shape();
+			
+			//	Draw the thrown object for easy testing
+			throwable.graphics.beginFill(0x0066FF);
+			throwable.graphics.drawCircle(0, 0, 10);
+			throwable.graphics.endFill();
+			
+			//calculate position for the new shape
+			throwable.x = e.x;
+			throwable.y = e.y;
+			throwable.y += e.magnitude * Math.sin(e.angle * (Math.PI / 180));
+			throwable.x -= e.magnitude * Math.cos(e.angle * (Math.PI / 180));
+			
+			//	Add to the display list
+			addChild(throwable);
 		}
 		
 		//	Function: toggleZoom (Boolean)

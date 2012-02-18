@@ -219,7 +219,9 @@ package jamazing.jamstory.entity
 		//	When the mouse is released, the player should throw
 		private function onMouseUp(e:MouseEvent):void
 		{
-			throwJam();
+			if(charging){
+				throwJam();
+			}
 		}
 		
 		
@@ -248,9 +250,9 @@ package jamazing.jamstory.entity
 			var angle:Number = (180 / Math.PI) * Math.atan(dy / dx);	//	Calculate angle
 			
 			//	Ensure the angle is correct for negative x
-			if (dx < 0) {
-				angle += 180;
-			}
+			//if (dx < 0) {
+			//	angle += 180;
+			//}
 			return angle;
 		}
 	
@@ -260,8 +262,9 @@ package jamazing.jamstory.entity
 		private function throwJam():void
 		{
 			var angle:Number = getAimingAngle();
-			dispatchEvent(new PlayerEvent("THROW", x, y, angle, throwPower));
 			trace("Player Thrown at power: " + throwPower.toString());
+			trace("Player Thrown at angle: " + angle.toFixed(0). toString());
+			dispatchEvent(new PlayerEvent("THROW", this.x, this.y, angle, throwPower));
 			
 			//	reset power etc for next throw
 			throwPower = 0;
