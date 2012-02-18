@@ -261,7 +261,7 @@ package jamazing.jamstory.entity
 		{
 			var angle:Number = getAimingAngle();
 			dispatchEvent(new PlayerEvent("THROW", x, y, angle, throwPower));
-			trace("Player Thrown at power: " + throwPower.toString);
+			trace("Player Thrown at power: " + throwPower.toString());
 			
 			//	reset power etc for next throw
 			throwPower = 0;

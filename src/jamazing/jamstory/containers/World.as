@@ -12,6 +12,7 @@ package jamazing.jamstory.containers
 	import flash.text.TextField;
 	import jamazing.jamstory.object.Platform;
 	import jamazing.jamstory.util.Keys;
+	import jamazing.jamstory.events.PlayerEvent;
 	
 	import jamazing.jamstory.entity.Player;
 	
@@ -46,6 +47,7 @@ package jamazing.jamstory.containers
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
+			addEventListener(PlayerEvent.THROW, onThrow);
 		}
 		
 		
@@ -122,6 +124,12 @@ package jamazing.jamstory.containers
 			
 		}
 		
+		//	Listener: onThrow
+		//	Listens for the player throwing a new object
+		private function onThrow(e:PlayerEvent):void
+		{
+			trace("Player Event Caught: THROW");
+		}
 		
 		//	Function: toggleZoom (Boolean)
 		//	Set true to zoom the world view or not
