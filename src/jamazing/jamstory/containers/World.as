@@ -118,7 +118,7 @@ package jamazing.jamstory.containers
 			addChild(player);
 			
 			player.x = 50;
-			player.y = -135;
+			player.y = -90;
 			
 		}
 		

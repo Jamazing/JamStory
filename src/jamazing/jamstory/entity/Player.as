@@ -100,9 +100,9 @@ package jamazing.jamstory.entity
 			jamjar = new JamJar();
 			jamjar.width = 75;
 			jamjar.height = 75;
-			addChild(jamjar); // ... and attach it to the player
-			jamjar.x = 0;
-			jamjar.y = 0;
+			addChild(jamjar); 	// ... and attach it to the player
+			jamjar.x = -jamjar.width/2;		//	Ensure registration point is in the center
+			jamjar.y = -jamjar.height/2;
 
 			// These control where the player will spawn, relative to the stage
 			x = stage.stageWidth / 10;
@@ -197,6 +197,27 @@ package jamazing.jamstory.entity
 				jump();
 		}
 		
+		
+		//	Function: getAimingAngle
+		//	Returns the angle at which the player is aiming
+		//	Returns the angle with the position x, direction
+		private function getAimingAngle():Number
+		{
+			//	Set visual reticule to the radius around the player
+			//		pointing to your cursor
+			var point:Point = localToGlobal(new Point(x, y));
+			var dx:Number = stage.mouseX - point.x;
+			var dy:Number = stage.mouseY - point.y;
+			var angle:Number = (180 / Math.PI) * Math.atan(dy / dx);
+			if (dx < 0) {
+				angle += 180;
+			}
+			return angle;
+		}
+	
+		//	Function: throwJam()
+		//	Throws the currently selected jam, at the angle you're pointing to
+
 		
 		
 		

@@ -13,21 +13,21 @@ package jamazing.jamstory.events
 	{
 		
 		public static const COLLIDES:String = "STATIC_COLLISION";	//	When a player collides with a static object
-		public static const COLLIDES:String = "JAM";				//	When a player is touching jam
+		public static const JAM:String = "JAM";				//	When a player is touching jam
+		public static const THROW:String = "THROW";
 		
 		public var x:Number;		//	X position this occured at
 		public var y:Number;		//	Y position this occured at
-		public var direction:int;	//	Direction of the collision
+		public var angle:Number;	//	Direction of the action
+		public var magnitude:Number;
 		
 		//	Constructor: default
-		public function PlayerEvent(type:String, bubbles:Boolean = true, cancelable:Boolean = false) 
+		public function PlayerEvent(type:String,x:Number, y:Number, angle:Number, magnitude:Number bubbles:Boolean = true, cancelable:Boolean = false) 
 		{
-			//	!!!!Please Remove
-			//		Only needed to allow compiling, not functionally correct
-			x = 0;
-			y = 0;
-			direction = 0;
-			//	!!!!Please Remove
+			this.x = x;
+			this.y = y;
+			this.angle = angle;
+			this.magnitude = magnitude;
 			
 			super(type, bubbles, cancelable);
 		}
