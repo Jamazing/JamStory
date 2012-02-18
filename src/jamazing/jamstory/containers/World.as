@@ -12,6 +12,7 @@ package jamazing.jamstory.containers
 	import flash.events.Event;
 	import flash.text.TextField;
 	import jamazing.jamstory.object.Platform;
+	import jamazing.jamstory.object.Throwable;
 	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.events.PlayerEvent;
 	
@@ -19,7 +20,10 @@ package jamazing.jamstory.containers
 	
 	public class World extends Sprite
 	{
-		private var levelContainer:Array;	// This will contain the level objects
+		private var staticObjects:Array;	//	This will contain the level objects
+		private var dynamicObjects:Array;	//	Objects for which collision detection is necessary
+		private var entities:Array;			//	Living Entities, such as enemies
+		
 		public var player:Player;			//	The player object
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
@@ -37,7 +41,10 @@ package jamazing.jamstory.containers
 		public function onInit(e:Event = null):void
 		{
 			//	Memory Allocations
-			levelContainer = new Array();
+			staticObjects = new Array();
+			dynamicObjects = new Array();
+			entities = new Array();
+			
 			player = new Player();
 			loadLevel();
 			
@@ -75,13 +82,6 @@ package jamazing.jamstory.containers
 				player.x = length-100;
 			}
 			
-			if (Keys.isDown(Keys.Z)) {
-				toggleZoom(true);
-			}
-			if (Keys.isDown(Keys.X)) {
-				toggleZoom(false);
-			}
-			
 		}
 		
 		
@@ -113,7 +113,7 @@ package jamazing.jamstory.containers
 			var statics:XMLList = xml.level.statics.obj;
 			for each (var p:XML in statics) {
 				var platform:Platform = new Platform(p.x, -p.y, p.width, p.height, p.colour);
-				levelContainer.push(platform);
+				staticObjects.push(platform);
 				addChild(platform);
 			}
 			
@@ -129,7 +129,7 @@ package jamazing.jamstory.containers
 		//	Listens for the player throwing a new object
 		private function onThrow(e:PlayerEvent):void
 		{
-			var throwable:Shape = new Shape();
+			var throwable:Throwable = new Throwable();
 			
 			//	Draw the thrown object for easy testing
 			throwable.graphics.beginFill(0x0066FF);
@@ -139,11 +139,11 @@ package jamazing.jamstory.containers
 			//calculate position for the new shape
 			throwable.x = e.x;
 			throwable.y = e.y;
-			throwable.y += e.magnitude*5 * Math.sin(e.angle * (Math.PI / 180));
-			throwable.x += e.magnitude*5 * Math.cos(e.angle * (Math.PI / 180));
 			
 			//	Add to the display list
 			addChild(throwable);
+			
+			throwable.throwPolar(e.magnitude, e.angle);
 		}
 		
 		//	Function: toggleZoom (Boolean)
