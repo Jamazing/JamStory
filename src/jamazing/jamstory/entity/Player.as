@@ -46,6 +46,8 @@ package jamazing.jamstory.entity
 		private var accelerationInterval:int = GLOBAL_ACC_INTERVAL;			// TODO: Move this to constructor in late build
 		/* until here */
 		
+		//	Targetting System
+		private var reticule:PlayerTarget;
 		
 		/* The following will be changed/removed */
 		public var air:Number;
@@ -61,11 +63,6 @@ package jamazing.jamstory.entity
 		/* until here */
 		
 		private var jumpTargetYOffset:int;
-		
-		//	Throwing related
-		private var reticule:PlayerTarget;
-		private var throwPower:Number;
-		private var charging:Boolean;
 		
 		
 		//	Constructor: default
@@ -122,8 +119,6 @@ package jamazing.jamstory.entity
 			// Initialize per-frame logic
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
 		
@@ -201,74 +196,6 @@ package jamazing.jamstory.entity
 
 			if(currentState.StateStatus == PlayerState.JumpUp)
 				jump();
-				
-			updateThrow();
-		}
-		
-		
-		//	Listener: onMouseDown
-		//	When the mouse is held down, the power of the next through increases
-		private function onMouseDown(e:MouseEvent):void
-		{
-			throwPower = 0;
-			charging = true;
-		}
-		
-		
-		//	Listener: onMouseUp
-		//	When the mouse is released, the player should throw
-		private function onMouseUp(e:MouseEvent):void
-		{
-			if(charging){
-				throwJam();
-			}
-		}
-		
-		
-		//	Function: updateThrow()
-		//	Performs helper functionality for updating how the throw works
-		private function updateThrow():void
-		{
-			if (charging) {
-				throwPower++;
-			}
-			if (throwPower > 100) {
-				throwJam();
-			}
-		}
-		
-		
-		//	Function: getAimingAngle
-		//	Returns the angle at which the player is aiming
-		//	Returns the angle with the position x, direction
-		private function getAimingAngle():Number
-		{
-			//	Get the angle from the player to the cursor
-			var point:Point = localToGlobal(new Point(x, y));	//	Turn player to stage co-ordinates
-			var dx:Number = stage.mouseX - point.x;				//	Get mouse stage co-ordinates
-			var dy:Number = stage.mouseY - point.y;
-			var angle:Number = (180 / Math.PI) * Math.atan(dy / dx);	//	Calculate angle
-			
-			//	Ensure the angle is correct for negative x
-			//if (dx < 0) {
-			//	angle += 180;
-			//}
-			return angle;
-		}
-	
-		
-		//	Function: throwJam()
-		//	Throws the currently selected jam, at the angle you're pointing to
-		private function throwJam():void
-		{
-			var angle:Number = getAimingAngle();
-			trace("Player Thrown at power: " + throwPower.toString());
-			trace("Player Thrown at angle: " + angle.toFixed(0). toString());
-			dispatchEvent(new PlayerEvent("THROW", this.x, this.y, angle, throwPower));
-			
-			//	reset power etc for next throw
-			throwPower = 0;
-			charging = false;
 		}
 		
 		

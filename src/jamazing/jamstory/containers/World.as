@@ -129,7 +129,6 @@ package jamazing.jamstory.containers
 		//	Listens for the player throwing a new object
 		private function onThrow(e:PlayerEvent):void
 		{
-			trace("Player Event Caught: THROW");
 			var throwable:Shape = new Shape();
 			
 			//	Draw the thrown object for easy testing
@@ -140,8 +139,8 @@ package jamazing.jamstory.containers
 			//calculate position for the new shape
 			throwable.x = e.x;
 			throwable.y = e.y;
-			throwable.y += e.magnitude * Math.sin(e.angle * (Math.PI / 180));
-			throwable.x -= e.magnitude * Math.cos(e.angle * (Math.PI / 180));
+			throwable.y += e.magnitude*5 * Math.sin(e.angle * (Math.PI / 180));
+			throwable.x += e.magnitude*5 * Math.cos(e.angle * (Math.PI / 180));
 			
 			//	Add to the display list
 			addChild(throwable);

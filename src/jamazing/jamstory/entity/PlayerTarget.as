@@ -22,6 +22,8 @@ package jamazing.jamstory.entity
 		private static const radius = 150;	//	radius from player to the reticule
 		private var reticule:Shape;
 
+		private var throwPower:Number;
+		private var charging:Boolean;
 		
 		//	Constructor: default
 		public function PlayerTarget() 
@@ -37,6 +39,10 @@ package jamazing.jamstory.entity
 			//	Memory Allocation
 			reticule = new Shape();
 			
+			//	Variable Initialisation
+			charging = false;
+			throwPower = 0;
+			
 			//	Graphics Initialisation
 			reticule.graphics.beginFill(0xFF0000);
 			reticule.graphics.drawCircle(radius, 0, 5);
@@ -48,22 +54,81 @@ package jamazing.jamstory.entity
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
 		
 		//	Function: onTick
 		//	Runs once per frame to update the positions
 		private function onTick(e:Event):void
 		{
-			//	Set visual reticule to the radius around the player
-			//		pointing to your cursor
-			var point:Point = localToGlobal(new Point(x, y));
-			var dx:Number = stage.mouseX - point.x;
+			rotation = getAimingAngle();
+			updateThrow();
+		}
+		
+				
+		
+		//	Listener: onMouseDown
+		//	When the mouse is held down, the power of the next through increases
+		private function onMouseDown(e:MouseEvent):void
+		{
+			throwPower = 0;
+			charging = true;
+		}
+		
+		
+		//	Listener: onMouseUp
+		//	When the mouse is released, the player should throw
+		private function onMouseUp(e:MouseEvent):void
+		{
+			if(charging){
+				throwJam();
+			}
+		}
+		
+		
+		//	Function: updateThrow()
+		//	Performs helper functionality for updating how the throw works
+		private function updateThrow():void
+		{
+			if (charging) {
+				throwPower++;
+			}
+			if (throwPower > 100) {
+				throwJam();
+			}
+		}
+		
+		
+		//	Function: getAimingAngle
+		//	Returns the angle at which the player is aiming
+		//	Returns the angle with the position x, direction
+		private function getAimingAngle():Number
+		{
+			//	Get the angle from the player to the cursor
+			var point:Point = localToGlobal(new Point(x, y));	//	Turn player to stage co-ordinates
+			var dx:Number = stage.mouseX - point.x;				//	Get mouse stage co-ordinates
 			var dy:Number = stage.mouseY - point.y;
-			var angle:Number = (180 / Math.PI) * Math.atan(dy / dx);
+			var angle:Number = (180 / Math.PI) * Math.atan(dy / dx);	//	Calculate angle
+			
+			//	Ensure the angle is correct for negative x
 			if (dx < 0) {
 				angle += 180;
 			}
-			rotation = angle;
+			return angle;
+		}
+	
+		
+		//	Function: throwJam()
+		//	Throws the currently selected jam, at the angle you're pointing to
+		private function throwJam():void
+		{
+			var angle:Number = getAimingAngle();
+			dispatchEvent(new PlayerEvent("THROW", parent.x, parent.y, angle, throwPower));
+			
+			//	reset power etc for next throw
+			throwPower = 0;
+			charging = false;
 		}
 		
 	}
