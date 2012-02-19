@@ -45,7 +45,7 @@ package jamazing.jamstory.entity
 		/* until here */
 
 		/* The following will controll acceleration */
-		private var accelerationInterval:int;
+		private var accelerationInterval:Number;
 		/* until here */
 		
 		/* Targetting System */
@@ -99,7 +99,7 @@ package jamazing.jamstory.entity
 			currentState = new PlayerState();
 			
 			// Initialize the acceleration counter variable
-			accelerationInterval:int = GLOBAL_ACC_INTERVAL;
+			accelerationInterval = GLOBAL_ACC_INTERVAL;
 			
 			// Initialize per-frame logic
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
