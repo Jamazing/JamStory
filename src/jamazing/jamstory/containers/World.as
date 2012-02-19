@@ -60,30 +60,32 @@ package jamazing.jamstory.containers
 			
 			addEventListener(PlayerEvent.COLLIDE, onPlayerCollide);
 		}
-		
+
+		//	Listener: onPlayerCollide
+		//	This listens for player movement and if such has occured checks if the player object should be signaled about a collision
+		/*
+		 * This doesn't work as I expected. If I dispatch the worldCollision event, it doesn't get caught by the player, 
+		 * even if a listener has been properly implemented. I'll read into AS3 events some more to get a grip on what's going on there.
+		 * The provided solution below works, but is temporary and is implemented *ONLY* for the floor right now.
+		 */
 		public function onPlayerCollide(collisionEvent:PlayerEvent):void
 		{
 			var worldCollision:WorldEvent = null;
-			for each (var staticObject:Platform in staticObjects)
+			
+			for each (var staticObject:Platform in staticObjects)			// Traverse each platform
 			{
-				if (collisionEvent.y == -90)
+				if (collisionEvent.y == -90)									// If player collides with platform...
 				{
-//					worldCollision = new WorldEvent(WorldEvent.STATIC_COLLIDE, staticObject.x, staticObject.y, 0, 0, true);
-					player.onStaticCollide(worldCollision);
-					break;
+//					worldCollision = new WorldEvent(WorldEvent.STATIC_COLLIDE, staticObject.x, staticObject.y, 0, 0, true);	// <- This doesn't work for some reason 
+					player.onStaticCollide(worldCollision);							// ... signal that a collision has occured
+					break;															// ... and get out
 				}
 			}
 			
+			/*
 			if(worldCollision!=null)
 				dispatchEvent(worldCollision);			
-			/*
-			
-			if (player.y > (ceiling - stage.stageHeight / 2)) {
-				this.y = (stage.stageHeight / 2) - player.y;
-			}
-			
-			*/
-			
+			*/			
 		}
 		
 		
@@ -99,10 +101,12 @@ package jamazing.jamstory.containers
 			}
 			
 			/*
-			//		Check the player is in bounds on the y-direction
-			if (player.y > (ceiling - stage.stageHeight / 2)) {
-				this.y = (stage.stageHeight / 2) - player.y;
-			}
+			 * This got moved to an event for testing purposes
+			 * -Ivan
+				//		Check the player is in bounds on the y-direction
+				if (player.y > (ceiling - stage.stageHeight / 2)) {
+					this.y = (stage.stageHeight / 2) - player.y;
+				}
 			*/
 			
 			//	Ensure the player stays in bounds

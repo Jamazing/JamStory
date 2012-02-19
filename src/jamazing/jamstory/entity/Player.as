@@ -181,6 +181,9 @@ package jamazing.jamstory.entity
 			 */
 		}
 
+		// Function: updateLocation
+		// This function gets called every frame
+		// This changes his location, depending on his state;
 		private function updateLocation():void
 		{
 			switch(currentState.StateStatus)
@@ -210,62 +213,30 @@ package jamazing.jamstory.entity
 		}
 		
 		//	Listener: onTick (Event)
-		//	Runs the update code once per frame
+		//	This listener checks for key input, manages states and fires events to check if there is a collision
 		private function onTick(e:Event):void
 		{
-			/*
-			if (currentState.isMovement() && !(Keys.isDown(Keys.A) || Keys.isDown(Keys.D))) //Keys.allDown(Keys.A, Keys.D))
-			{
-				currentState.StateStatus -= 1;		
+			if (Keys.isDown(Keys.A)) {						// If A is pressed...
+				updateMovementState(PlayerState.Left);			// ... we want to go left
 			}
-			*/
-
-			if (Keys.isDown(Keys.A)) {
-				updateMovementState(PlayerState.Left);
+			else if (Keys.isDown(Keys.D)){					// If D is pressed...
+				updateMovementState(PlayerState.Right);			// ... we want to go right
 			}
-			else if (Keys.isDown(Keys.D)){
-				updateMovementState(PlayerState.Right);
+			else if (Keys.isDown(Keys.W) && currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall) {	// If W is pressed and the player is not in the air...
+				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;											// ... the height at which he should jump is calculated ...
+				currentState.StateStatus = PlayerState.Jump;																				// ... and his state is changed to indicate he is jumping
 			}
-			else if (Keys.isDown(Keys.W) && currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall) {
-				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;
-				currentState.StateStatus = PlayerState.Jump;
-			}
-			else
-			{
-				if(currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall)
-					currentState.SwitchToIdle();
+			else {																														// In all other cases
+				if(currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall)								// ... If the player is not jumping and not falling
+					currentState.SwitchToIdle();																								// ... he must be idle, so his state is changed to that
 			}
 			
-			
+			// Update player's current location
 			updateLocation();
 
-
-
+			// The following dispatches an event, telling the world that something has occured, so that it checks for collision
 			var updatedPlayer:PlayerEvent = new PlayerEvent(PlayerEvent.COLLIDE, x, y, 0, 0);
 			dispatchEvent(updatedPlayer);
-			
-			
-			/*
-			if (Keys.isDown(Keys.W))
-			{
-				if (currentState.StateStatus < PlayerState.JumpUp)
-				{
-					jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;
-					currentState.StateStatus = PlayerState.JumpUp;
-				}
-			}
-
-			if(currentState.StateStatus == PlayerState.JumpUp)
-				jump();
-			*/
-		}
-		
-		private function updateJumpState():void 
-		{
-
-		}
-		
-		
-		
+		}				
 	}
 }

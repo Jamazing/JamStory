@@ -2,6 +2,7 @@
 //	Author: Ivan Mateev
 //	WorldEvent
 //		Fired when there has been a colision etc
+//	Note: DOES NOT WORK at present!
 
 package jamazing.jamstory.events 
 {

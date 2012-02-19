@@ -15,8 +15,8 @@ package jamazing.jamstory.events
 		/* I know this is a bit different, than originally talked about, but it was quite difficult
 		 * to implement the original idea as I still don't quite get it;
 		 * In this implementation, I've implemented the concept, that the player object will dispatch an
-		 * "attempt collide" event, which will be caught by the world, which will dispatch an event, telling
-		 * the player object about what has been hit, *if* something has been hit.
+		 * "attempt collide" event, which will be caught by the world, which will manage collision, 
+		 * *if* something has been hit.
 		 * This is to have something working. I am willing to approach the original idea if required, but I will need
 		 * a more detailed explanation.
 		 * -Ivan
