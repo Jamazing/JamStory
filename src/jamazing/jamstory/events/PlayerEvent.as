@@ -1,5 +1,6 @@
 //	Copyright 2012 Jamazing games©
 //	Author: Gordon D Mckendrick
+//	Contrib: Ivan Mateev
 //	PlayerEvent
 //		Fired when the player is involved in actions such as collisions etc
 
@@ -11,9 +12,18 @@ package jamazing.jamstory.events
 	//	Class: PlayerEvent
 	public class PlayerEvent extends Event
 	{
-		
-		public static const COLLIDES:String = "STATIC_COLLISION";	//	When a player collides with a static object
-		public static const JAM:String = "JAM";				//	When a player is touching jam
+		/* I know this is a bit different, than originally talked about, but it was quite difficult
+		 * to implement the original idea as I still don't quite get it;
+		 * In this implementation, I've implemented the concept, that the player object will dispatch an
+		 * "attempt collide" event, which will be caught by the world, which will dispatch an event, telling
+		 * the player object about what has been hit, *if* something has been hit.
+		 * This is to have something working. I am willing to approach the original idea if required, but I will need
+		 * a more detailed explanation.
+		 * -Ivan
+		 */
+		public static const COLLIDE:String = "COLLISION";			//	When a player collides with something
+		public static const JAM:String = "JAM";						//	When a player is touching jam;
+
 		public static const THROW:String = "THROW";
 		
 		public var x:Number;		//	X position this occured at
@@ -32,6 +42,15 @@ package jamazing.jamstory.events
 			super(type, bubbles, cancelable);
 		}
 		
+		override public function clone():Event 
+		{
+			return new PlayerEvent(type, x, y, angle, magnitude, bubbles, cancelable);
+		}
+		
+		override public function toString():String 
+		{
+			return type + " at " + x.toString() + ";" + y.toString() + "| phi=" + angle.toString() + "| magnitude=" + magnitude.toString();
+		}
 	}
 
 }

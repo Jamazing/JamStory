@@ -11,37 +11,43 @@ package jamazing.jamstory.object
 
 	public class BaseObject extends Sprite 
 	{
+		/* The following will controll location */
 		private var xLocation:int;			// xLocation of object
 		private var yLocation:int;			// yLocation of object
-		private var isAbstract:Boolean;		// this controls if the class is abstract or not
+		// private var isAbstract:Boolean;		Abstract class logic was phased out
 		
 		public function BaseObject(inputXLocation:int=0, inputYLocation:int=0) 
 		{
 			super();
 			xLocation = inputXLocation;
 			yLocation = inputYLocation;
-			isAbstract = true;
 		}
 		
-		// This is used when creating objects, which are of a derived class; This indicates that a class is not abstract
-		protected function createNonAbstractObject():void
+		public function get XLocation()
 		{
-			this.isAbstract = false;
+			return xLocation;
 		}
 		
-		/* [TODO laster: Implement unplaceable logic] */
+		public function set XLocation(value:Number)
+		{
+			xLocation = value;
+		}		
+		
+		public function get YLocation()
+		{
+			return yLocation;
+		}
+		
+		public function set YLocation(value:Number)
+		{
+			yLocation = value;
+		}
+		
 	}
 	
 	/*
-	 * This is just a placeholder for until i can get the real thing in there
-	 
-	internal class PlayerPlaceHolderClass extends BaseObject
-	{
-		public function PlayerPlaceHolderClass()
-		{
-			super();
-		}
-	}
+	 removed PlayerPlaceHolderClass
+	 -Ivan
 	*/
 
 }

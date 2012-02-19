@@ -13,7 +13,7 @@ package jamazing.jamstory.object
 		{
 			super();
 			isExit = isExitInput;
-			createNonAbstractObject();
+			//createNonAbstractObject();
 		}
 		
 	}

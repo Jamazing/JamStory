@@ -1,9 +1,11 @@
 //	Copyright 2012 Jamazing Games©
-//	Author: Gordon D Mckendrick, Stefan Hristov
+//	Author: Gordon D Mckendrick, Stefan Hristov, Ivan Mateev
 //
 //	Player Object
 //	Represents the player in the level
 //	Future versions should extend a generic entity class
+//	Presently extends BaseObject
+//	[TODO: Implement direciton]
 
 package jamazing.jamstory.entity 
 {
@@ -14,13 +16,15 @@ package jamazing.jamstory.entity
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import jamazing.jamstory.events.PlayerEvent;
+	import jamazing.jamstory.object.BaseObject;
 	import jamazing.jamstory.util.Keys;	
 	import jamazing.jamstory.entity.PlayerTarget;
 	import jamazing.jamstory.util.Resource;
+	import jamazing.jamstory.events.WorldEvent;
 	
 	//	Class: Player
 	//	Represents the player entity that the user controls
-	public class Player extends Sprite
+	public class Player extends BaseObject
 	{
 		/* Constants start here */
 		static private const TWELVE:Number = 12;
@@ -37,8 +41,6 @@ package jamazing.jamstory.entity
 		
 		
 		/* The following will controll the movement and location */
-		private var xLocation:Number;
-		private var yLocation:Number;
 		private var currentState:PlayerState;
 		/* until here */
 
@@ -110,8 +112,8 @@ package jamazing.jamstory.entity
 			y = stage.stageHeight/2;// / 20;
 
 			// These control where the center of the player is
-			xLocation = x + jamjar.width / 2;
-			yLocation = y + jamjar.height / 2;
+			XLocation = x + jamjar.width / 2;
+			YLocation = y + jamjar.height / 2;
 			
 			// Initialize the player state
 			currentState = new PlayerState();
@@ -119,21 +121,48 @@ package jamazing.jamstory.entity
 			// Initialize per-frame logic
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
+			
+			addEventListener(WorldEvent.STATIC_COLLIDE, onStaticCollide);
 		}
 		
+		private function onStaticCollide(staticCollideEvent:WorldEvent):void
+		{
+			if (currentState.IsMovement())
+			{
+				currentState.SwitchToIdle();
+			}
+			else
+			{
+				switch(currentState.StateStatus)
+				{
+					case PlayerState.Jump:
+						currentState.SwitchToFalling();
+						break;
+						
+					case PlayerState.Fall:
+						currentState.SwitchToIdle();
+						break;
+						
+				}
+			}
+		}
 		
 		//	Function: jump
 		//	Makes the player jump by applying a force upwards
-		public function jump():void
+		public function updateJumpLocation():void
 		{			
 			jumpTargetYOffset -= JUMP_SPEED;
 				
 			y -= JUMP_SPEED;
 			
 			if (jumpTargetYOffset <= 0)
-				currentState.StateStatus = PlayerState.FallDown; 
+				currentState.StateStatus = PlayerState.Fall; 
 		}
 		
+		private function updateFallLocation():void
+		{
+			y += JUMP_SPEED;			
+		}
 		
 		//	Function: bounce
 		//	Makes the player jump by applying a force upwards
@@ -143,20 +172,19 @@ package jamazing.jamstory.entity
 		}
 		
 		
-		//	Function: move (int)
+		//	Function: move
 		//	[TODO: Document this properly], do drift
-		public function move(xOffset:Number):void
+		public function updateMovementState(direction:int):void
 		{
 			if (currentState.StateStatus == PlayerState.Idle)
 			{
-				currentState.StateStatus = PlayerState.Walk;
+				currentState.StateStatus = direction*(-1);	// [TODO: NO!]
 			}
-
-			if (currentState.StateStatus == PlayerState.Walk)
+			else if (currentState.IsWalking())// .StateStatus == PlayerState.Walk)
 			{
 				if(accelerationInterval == 0)
 				{
-					currentState.StateStatus++;
+					currentState.SwtichToRunning();
 					accelerationInterval = GLOBAL_ACC_INTERVAL;
 				}
 				else
@@ -164,27 +192,80 @@ package jamazing.jamstory.entity
 					accelerationInterval--;
 				}
 			}
-			x += xOffset * currentState.StateStatus;
+			/*
+			 * else		
+			 * {
+			 * 	currentState.StateStatus = PlayerState.Fall;	//This would make sense, since if all other cases aren't true, then we must be falling?
+			 * 													//Needs testing thought
+			 * }
+			 */
 			
+
+			 //			x += xOffset * currentState.StateStatus;
 		}
 
+		private function updateLocation():void
+		{
+			switch(currentState.StateStatus)
+			{
+				case PlayerState.WalkLeft:
+					x -= MOVE_OFFSET * currentState.StateStatus; // [TODO: Implement a proper speed modifier]
+					break;
+				case PlayerState.WalkRight:
+					x += MOVE_OFFSET * currentState.StateStatus; // [--//--]
+					break;
+				case PlayerState.RunLeft:
+					x -= MOVE_OFFSET * currentState.StateStatus; // [--//--]
+					break;W
+				case PlayerState.RunRight:
+					x += MOVE_OFFSET * currentState.StateStatus; // [--//--]
+					break;
+				case PlayerState.Jump:
+					updateJumpLocation();
+					break;
+				case PlayerState.Fall:
+					updateFallLocation();
+					break;
+				default:
+					trace("Other state traced - code: "+currentState.StateStatus.toString());
+			}
+			
+		}
 		
 		//	Listener: onTick (Event)
 		//	Runs the update code once per frame
 		private function onTick(e:Event):void
 		{
+			/*
 			if (currentState.isMovement() && !(Keys.isDown(Keys.A) || Keys.isDown(Keys.D))) //Keys.allDown(Keys.A, Keys.D))
 			{
 				currentState.StateStatus -= 1;		
 			}
+			*/
 
 			if (Keys.isDown(Keys.A)) {
-				move(-MOVE_OFFSET);
+				updateMovementState(PlayerState.Left);
 			}
-			if (Keys.isDown(Keys.D)){
-				move(MOVE_OFFSET);
+			else if (Keys.isDown(Keys.D)){
+				updateMovementState(PlayerState.Right);
+			}
+			else if (Keys.isDown(Keys.W) && currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall) {
+				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;
+				currentState.StateStatus = PlayerState.Jump;
+			}
+			else
+			{
+				if(currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall)
+					currentState.SwitchToIdle();
 			}
 			
+			
+			updateLocation();
+			
+			var updatedPlayer:PlayerEvent = new PlayerEvent(PlayerEvent.COLLIDE, XLocation, YLocation, 0, 0);
+			dispatchEvent(updatedPlayer);
+			
+			/*
 			if (Keys.isDown(Keys.W))
 			{
 				if (currentState.StateStatus < PlayerState.JumpUp)
@@ -196,10 +277,15 @@ package jamazing.jamstory.entity
 
 			if(currentState.StateStatus == PlayerState.JumpUp)
 				jump();
+			*/
+		}
+		
+		private function updateJumpState():void 
+		{
+
 		}
 		
 		
 		
 	}
-
 }

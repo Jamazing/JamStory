@@ -19,7 +19,7 @@ package jamazing.jamstory.entity
 	public class PlayerTarget extends Sprite
 	{
 		
-		private static const radius = 150;	//	radius from player to the reticule
+		private static const radius:int = 150;	//	radius from player to the reticule
 		private var reticule:Shape;
 
 		private var throwPower:Number;
