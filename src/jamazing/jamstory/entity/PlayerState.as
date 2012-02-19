@@ -142,6 +142,11 @@ package jamazing.jamstory.entity
 			return (status>=PlayerState.Idle && status <=PlayerState.Fall);
 		}
 		
+		public function IsInAir():Boolean
+		{
+			return stateStatus == Jump || stateStatus == Fall;
+		}
+		
 		// Setter: StateStatus, one paramater[int]
 		// Sets the value of stateStatus; includes error checking
 		// NOTE: This is to avoid errors in future builds

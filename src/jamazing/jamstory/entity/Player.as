@@ -40,7 +40,6 @@ package jamazing.jamstory.entity
 		public var jamjar:Bitmap;
 		/* until here */
 		
-		
 		/* The following will controll the movement and location */
 		private var currentState:PlayerState;
 		/* until here */
@@ -49,11 +48,13 @@ package jamazing.jamstory.entity
 		private var accelerationInterval:int = GLOBAL_ACC_INTERVAL;			// TODO: Move this to constructor in late build
 		/* until here */
 		
-		//	Targetting System
+		/* Targetting System */
 		private var reticule:PlayerTarget;
+		/* until here */
 		
-		// When the player jumps, this variable specifies how far along the y-axis until he has to start falling down
+		/* When the player jumps, this variable specifies how far along the y-axis until he has to start falling down */
 		private var jumpTargetYOffset:Number;
+		/* Until here */
 		
 		
 		//	Constructor: default
@@ -212,24 +213,41 @@ package jamazing.jamstory.entity
 			
 		}
 		
+		//	Function: applyHover (direction)
+		//  This function gets called every time there has been a change of direction;
+		//	It handles movement in mid-air
+		private function applyHover(direction:int):void
+		{
+			if (!currentState.IsInAir())	// If we are not mid-air...
+				return;							// ... ignore.
+			
+			x += MOVE_OFFSET * (direction==-1 ? -1 : 1 );				// Move
+																		// [TODO: Implement direction, so the "?" can go]
+		}
+		
 		//	Listener: onTick (Event)
 		//	This listener checks for key input, manages states and fires events to check if there is a collision
 		private function onTick(e:Event):void
 		{
 			if (Keys.isDown(Keys.A)) {						// If A is pressed...
 				updateMovementState(PlayerState.Left);			// ... we want to go left
+				applyHover(PlayerState.Left);
 			}
 			else if (Keys.isDown(Keys.D)){					// If D is pressed...
 				updateMovementState(PlayerState.Right);			// ... we want to go right
+				applyHover(PlayerState.Right);
 			}
-			else if (Keys.isDown(Keys.W) && currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall) {	// If W is pressed and the player is not in the air...
-				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;											// ... the height at which he should jump is calculated ...
-				currentState.StateStatus = PlayerState.Jump;																				// ... and his state is changed to indicate he is jumping
-			}
-			else {																														// In all other cases
+			else 
+			{
 				if(currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall)								// ... If the player is not jumping and not falling
 					currentState.SwitchToIdle();																								// ... he must be idle, so his state is changed to that
 			}
+			
+			if (Keys.isDown(Keys.W) && currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall) {	// If W is pressed and the player is not in the air...
+				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;											// ... the height at which he should jump is calculated ...
+				currentState.StateStatus = PlayerState.Jump;																				// ... and his state is changed to indicate he is jumping
+			}
+		
 			
 			// Update player's current location
 			updateLocation();
