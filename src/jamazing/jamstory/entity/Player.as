@@ -12,6 +12,7 @@ package jamazing.jamstory.entity
 	import flash.display.ActionScriptVersion;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.events.GestureEvent;
 	import flash.geom.Point;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -51,7 +52,8 @@ package jamazing.jamstory.entity
 		//	Targetting System
 		private var reticule:PlayerTarget;
 		
-		private var jumpTargetYOffset:int;
+		// When the player jumps, this variable specifies how far along the y-axis until he has to start falling down
+		private var jumpTargetYOffset:Number;
 		
 		
 		//	Constructor: default
@@ -98,75 +100,76 @@ package jamazing.jamstory.entity
 			// Initialize per-frame logic
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
-
-			addEventListener(WorldEvent.STATIC_COLLIDE, onStaticCollide,true);	
+			
+			/* For some reason I can't quite get this right.
+			 * TODO: Explain exactly what
+			 */
+			//addEventListener(WorldEvent.STATIC_COLLIDE, onStaticCollide);
+			
 		}
 		
+		//	Function: onStaticCollide (WorldEvent)
+		//	Changes the player's states, depending on the collision;
+		//	At present handles only jump/fall
 		public function onStaticCollide(staticCollideEvent:WorldEvent):void
 		{
-			if (currentState.IsMovement())
-			{
-				currentState.SwitchToIdle();
-			}
-			else
-			{
-				switch(currentState.StateStatus)
-				{
+			switch(currentState.StateStatus) {
 					case PlayerState.Jump:
 						currentState.SwitchToFalling();
 						break;
 						
 					case PlayerState.Fall:
 						currentState.SwitchToIdle();
-						break;
-						
+						break;						
 				}
-			}
 		}
 		
-		//	Function: jump
-		//	Makes the player jump by applying a force upwards
+		//	Function: updateJumpLocation
+		//	This function gets called every frame If the player is in a jump state;
+		//  This updates his current location and also calculates how far until he starts falling down 
 		public function updateJumpLocation():void
-		{			
-			jumpTargetYOffset -= JUMP_SPEED;
+		{
+			jumpTargetYOffset -= JUMP_SPEED;					// Update how far left until jump peek is reached
 				
-			y -= JUMP_SPEED;
+			y -= JUMP_SPEED;									// Update the current location along the y-axis
 			
-			if (jumpTargetYOffset <= 0)
-				currentState.StateStatus = PlayerState.Fall; 
+			if (jumpTargetYOffset <= 0)							// If the jump peek has been reached ...
+				currentState.StateStatus = PlayerState.Fall; 		// ... the current state becomses "Falling"
 		}
 		
+		// Function: updateFallLocaton
+		// This function gets called every frame If the player is in a fall state;
+		// This updates his current location;
 		private function updateFallLocation():void
 		{
 			y += JUMP_SPEED;			
 		}
-		
+
+		/*
 		//	Function: bounce
 		//	Makes the player jump by applying a force upwards
 		public function bounce():void
 		{
 			;//yForce = -(Math.abs(yForce) * 1.2) - 200;
 		}
+		* [TODO: Reimplement this completely!]
+		*/		
 		
-		
-		//	Function: move
-		//	[TODO: Document this properly], do drift
+		//	Function: updateMovementState (direction)
+		//	This function gets called every time there is an input from the keyboard;
+		//	It changes the player's state, depending on the direction provided and his current state
 		public function updateMovementState(direction:int):void
 		{
-			if (currentState.StateStatus == PlayerState.Idle)
-			{
-				currentState.StateStatus = direction*(-1);	// [TODO: NO!]
+			if (currentState.StateStatus == PlayerState.Idle) {		// If the player is idle, initiate movement
+				currentState.StateStatus = direction*(-1);			// [TODO: NO! Implement a "direction" mechanic]
 			}
-			else if (currentState.IsWalking())// .StateStatus == PlayerState.Walk)
-			{
-				if(accelerationInterval == 0)
-				{
-					currentState.SwtichToRunning();
-					accelerationInterval = GLOBAL_ACC_INTERVAL;
+			else if (currentState.IsWalking()) {					// If the player is walking...	
+				if(accelerationInterval == 0) {							// ... if it's time to accelerate...
+					currentState.SwtichToRunning();							// ... he starts running...
+					accelerationInterval = GLOBAL_ACC_INTERVAL;				// ... and the timer is reset!
 				}
-				else
-				{
-					accelerationInterval--;
+				else {												// Otherwise ...
+					accelerationInterval--;								// ... the acceleration countdown timer is decreased ...
 				}
 			}
 			/*
@@ -176,9 +179,6 @@ package jamazing.jamstory.entity
 			 * 													//Needs testing thought
 			 * }
 			 */
-			
-
-			 //			x += xOffset * currentState.StateStatus;
 		}
 
 		private function updateLocation():void
