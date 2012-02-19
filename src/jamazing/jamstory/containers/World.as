@@ -11,6 +11,7 @@ package jamazing.jamstory.containers
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.TextField;
+	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.object.Platform;
 	import jamazing.jamstory.object.Throwable;
 	import jamazing.jamstory.util.Keys;
@@ -56,6 +57,33 @@ package jamazing.jamstory.containers
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(PlayerEvent.THROW, onThrow);
+			
+			addEventListener(PlayerEvent.COLLIDE, onPlayerCollide);
+		}
+		
+		public function onPlayerCollide(collisionEvent:PlayerEvent):void
+		{
+			var worldCollision:WorldEvent = null;
+			for each (var staticObject:Platform in staticObjects)
+			{
+				if (collisionEvent.y == -90)
+				{
+//					worldCollision = new WorldEvent(WorldEvent.STATIC_COLLIDE, staticObject.x, staticObject.y, 0, 0, true);
+					player.onStaticCollide(worldCollision);
+					break;
+				}
+			}
+			
+			if(worldCollision!=null)
+				dispatchEvent(worldCollision);			
+			/*
+			
+			if (player.y > (ceiling - stage.stageHeight / 2)) {
+				this.y = (stage.stageHeight / 2) - player.y;
+			}
+			
+			*/
+			
 		}
 		
 		
@@ -70,10 +98,12 @@ package jamazing.jamstory.containers
 				this.x = (stage.stageWidth / 2) - player.x;
 			}
 			
+			/*
 			//		Check the player is in bounds on the y-direction
 			if (player.y > (ceiling - stage.stageHeight / 2)) {
 				this.y = (stage.stageHeight / 2) - player.y;
 			}
+			*/
 			
 			//	Ensure the player stays in bounds
 			if (player.x < 0) {

@@ -51,19 +51,6 @@ package jamazing.jamstory.entity
 		//	Targetting System
 		private var reticule:PlayerTarget;
 		
-		/* The following will be changed/removed */
-		public var air:Number;
-		public var xForce:Number;	//	Horizontal force applied in this frame. +ve is right
-		public var xSpeed:Number;	//	Horizontal speed.
-		public var yForce:Number;	//	Vertical force applied in this frame. +is down 
-		public var ySpeed:Number;	//	Vertical speed. 
-		public var mass:int;	//	Mass of the player object
-		public var friction:int;
-		public var stuck_count:int;
-		public var jumping:Boolean;	//	True if the player is jumping
-		public var stuck:Boolean;
-		/* until here */
-		
 		private var jumpTargetYOffset:int;
 		
 		
@@ -82,17 +69,7 @@ package jamazing.jamstory.entity
 		//	Listener: onInit (Event = null)
 		//	Initialises the player once it's been added to the stage properly
 		private function onInit(e:Event = null):void 
-		{			
-			//	!!! Temporary - Remove once no longer referenced
-			air = 1;
-			xForce = 0;
-			xSpeed = 0;
-			yForce = 0;
-			ySpeed = 0;
-			mass = 10;
-			friction = 0;
-			//	!!!
-			
+		{						
 			//	Initialise the reticule
 			//	!!! Temporary - remove once aiming functionality is moved over
 			reticule = new PlayerTarget();
@@ -121,11 +98,11 @@ package jamazing.jamstory.entity
 			// Initialize per-frame logic
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
-			
-			addEventListener(WorldEvent.STATIC_COLLIDE, onStaticCollide);
+
+			addEventListener(WorldEvent.STATIC_COLLIDE, onStaticCollide,true);	
 		}
 		
-		private function onStaticCollide(staticCollideEvent:WorldEvent):void
+		public function onStaticCollide(staticCollideEvent:WorldEvent):void
 		{
 			if (currentState.IsMovement())
 			{
@@ -168,7 +145,7 @@ package jamazing.jamstory.entity
 		//	Makes the player jump by applying a force upwards
 		public function bounce():void
 		{
-			yForce = -(Math.abs(yForce) * 1.2) - 200;
+			;//yForce = -(Math.abs(yForce) * 1.2) - 200;
 		}
 		
 		
@@ -261,9 +238,12 @@ package jamazing.jamstory.entity
 			
 			
 			updateLocation();
-			
-			var updatedPlayer:PlayerEvent = new PlayerEvent(PlayerEvent.COLLIDE, XLocation, YLocation, 0, 0);
+
+
+
+			var updatedPlayer:PlayerEvent = new PlayerEvent(PlayerEvent.COLLIDE, x, y, 0, 0);
 			dispatchEvent(updatedPlayer);
+			
 			
 			/*
 			if (Keys.isDown(Keys.W))
