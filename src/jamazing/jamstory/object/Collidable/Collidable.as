@@ -12,9 +12,9 @@ package jamazing.jamstory.object.Collidable
 
 	public class Collidable
 	{
-		public var x:int;
-		public var y:int;
-		internal var radius:int;
+		public var x:Number;
+		public var y:Number;
+		internal var radius:Number;
 		internal var members:Array; //array of collidables
 		
 		//	Constructor: default

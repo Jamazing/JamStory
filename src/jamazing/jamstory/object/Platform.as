@@ -17,7 +17,7 @@ package jamazing.jamstory.object
 	public class Platform extends Sprite
 	{
 		public var colour:int;	//	colour of the platform
-		public var collidable:Collidable;
+		public var collidable:BoxCollidable;
 		
 		public function Platform(x:int, y:int, width:int, height:int, colour:int = 0x0033FF  ) 
 		{
@@ -25,7 +25,7 @@ package jamazing.jamstory.object
 			this.colour = colour;
 			
 			//var point:Point = localToGlobal(new Point(x, y));
-			collidable = new Collidable(x, y, (width + height) / 2);
+			collidable = new BoxCollidable(x, y, width, height);
 			
 			//	Main graphics for the body
 			graphics.beginFill(this.colour);
