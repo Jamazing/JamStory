@@ -36,8 +36,8 @@ package jamazing.jamstory.object.Collidable
 				var b:BoxCollidable = c as BoxCollidable;
 				
 			}else {
-				var distance:Number = Math.sqrt((x - c.x) * (x - c.x) + (y - c.y) * (y - c.y));
-				var difference:Number = distance - (radius + c.radius);
+				var distance:Number = (x - c.x) * (x - c.x) + (y - c.y) * (y - c.y);
+				var difference:Number = distance - ((radius + c.radius)*(radius + c.radius));
 				//	If hits, check every sub object
 				//	If there are no sub object - return
 				//	If any sub object (and their children) registers a hit - return true

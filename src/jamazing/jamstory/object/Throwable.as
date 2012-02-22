@@ -10,6 +10,7 @@ package jamazing.jamstory.object
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import jamazing.jamstory.object.Collidable.Collidable;
 	
 	//	Class: Throwable
 	public class Throwable extends Sprite
@@ -20,6 +21,7 @@ package jamazing.jamstory.object
 		private var ySpeed:Number;
 		private var yAccel:Number;
 		private var moving:Boolean;
+		public var collidable:Collidable;
 		
 		//	Constructor: default
 		public function Throwable() 
@@ -33,6 +35,7 @@ package jamazing.jamstory.object
 		{
 			
 			//	Memory Allocation
+			collidable = new Collidable(x, y, 5);
 			
 			//	Variable Initialisation
 			xSpeed = 0;
