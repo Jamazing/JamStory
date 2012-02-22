@@ -1,3 +1,11 @@
+//	Copyright 2012 Jamazing Games©
+//	Author: Gordon D Mckendrick
+//	TestPlayer
+//		Testing of a player class, without disturbing main Player development
+//		Testing of movement using accelerations and speeds - from Sonic style games
+//		Testing of more events based mechanics for collisions
+//		Note: Changes have been made in World to accomodate this testing.
+
 package jamazing.jamstory.entity 
 {
 	import flash.display.Sprite;
@@ -5,16 +13,17 @@ package jamazing.jamstory.entity
 	import flash.geom.Point;
 	import jamazing.jamstory.object.Collidable.Collidable;
 	import jamazing.jamstory.util.Keys;
-	import jamazing.jamstory.events.WorldEvent;
+	import jamazing.jamstory.events.PlayerEvent;
 	
+	//	Class: TestPlayer
 	public class TestPlayer extends Sprite
 	{
-		public var xSpeed:Number;
-		public var ySpeed:Number;
-		public var xAccel:Number;
+		public var xSpeed:Number;	//	Amount to increment x position each tick
+		public var ySpeed:Number;	
+		public var xAccel:Number;	//	Amount to increment x-speed each tick
 		public var yAccel:Number;
-		public var moving:Boolean;
-		public var jumping:Boolean;
+		public var moving:Boolean;	//	True if currently moving
+		public var jumping:Boolean;	//	True if currently jumping
 		
 		public var collidable:Collidable;
 		
@@ -39,7 +48,7 @@ package jamazing.jamstory.entity
 			xSpeed = 0;
 			ySpeed = 0;
 			xAccel = 0;
-			yAccel = 0;
+			yAccel = 1;
 			moving = false;
 			jumping = false;
 			
@@ -51,40 +60,36 @@ package jamazing.jamstory.entity
 			//	Event listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
-			stage.addEventListener(WorldEvent.STATIC_COLLIDE, onCollide);
+			stage.addEventListener(PlayerEvent.COLLIDE, onCollide);
 		}
 		
-		private function onCollide(e:WorldEvent):void
+		//	Listener: onCollide
+		//	Fires whenever the player is involved in a collision event
+		private function onCollide(e:PlayerEvent):void
 		{
-			trace("Collision");
+			ySpeed = 0;
+			y = e.y - height / 2;
 		}
 		
-		//	Function: onTick
+		//	Listener: onTick
 		//	Updates the movement each frame
 		private function onTick(e:Event):void
 		{
 			if (Keys.isDown(Keys.D)) {
 				xSpeed = 10;
 			}else if (Keys.isDown(Keys.A)) {
-				xSpeed = -10;
+				if (xSpeed > 0){
+					xSpeed = -30;
+				}else {
+					xSpeed = -10;
+				}
 			}else {
 				xSpeed *= 0.8;
 			}
 			if (Math.abs(xSpeed) < 1) {
 				xSpeed = 0;
 			}
-			
-			if (Keys.isDown(Keys.S)) {
-				ySpeed = 10;
-			}else if (Keys.isDown(Keys.W)) {
-				ySpeed = -10;
-			}else {
-				ySpeed *= 0.8;
-			}
-			if (Math.abs(ySpeed) < 1) {
-				ySpeed = 0;
-			}
-			
+
 			//	Update speed and position
 			xSpeed += xAccel;
 			ySpeed += yAccel;

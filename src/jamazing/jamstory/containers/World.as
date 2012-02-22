@@ -91,7 +91,7 @@ package jamazing.jamstory.containers
 		{
 			for each (var platform:Platform in staticObjects) {
 				if (platform.isHit(player.collidable)) {
-					stage.dispatchEvent(new WorldEvent(WorldEvent.STATIC_COLLIDE, player.x, player.y, player.xSpeed, 90));
+					stage.dispatchEvent(new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height/2, player.xSpeed, 0));
 				}
 			}
 		}
