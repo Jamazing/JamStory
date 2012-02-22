@@ -11,6 +11,7 @@ package jamazing.jamstory.containers
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.TextField;
+	import jamazing.jamstory.entity.TestPlayer;
 	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.object.Platform;
 	import jamazing.jamstory.object.Throwable;
@@ -25,11 +26,11 @@ package jamazing.jamstory.containers
 		private var dynamicObjects:Array;	//	Objects for which collision detection is necessary
 		private var entities:Array;			//	Living Entities, such as enemies
 		
-		public var player:Player;			//	The player object
+		public var player:TestPlayer;		//	The player object
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
 		
-		// Constructor
+		// Constructor: default
 		public function World() 
 		{
 			if (stage) onInit();
@@ -46,7 +47,7 @@ package jamazing.jamstory.containers
 			dynamicObjects = new Array();
 			entities = new Array();
 			
-			player = new Player();
+			player = new TestPlayer();
 			loadLevel();
 			
 			//	Variable Initialisation
@@ -57,35 +58,6 @@ package jamazing.jamstory.containers
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(PlayerEvent.THROW, onThrow);
-			
-			addEventListener(PlayerEvent.COLLIDE, onPlayerCollide);
-		}
-
-		//	Listener: onPlayerCollide
-		//	This listens for player movement and if such has occured checks if the player object should be signaled about a collision
-		/*
-		 * This doesn't work as I expected. If I dispatch the worldCollision event, it doesn't get caught by the player, 
-		 * even if a listener has been properly implemented. I'll read into AS3 events some more to get a grip on what's going on there.
-		 * The provided solution below works, but is temporary and is implemented *ONLY* for the floor right now.
-		 */
-		public function onPlayerCollide(collisionEvent:PlayerEvent):void
-		{
-			var worldCollision:WorldEvent = null;
-			
-			for each (var staticObject:Platform in staticObjects)			// Traverse each platform
-			{
-				if (collisionEvent.y == -90)									// If player collides with platform...
-				{
-//					worldCollision = new WorldEvent(WorldEvent.STATIC_COLLIDE, staticObject.x, staticObject.y, 0, 0, true);	// <- This doesn't work for some reason 
-					player.onStaticCollide(worldCollision);							// ... signal that a collision has occured
-					break;															// ... and get out
-				}
-			}
-			
-			/*
-			if(worldCollision!=null)
-				dispatchEvent(worldCollision);			
-			*/			
 		}
 		
 		
@@ -100,14 +72,10 @@ package jamazing.jamstory.containers
 				this.x = (stage.stageWidth / 2) - player.x;
 			}
 			
-			/*
-			 * This got moved to an event for testing purposes
-			 * -Ivan
-				//		Check the player is in bounds on the y-direction
-				if (player.y > (ceiling - stage.stageHeight / 2)) {
-					this.y = (stage.stageHeight / 2) - player.y;
-				}
-			*/
+			//	Check the player is in bounds on the y-direction
+			if (player.y > (ceiling - stage.stageHeight / 2)) {
+				this.y = (stage.stageHeight / 2) - player.y;
+			}
 			
 			//	Ensure the player stays in bounds
 			if (player.x < 0) {
@@ -116,8 +84,17 @@ package jamazing.jamstory.containers
 				player.x = length-100;
 			}
 			
+			testCollisions();
 		}
 		
+		private function testCollisions():void
+		{
+			for each (var platform:Platform in staticObjects) {
+				if (platform.isHit(player.collidable)) {
+					stage.dispatchEvent(new WorldEvent(WorldEvent.STATIC_COLLIDE, player.x, player.y, player.xSpeed, 90));
+				}
+			}
+		}
 		
 		//	Function: loadLevel()
 		//	Loads the level data into objects

@@ -7,12 +7,13 @@
 
 package jamazing.jamstory.object.Collidable 
 {
-	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.Point;
 
 	public class Collidable
 	{
-		internal var x:int;
-		internal var y:int;
+		public var x:int;
+		public var y:int;
 		internal var radius:int;
 		internal var members:Array; //array of collidables
 		
@@ -22,6 +23,7 @@ package jamazing.jamstory.object.Collidable
 			this.x = x;
 			this.y = y;
 			this.radius = radius;
+			members = new Array();
 		}
 		
 		//	Function: isHit
@@ -30,15 +32,14 @@ package jamazing.jamstory.object.Collidable
 		{
 			//	If it's a box collidable, process it as such
 			//	Otherwise, treat it as a standard, radial collidable
-			if (typeof(c) == BoxCollidable) {
+			if (c is BoxCollidable) {
 				var b:BoxCollidable = c as BoxCollidable;
 				
-			}else{
-				var distance = Math.sqrt((x + c.x) * (x + c.x) + (y + c.y) * (y + c.y));
-				var difference = distance - (radius + c.radius);
-				
+			}else {
+				var distance:Number = Math.sqrt((x - c.x) * (x - c.x) + (y - c.y) * (y - c.y));
+				var difference:Number = distance - (radius + c.radius);
 				//	If hits, check every sub object
-				//	If there are no sub objects - return
+				//	If there are no sub object - return
 				//	If any sub object (and their children) registers a hit - return true
 				if (difference <= 0) {
 					if (members.length > 0){
@@ -54,6 +55,7 @@ package jamazing.jamstory.object.Collidable
 					
 				}
 			}
+			return false;
 		}
 		
 	}

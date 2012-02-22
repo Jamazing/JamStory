@@ -11,17 +11,20 @@ package jamazing.jamstory.object.Collidable
 	//	Represents a Box Shapes Collidable Object
 	public class BoxCollidable extends Collidable
 	{
-		internal var width:int;
-		internal var height:int;
+		//internal var width:int;
+		//internal var height:int;
 		internal var angle:int;
 		
 		
 		//	Constructor: default
-		public function BoxCollidable();
-		
-		override public function isHit(c:Collidable):void
+		public function BoxCollidable(x:int, y:int, width:int, height:int)
 		{
-			
+			super(x, y, width);
+		}
+		
+		override public function isHit(c:Collidable):Boolean
+		{
+			return false;
 		}
 	}
 
