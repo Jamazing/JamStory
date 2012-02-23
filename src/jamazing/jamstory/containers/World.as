@@ -94,6 +94,14 @@ package jamazing.jamstory.containers
 					stage.dispatchEvent(new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height/2, player.xSpeed, 0));
 				}
 			}
+			
+			for each (var platform:Platform in staticObjects) {
+				for each (var throwable:Throwable in dynamicObjects) {
+					if (platform.isHit(throwable.collidable)) {
+						throwable.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, platform.x, platform.y - platform.height/2));
+					}
+				}
+			}
 		}
 		
 		//	Function: loadLevel()
@@ -153,7 +161,7 @@ package jamazing.jamstory.containers
 			
 			//	Add to the display list
 			addChild(throwable);
-			
+			dynamicObjects.push(throwable);
 			throwable.throwPolar(e.magnitude, e.angle);
 		}
 		

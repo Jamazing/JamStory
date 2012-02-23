@@ -12,6 +12,7 @@ package jamazing.jamstory.events
 	//	Class: PlayerEvent
 	public class PlayerEvent extends Event
 	{
+		public static const THROWABLE_COLLISION:String = "THROWABLE_COLLISION";	
 		public static const COLLIDE:String = "COLLISION";			//	When a player collides with something
 		public static const JAM:String = "JAM";						//	When a player is touching jam;
 		public static const THROW:String = "THROW";

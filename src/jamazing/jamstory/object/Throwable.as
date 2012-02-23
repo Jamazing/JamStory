@@ -11,6 +11,7 @@ package jamazing.jamstory.object
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import jamazing.jamstory.object.Collidable.Collidable;
+	import jamazing.jamstory.events.PlayerEvent;
 	
 	//	Class: Throwable
 	public class Throwable extends Sprite
@@ -47,6 +48,7 @@ package jamazing.jamstory.object
 			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
+			addEventListener(PlayerEvent.THROWABLE_COLLISION, onCollide);
 		}
 		
 		//	Listener: onTick
@@ -60,6 +62,17 @@ package jamazing.jamstory.object
 				ySpeed += yAccel;
 				xSpeed += xAccel;
 			}
+			collidable.x = x;
+			collidable.y = y;
+		}
+		
+		//	Listener: onCollide
+		//	Reacts to any collisions by bouncing
+		private function onCollide(e:PlayerEvent):void
+		{
+			ySpeed *= -0.5;
+			xSpeed *= 0.5;
+			y = e.y;
 		}
 		
 		//	Function: throwPolar

@@ -124,7 +124,7 @@ package jamazing.jamstory.entity
 		private function throwJam():void
 		{
 			var angle:Number = getAimingAngle();
-			dispatchEvent(new PlayerEvent("THROW", parent.x, parent.y, angle, throwPower));
+			dispatchEvent(new PlayerEvent("THROW", parent.x, parent.y, angle, throwPower+10));
 			
 			//	reset power etc for next throw
 			throwPower = 0;

@@ -8,12 +8,14 @@
 
 package jamazing.jamstory.entity 
 {
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import jamazing.jamstory.object.Collidable.Collidable;
 	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.events.PlayerEvent;
+	import jamazing.jamstory.util.Resource;
 	
 	//	Class: TestPlayer
 	public class TestPlayer extends Sprite
@@ -24,9 +26,12 @@ package jamazing.jamstory.entity
 		public var yAccel:Number;
 		public var moving:Boolean;	//	True if currently moving
 		public var jumping:Boolean;	//	True if currently jumping
+		public var playerHeight:Number;
+		public var playerWidth:Number;
 		
 		public var collidable:Collidable;
-		
+		public var reticule:PlayerTarget;
+		public var jamjar:Bitmap;
 		//	Constructor: default
 		public function TestPlayer() 
 		{
@@ -39,11 +44,10 @@ package jamazing.jamstory.entity
 		//	Initialises the object once added to the stage
 		private function onInit(e:Event = null):void
 		{
-			x = 0;
-			y = 220;
 			//	Memory Allocation
 			collidable = new Collidable(x, y, 30);
-
+			reticule = new PlayerTarget();
+			
 			//	Variable Initialisation
 			xSpeed = 0;
 			ySpeed = 0;
@@ -51,11 +55,21 @@ package jamazing.jamstory.entity
 			yAccel = 1;
 			moving = false;
 			jumping = false;
+			playerHeight = 30;
+			playerWidth = 30;
+			x = 0;
+			y = 220;
 			
 			//	Graphics initialisation
-			graphics.beginFill(0xFF6600);
-			graphics.drawCircle(0, 0, 30);
-			graphics.endFill();
+			jamjar = new Resource.CHARACTER_IMAGE();
+			jamjar.width = 60;
+			jamjar.height = 60;
+			jamjar.x = -jamjar.width / 2;
+			jamjar.y = -jamjar.height / 2;
+			addChild(jamjar);
+			
+			//	Add children
+			addChild(reticule);
 			
 			//	Event listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -68,7 +82,7 @@ package jamazing.jamstory.entity
 		private function onCollide(e:PlayerEvent):void
 		{
 			ySpeed = 0;
-			y = e.y - height / 2;
+			y = e.y - playerHeight;
 		}
 		
 		//	Listener: onTick
