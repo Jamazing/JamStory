@@ -11,12 +11,14 @@ package jamazing.jamstory.containers
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.TextField;
+	import flash.utils.ByteArray;
 	import jamazing.jamstory.entity.TestPlayer;
 	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.object.Platform;
 	import jamazing.jamstory.object.Throwable;
 	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.events.PlayerEvent;
+	import jamazing.jamstory.util.Resource;
 	
 	import jamazing.jamstory.entity.Player;
 	
@@ -108,18 +110,9 @@ package jamazing.jamstory.containers
 		//	Loads the level data into objects
 		public function loadLevel():void
 		{
-			var loader:URLLoader = new URLLoader();
-			loader.load(new URLRequest("./extern/level.xml"));
-			 
-			loader.addEventListener(Event.COMPLETE, onLoadXML);
-		}
-		
-		
-		//	Listener: onLoadXML
-		//	Fires when the level XML has finished loading
-		public function onLoadXML(e:Event):void
-		{
-			var xml:XML = new XML(e.target.data);
+			var bytes:ByteArray = (new Resource.LEVEL()) as ByteArray;
+			var s:String = bytes.readUTFBytes( bytes.length);
+			var xml:XML = new XML(s);
 			
 			//	loading the main data
 			var info:XMLList = xml.level.info;
@@ -141,7 +134,6 @@ package jamazing.jamstory.containers
 			
 			player.x = 50;
 			player.y = -90;
-			
 		}
 		
 		//	Listener: onThrow

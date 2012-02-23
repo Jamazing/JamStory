@@ -20,6 +20,8 @@ package jamazing.jamstory.util
 		[Embed(source = "../../../../resources/kitchen.jpg")]
 		public static var BACKGROUND_IMAGE:Class;
 		
+		[Embed(source="../../../../resources/level.xml" , mimeType="application/octet-stream")]
+		public static var LEVEL:Class
 	}
 
 }
