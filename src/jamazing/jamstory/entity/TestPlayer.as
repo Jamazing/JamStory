@@ -52,7 +52,7 @@ package jamazing.jamstory.entity
 			xSpeed = 0;
 			ySpeed = 0;
 			xAccel = 0;
-			yAccel = 1;
+			yAccel = 2;
 			moving = false;
 			jumping = false;
 			playerHeight = 30;
@@ -83,6 +83,7 @@ package jamazing.jamstory.entity
 		{
 			ySpeed = 0;
 			y = e.y - playerHeight;
+			jumping = false;
 		}
 		
 		//	Listener: onTick
@@ -102,6 +103,12 @@ package jamazing.jamstory.entity
 			}
 			if (Math.abs(xSpeed) < 1) {
 				xSpeed = 0;
+				moving = false;
+			}
+			
+			if ((Keys.isDown(Keys.W)) && (!jumping)) {
+				jumping = true;
+				ySpeed = -18;
 			}
 
 			//	Update speed and position
