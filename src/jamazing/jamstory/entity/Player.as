@@ -14,6 +14,7 @@ package jamazing.jamstory.entity
 	import flash.display.Sprite;
 	import flash.events.GestureEvent;
 	import flash.geom.Point;
+	import jamazing.jamstory.object.Collidable.Collidable;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import jamazing.jamstory.events.PlayerEvent;
@@ -27,6 +28,10 @@ package jamazing.jamstory.entity
 	//	Represents the player entity that the user controls
 	public class Player extends BaseObject
 	{
+		/* TODO: I'm not quite sure what this does yet */
+		public var collidable:Collidable;
+		/* until here */
+		
 		/* Constants start here */
 		static private const TWELVE:Number = 12;
 		static private const MOVE_OFFSET:Number = 12;	// This controls by how many pixels will the player object displace when movement is initiated		
@@ -34,6 +39,8 @@ package jamazing.jamstory.entity
 		static private const JUMP_SPEED:Number = 12;
 		static private const IDLE_JUMP_OFFSET:Number = 50;
 		static private const JUMP_MODIFIER:Number = 12;
+		static private const WALK_SPEED:Number = 12;
+		static private const RUN_SPEED:Number = 24;
 		/* until here */
 
 		/* The following control image drawing */
@@ -42,6 +49,7 @@ package jamazing.jamstory.entity
 		
 		/* The following will controll the movement and location */
 		private var currentState:PlayerState;
+		private var currentHeading:Direction;
 		/* until here */
 
 		/* The following will controll acceleration */
@@ -73,11 +81,12 @@ package jamazing.jamstory.entity
 		//	Initialises the player once it's been added to the stage properly
 		private function onInit(e:Event = null):void 
 		{						
+			//	Initialize the collidable
+			collidable = new Collidable(x, y, 30);
+			
 			//	Initialise the reticule
-			//	!!! Temporary - remove once aiming functionality is moved over
 			reticule = new PlayerTarget();
 			addChild(reticule);
-			//	!!!
 			
 			// These create the sprite...
 			jamjar = new Resource.CHARACTER_IMAGE();
@@ -96,7 +105,8 @@ package jamazing.jamstory.entity
 			YLocation = y + jamjar.height / 2;
 			
 			// Initialize the player state
-			currentState = new PlayerState();
+			currentState = new PlayerState(PlayerState.FALL);
+			currentHeading = new Direction(Direction.RIGHT);
 			
 			// Initialize the acceleration counter variable
 			accelerationInterval = GLOBAL_ACC_INTERVAL;
@@ -104,28 +114,20 @@ package jamazing.jamstory.entity
 			// Initialize per-frame logic
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
-			
-			/* For some reason I can't quite get this right.
-			 * TODO: Explain exactly what
-			 */
-			//addEventListener(WorldEvent.STATIC_COLLIDE, onStaticCollide);
-			
+			stage.addEventListener(PlayerEvent.COLLIDE, onCollide);
 		}
 		
 		//	Function: onStaticCollide (WorldEvent)
 		//	Changes the player's states, depending on the collision;
 		//	At present handles only jump/fall
-		public function onStaticCollide(staticCollideEvent:WorldEvent):void
+		public function onCollide(staticCollideEvent:PlayerEvent):void
 		{
-			switch(currentState.StateStatus) {
-					case PlayerState.Jump:
-						currentState.SwitchToFalling();
-						break;
-						
-					case PlayerState.Fall:
-						currentState.SwitchToIdle();
-						break;						
-				}
+			if (currentState == PlayerState.JUMP) {
+				currentState = PlayerState.JUMP;
+			}
+			else if (currentState == PlayerState.FALL) {
+				currentState = PlayerState.IDLE;
+			}
 		}
 		
 		//	Function: updateJumpLocation
@@ -138,7 +140,7 @@ package jamazing.jamstory.entity
 			y -= JUMP_SPEED;									// Update the current location along the y-axis
 			
 			if (jumpTargetYOffset <= 0)							// If the jump peek has been reached ...
-				currentState.StateStatus = PlayerState.Fall; 		// ... the current state becomses "Falling"
+				currentState = PlayerState.FALL; 		// ... the current state becomses "Falling"
 		}
 		
 		// Function: updateFallLocaton
@@ -162,14 +164,16 @@ package jamazing.jamstory.entity
 		//	Function: updateMovementState (direction)
 		//	This function gets called every time there is an input from the keyboard;
 		//	It changes the player's state, depending on the direction provided and his current state
-		public function updateMovementState(direction:int):void
+		public function updateMovementState(newHeading:Direction):void
 		{
-			if (currentState.StateStatus == PlayerState.Idle) {		// If the player is idle, initiate movement
-				currentState.StateStatus = direction*(-1);			// [TODO: NO! Implement a "direction" mechanic]
+			if (currentState == PlayerState.IDLE) {		// If the player is idle, initiate movement
+				currentState = PlayerState.WALK;
+				currentHeading = newHeading;
+				//currentState.StateStatus = direction*(-1);			// [TODO: NO! Implement a "direction" mechanic]
 			}
-			else if (currentState.IsWalking()) {					// If the player is walking...	
+			else if (currentState==PlayerState.WALK) {					// If the player is walking...	
 				if(accelerationInterval == 0) {							// ... if it's time to accelerate...
-					currentState.SwtichToRunning();							// ... he starts running...
+					currentState= PlayerState.RUN;							// ... he starts running...
 					accelerationInterval = GLOBAL_ACC_INTERVAL;				// ... and the timer is reset!
 				}
 				else {												// Otherwise ...
@@ -190,74 +194,70 @@ package jamazing.jamstory.entity
 		// This changes his location, depending on his state;
 		private function updateLocation():void
 		{
-			switch(currentState.StateStatus)
+			if (currentState.IsGroundBased())
 			{
-				case PlayerState.WalkLeft:
-					x -= MOVE_OFFSET * currentState.StateStatus; // [TODO: Implement a proper speed modifier]
-					break;
-				case PlayerState.WalkRight:
-					x += MOVE_OFFSET * currentState.StateStatus; // [--//--]
-					break;
-				case PlayerState.RunLeft:
-					x -= MOVE_OFFSET * currentState.StateStatus; // [--//--]
-					break;W
-				case PlayerState.RunRight:
-					x += MOVE_OFFSET * currentState.StateStatus; // [--//--]
-					break;
-				case PlayerState.Jump:
-					updateJumpLocation();
-					break;
-				case PlayerState.Fall:
-					updateFallLocation();
-					break;
-				default:
-					trace("Other state traced - code: "+currentState.StateStatus.toString());
+				x += Direction.DirectionModifier(currentHeading) * (currentState==PlayerState.WALK ? WALK_SPEED : RUN_SPEED);
 			}
+			else if (currentState == PlayerState.JUMP)
+			{
+				updateJumpLocation();
+			}
+			else if (currentState == PlayerState.FALL)
+			{
+				updateFallLocation();
+			}
+			else
+				trace("Other state traced - code: "+currentState.toString()+currentState.valueOf());
 			
 		}
 		
 		//	Function: applyHover (direction)
 		//  This function gets called every time there has been a change of direction;
 		//	It handles movement in mid-air
-		private function applyHover(direction:int):void
+		private function applyHover(newDirection:Direction):void
 		{
 			if (!currentState.IsInAir())	// If we are not mid-air...
+			{
 				return;							// ... ignore.
+			}
 			
-			x += MOVE_OFFSET * (direction==-1 ? -1 : 1 );				// Move
+			x += MOVE_OFFSET * Direction.DirectionModifier(newDirection);
+				
+/*			x += MOVE_OFFSET * (direction==-1 ? -1 : 1 );				// Move
 																		// [TODO: Implement direction, so the "?" can go]
-		}
-		
+*/		}
+
+
 		//	Listener: onTick (Event)
 		//	This listener checks for key input, manages states and fires events to check if there is a collision
 		private function onTick(e:Event):void
 		{
 			if (Keys.isDown(Keys.A)) {						// If A is pressed...
-				updateMovementState(PlayerState.Left);			// ... we want to go left
-				applyHover(PlayerState.Left);
+				updateMovementState(Direction.LEFT);			// ... we want to go left
+				applyHover(Direction.LEFT);
 			}
 			else if (Keys.isDown(Keys.D)){					// If D is pressed...
-				updateMovementState(PlayerState.Right);			// ... we want to go right
-				applyHover(PlayerState.Right);
+				updateMovementState(Direction.RIGHT);			// ... we want to go right
+				applyHover(Direction.RIGHT);
 			}
 			else 
 			{
-				if(currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall)								// ... If the player is not jumping and not falling
-					currentState.SwitchToIdle();																								// ... he must be idle, so his state is changed to that
+				if(!currentState.IsInAir())								// ... If the player is not jumping and not falling
+					currentState=PlayerState.IDLE;																								// ... he must be idle, so his state is changed to that
 			}
 			
-			if (Keys.isDown(Keys.W) && currentState.StateStatus!=PlayerState.Jump && currentState.StateStatus!=PlayerState.Fall) {	// If W is pressed and the player is not in the air...
-				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * currentState.StateStatus;											// ... the height at which he should jump is calculated ...
-				currentState.StateStatus = PlayerState.Jump;																				// ... and his state is changed to indicate he is jumping
+			if (Keys.isDown(Keys.W) && !currentState.IsInAir()) {	// If W is pressed and the player is not in the air...
+				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * TWELVE;											// ... the height at which he should jump is calculated ...
+				currentState = PlayerState.JUMP;																				// ... and his state is changed to indicate he is jumping
 			}
 		
 			
 			// Update player's current location
 			updateLocation();
 
-			// The following dispatches an event, telling the world that something has occured, so that it checks for collision
-			var updatedPlayer:PlayerEvent = new PlayerEvent(PlayerEvent.COLLIDE, x, y, 0, 0);
-			dispatchEvent(updatedPlayer);
+			// Update collidable's location
+			collidable.x = x;
+			collidable.y = y;
 		}				
 	}
 }
