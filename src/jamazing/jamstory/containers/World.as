@@ -27,8 +27,11 @@ package jamazing.jamstory.containers
 		private var staticObjects:Array;	//	This will contain the level objects
 		private var dynamicObjects:Array;	//	Objects for which collision detection is necessary
 		private var entities:Array;			//	Living Entities, such as enemies
+
+		static private const TWELVE:Number = 12;	// This is to remind me that there is something todo
+														// -Ivan
 		
-		public var player:TestPlayer;		//	The player object
+		public var player:Player;// TestPlayer;		//	The player object
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
 		
@@ -49,7 +52,7 @@ package jamazing.jamstory.containers
 			dynamicObjects = new Array();
 			entities = new Array();
 			
-			player = new TestPlayer();
+			player = new Player;// TestPlayer();
 			loadLevel();
 			
 			//	Variable Initialisation
@@ -88,14 +91,29 @@ package jamazing.jamstory.containers
 			
 			testCollisions();
 		}
+
 		
+		private	var playerHitAnnouncement:PlayerEvent = null;
 		private function testCollisions():void
 		{
+			var test:Boolean = false;
+			
 			for each (var platform:Platform in staticObjects) {
 				if (platform.isHit(player.collidable)) {
-					stage.dispatchEvent(new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height/2, player.xSpeed, 0));
+					playerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height / 2, player.PlayerSpeed , 0);
+					stage.dispatchEvent(playerHitAnnouncement);// used to be (, player.xSpeed, 0));
+					trace("hit");
+					test = true;
 				}
 			}
+			
+			trace(test);
+			
+			if (!test)
+				if (playerHitAnnouncement!=null)
+				{
+					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, playerHitAnnouncement.x, playerHitAnnouncement.y, player.PlayerSpeed, 0));
+				}
 			
 			for each (var platform:Platform in staticObjects) {
 				for each (var throwable:Throwable in dynamicObjects) {

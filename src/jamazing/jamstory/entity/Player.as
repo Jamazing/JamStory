@@ -41,6 +41,7 @@ package jamazing.jamstory.entity
 		static private const JUMP_MODIFIER:Number = 12;
 		static private const WALK_SPEED:Number = 12;
 		static private const RUN_SPEED:Number = 24;
+		static private const FALL_MULTIPLIER:Number = 1.5;		// 1.5 feels better for some reason
 		/* until here */
 
 		/* The following control image drawing */
@@ -115,6 +116,7 @@ package jamazing.jamstory.entity
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			stage.addEventListener(PlayerEvent.COLLIDE, onCollide);
+			stage.addEventListener(PlayerEvent.NOCOLLIDE, onCollide);
 		}
 		
 		//	Function: onStaticCollide (WorldEvent)
@@ -122,6 +124,13 @@ package jamazing.jamstory.entity
 		//	At present handles only jump/fall
 		public function onCollide(staticCollideEvent:PlayerEvent):void
 		{
+			if (staticCollideEvent.type == PlayerEvent.NOCOLLIDE)
+			{
+				if(currentState!=PlayerState.JUMP)
+					currentState = PlayerState.FALL;
+				return;
+			}
+			
 			if (currentState == PlayerState.JUMP) {
 				currentState = PlayerState.JUMP;
 			}
@@ -148,7 +157,7 @@ package jamazing.jamstory.entity
 		// This updates his current location;
 		private function updateFallLocation():void
 		{
-			y += JUMP_SPEED;			
+			y += JUMP_SPEED*FALL_MULTIPLIER;			
 		}
 
 		/*
@@ -223,31 +232,45 @@ package jamazing.jamstory.entity
 			
 			x += MOVE_OFFSET * Direction.DirectionModifier(newDirection);
 				
-/*			x += MOVE_OFFSET * (direction==-1 ? -1 : 1 );				// Move
-																		// [TODO: Implement direction, so the "?" can go]
-*/		}
-
-
+		}
+		
+		public function get PlayerSpeed()
+		{
+			if (currentState.IsGroundBased())
+			{
+				return MOVE_OFFSET;	// Not exactly right for run
+			}
+			
+			if (currentState == PlayerState.FALL || currentState == PlayerState.JUMP)
+			{
+				return JUMP_SPEED;	// Not exactly right for fall, so todo:update that later on
+			}
+			
+			trace("twelve ;-)");
+			return TWELVE;
+			
+		}
+		
 		//	Listener: onTick (Event)
 		//	This listener checks for key input, manages states and fires events to check if there is a collision
 		private function onTick(e:Event):void
 		{
-			if (Keys.isDown(Keys.A)) {						// If A is pressed...
+			if (Keys.isDown(Keys.A) && !Keys.isDown(Keys.D)) {						// If A is pressed...
 				updateMovementState(Direction.LEFT);			// ... we want to go left
 				applyHover(Direction.LEFT);
 			}
-			else if (Keys.isDown(Keys.D)){					// If D is pressed...
+			else if (Keys.isDown(Keys.D) && !Keys.isDown(Keys.A)){					// If D is pressed...
 				updateMovementState(Direction.RIGHT);			// ... we want to go right
 				applyHover(Direction.RIGHT);
 			}
 			else 
 			{
 				if(!currentState.IsInAir())								// ... If the player is not jumping and not falling
-					currentState=PlayerState.IDLE;																								// ... he must be idle, so his state is changed to that
+					currentState = PlayerState.IDLE;																								// ... he must be idle, so his state is changed to that
 			}
 			
 			if (Keys.isDown(Keys.W) && !currentState.IsInAir()) {	// If W is pressed and the player is not in the air...
-				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER * TWELVE;											// ... the height at which he should jump is calculated ...
+				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER;											// ... the height at which he should jump is calculated ...
 				currentState = PlayerState.JUMP;																				// ... and his state is changed to indicate he is jumping
 			}
 		

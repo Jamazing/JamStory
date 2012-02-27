@@ -34,7 +34,7 @@ package jamazing.jamstory
 		{	
 			//	Memory Allocation
 			background = new Background();
-			world = new World()
+			world = new World();
 			overlay = new Overlay();
 			
 			
