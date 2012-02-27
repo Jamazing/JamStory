@@ -28,7 +28,7 @@ package jamazing.jamstory.entity
 	//	Represents the player entity that the user controls
 	public class Player extends BaseObject
 	{
-		/* TODO: I'm not quite sure what this does yet */
+		/* Collidable object to handle collisions */
 		public var collidable:Collidable;
 		/* until here */
 		
@@ -116,21 +116,22 @@ package jamazing.jamstory.entity
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			stage.addEventListener(PlayerEvent.COLLIDE, onCollide);
-			stage.addEventListener(PlayerEvent.NOCOLLIDE, onCollide);
+			stage.addEventListener(PlayerEvent.NOCOLLIDE, onNoCollide);
+		}
+
+		//	Function: onNoCollide (PlayerEvent)
+		//	Envoked when a player steps of a ledge;
+		public function onNoCollide(removedCollisionEvent:PlayerEvent):void
+		{
+			if (currentState != PlayerState.JUMP)
+				currentState=PlayerState.FALL;
 		}
 		
-		//	Function: onStaticCollide (WorldEvent)
+		//	Function: onCollide (PlayerEvent)
 		//	Changes the player's states, depending on the collision;
 		//	At present handles only jump/fall
 		public function onCollide(staticCollideEvent:PlayerEvent):void
 		{
-			if (staticCollideEvent.type == PlayerEvent.NOCOLLIDE)
-			{
-				if(currentState!=PlayerState.JUMP)
-					currentState = PlayerState.FALL;
-				return;
-			}
-			
 			if (currentState == PlayerState.JUMP) {
 				currentState = PlayerState.JUMP;
 			}
@@ -178,7 +179,6 @@ package jamazing.jamstory.entity
 			if (currentState == PlayerState.IDLE) {		// If the player is idle, initiate movement
 				currentState = PlayerState.WALK;
 				currentHeading = newHeading;
-				//currentState.StateStatus = direction*(-1);			// [TODO: NO! Implement a "direction" mechanic]
 			}
 			else if (currentState==PlayerState.WALK) {					// If the player is walking...	
 				if(accelerationInterval == 0) {							// ... if it's time to accelerate...
@@ -189,13 +189,6 @@ package jamazing.jamstory.entity
 					accelerationInterval--;								// ... the acceleration countdown timer is decreased ...
 				}
 			}
-			/*
-			 * else		
-			 * {
-			 * 	currentState.StateStatus = PlayerState.Fall;	//This would make sense, since if all other cases aren't true, then we must be falling?
-			 * 													//Needs testing thought
-			 * }
-			 */
 		}
 
 		// Function: updateLocation
@@ -203,6 +196,9 @@ package jamazing.jamstory.entity
 		// This changes his location, depending on his state;
 		private function updateLocation():void
 		{
+			if (currentState == PlayerState.IDLE)
+				return;
+			
 			if (currentState.IsGroundBased())
 			{
 				x += Direction.DirectionModifier(currentHeading) * (currentState==PlayerState.WALK ? WALK_SPEED : RUN_SPEED);
@@ -226,27 +222,32 @@ package jamazing.jamstory.entity
 		private function applyHover(newDirection:Direction):void
 		{
 			if (!currentState.IsInAir())	// If we are not mid-air...
-			{
 				return;							// ... ignore.
-			}
 			
-			x += MOVE_OFFSET * Direction.DirectionModifier(newDirection);
-				
+			x += MOVE_OFFSET * Direction.DirectionModifier(newDirection);				
 		}
-		
+
+		//	Getter: PlayerSpeed
+		//	This returns the speed of the player
 		public function get PlayerSpeed()
-		{
+		{		
 			if (currentState.IsGroundBased())
 			{
-				return MOVE_OFFSET;	// Not exactly right for run
+				if (currentState = PlayerState.WALK)
+					return WALK_SPEED;
+				else if (currentState = PlayerState.RUN)
+					return RUN_SPEED;
 			}
 			
-			if (currentState == PlayerState.FALL || currentState == PlayerState.JUMP)
+			if (currentState.IsInAir())
 			{
-				return JUMP_SPEED;	// Not exactly right for fall, so todo:update that later on
+				return JUMP_SPEED;
 			}
 			
-			trace("twelve ;-)");
+			if (currentState == PlayerState.IDLE)
+				return 0;
+			
+			trace("twelve ;-) "+currentState.toString());
 			return TWELVE;
 			
 		}

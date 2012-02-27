@@ -34,6 +34,13 @@ package jamazing.jamstory.events
 			super(type, bubbles, cancelable);
 		}
 		
+		//	Getter: HasNoMagnitude
+		//	Returns true if an event has no magnitude; eg: has been initiated from idle
+		public function get HasNoMagnitude()
+		{
+			return magnitude == 0;
+		}
+		
 		override public function clone():Event 
 		{
 			return new PlayerEvent(type, x, y, angle, magnitude, bubbles, cancelable);

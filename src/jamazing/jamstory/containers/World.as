@@ -24,6 +24,12 @@ package jamazing.jamstory.containers
 	
 	public class World extends Sprite
 	{
+
+		/* This holds the last player event, which has been thrown */
+		private	var lastPlayerHitAnnouncement:PlayerEvent = null;
+		/* ends here */
+
+		
 		private var staticObjects:Array;	//	This will contain the level objects
 		private var dynamicObjects:Array;	//	Objects for which collision detection is necessary
 		private var entities:Array;			//	Living Entities, such as enemies
@@ -92,28 +98,23 @@ package jamazing.jamstory.containers
 			testCollisions();
 		}
 
-		
-		private	var playerHitAnnouncement:PlayerEvent = null;
 		private function testCollisions():void
 		{
-			var test:Boolean = false;
+			var hasPlayerEventOccured:Boolean = false;
 			
 			for each (var platform:Platform in staticObjects) {
 				if (platform.isHit(player.collidable)) {
-					playerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height / 2, player.PlayerSpeed , 0);
-					stage.dispatchEvent(playerHitAnnouncement);// used to be (, player.xSpeed, 0));
-					trace("hit");
-					test = true;
+					lastPlayerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height / 2, 0, player.PlayerSpeed);
+
+					stage.dispatchEvent(lastPlayerHitAnnouncement);// used to be (, player.xSpeed, 0));
+					
+					hasPlayerEventOccured = true;
 				}
 			}
-			
-			trace(test);
-			
-			if (!test)
-				if (playerHitAnnouncement!=null)
-				{
-					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, playerHitAnnouncement.x, playerHitAnnouncement.y, player.PlayerSpeed, 0));
-				}
+
+			if (!hasPlayerEventOccured)
+				if (lastPlayerHitAnnouncement!=null && lastPlayerHitAnnouncement.HasNoMagnitude)
+					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, lastPlayerHitAnnouncement.x, lastPlayerHitAnnouncement.y, 0, player.PlayerSpeed));
 			
 			for each (var platform:Platform in staticObjects) {
 				for each (var throwable:Throwable in dynamicObjects) {
