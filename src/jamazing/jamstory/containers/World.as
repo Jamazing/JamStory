@@ -113,7 +113,7 @@ package jamazing.jamstory.containers
 			}
 
 			if (!hasPlayerEventOccured)
-				if (lastPlayerHitAnnouncement!=null && lastPlayerHitAnnouncement.HasNoMagnitude)
+				if (lastPlayerHitAnnouncement!=null && !lastPlayerHitAnnouncement.HasNoMagnitude)
 					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, lastPlayerHitAnnouncement.x, lastPlayerHitAnnouncement.y, 0, player.PlayerSpeed));
 			
 			for each (var platform:Platform in staticObjects) {
