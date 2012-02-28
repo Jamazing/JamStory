@@ -10,7 +10,7 @@ package jamazing.jamstory.entity
 {
 	import flash.events.Event;
 	import flash.geom.Point;
-	import jamazing.jamstory.entity.Collidable.BoxCollidable;
+	import jamazing.jamstory.entity.BoxCollidable;
 
 	
 	//	Class: Collidable
@@ -19,7 +19,7 @@ package jamazing.jamstory.entity
 		public var x:Number;			//	x position (world relative)
 		public var y:Number;			//	y position (world relati
 		public var radius:Number;		//	radius from center to edge
-		public var members:Array; 	//	array of collidables
+		public var members:Array; 		//	array of collidables
 		
 		
 		//	Constructor: (int, int, int)
@@ -40,7 +40,7 @@ package jamazing.jamstory.entity
 			//	If it's a box collidable, process it as such
 			//	Otherwise, treat it as a standard, radial collidable
 			if (c is BoxCollidable) {
-				var b:BoxCollidable = c as BoxCollidable;
+				// perform the box collision tests
 				
 			}else {
 				var distance:Number = (x - c.x) * (x - c.x) + (y - c.y) * (y - c.y);
@@ -66,7 +66,6 @@ package jamazing.jamstory.entity
 			}
 			return false;
 		}
-		
 		
 	}
 }

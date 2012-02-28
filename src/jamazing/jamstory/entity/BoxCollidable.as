@@ -4,7 +4,7 @@
 //	BoxCollidable
 //		A collidable box shaped object
 
-package jamazing.jamstory.entity.Collidable 
+package jamazing.jamstory.entity 
 {
 	import jamazing.jamstory.entity.Collidable;
 	

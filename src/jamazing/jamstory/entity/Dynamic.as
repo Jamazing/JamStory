@@ -7,29 +7,21 @@
 package jamazing.jamstory.entity 
 {
 	import flash.display.Bitmap;
-	import flash.display.Sprite;
 	import flash.events.Event;
-	import jamazing.jamstory.entity.Collidable.Collidable;
+	import jamazing.jamstory.entity.Collidable;
 	
 	//	Class: Dynamic
-	public class Dynamic extends Sprite
+	public class Dynamic extends Static
 	{
-		public var collision:Collidable;	//	Collision box
-		private var bitmap:Bitmap;			//	The bitmap display for this object
-		
-		private var xSpeed:Number;			//	Current movement speed in the x direction
-		private var ySpeed:Number;
-		private var xAccel:Number;			//	Amount that the xSpeed changes each frame
-		private var yAccel:Number;
+		public var xSpeed:Number;			//	Current movement speed in the x direction
+		public var ySpeed:Number;
+		public var xAccel:Number;			//	Amount that the xSpeed changes each frame
+		public var yAccel:Number;
+		public var isMoving:Boolean;		//	True if the object is currently in motion
 		
 		//	Constructor: default
-		public function Dynamic(xSpeed:Number = 0, ySpeed:Number = 0, xAccel:Number = 0, yAccel:number = 0 ) 
-		{
-			xSpeed = 0;
-			ySpeed = 0;
-			xAccel = 0;
-			yAccel = 0;
-			
+		public function Dynamic() 
+		{	
 			super();
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -38,21 +30,30 @@ package jamazing.jamstory.entity
 		//	Function: onInit
 		//	Initialisation once added to the stage
 		private function onInit(e:Event = null):void
-		{
-
+		{		
+			removeEventListener(Event.ADDED_TO_STAGE, onInit);
+			addEventListener(Event.ENTER_FRAME, onTick);
 		}
 		
-		//	Set: x:Number
-		public function set x(x:Number):void
+		//	Listener: onTick
+		//	Updates the position each frame
+		protected function onTick(e:Event):void
 		{
-			this.x = x;
+			//	Update Movement
+			if (isMoving) {
+				x += xSpeed;
+				y += ySpeed;
+				ySpeed += yAccel;
+				xSpeed += xAccel;
+			}
+			
+			//	Update the collision box position
+			if(hitbox){
+				hitbox.x = x;
+				hitbox.y = y;
+			}
 		}
 		
-		//	Set: y:Number
-		public function set y(y:Number):void
-		{
-			this.y = y;
-		}
 	}
 
 }

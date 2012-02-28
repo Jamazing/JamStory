@@ -9,23 +9,16 @@
 
 package jamazing.jamstory.entity 
 {
-	import flash.display.Sprite;
 	import flash.events.Event;
+	import jamazing.jamstory.entity.Dynamic;
 	import jamazing.jamstory.entity.Collidable;
 	import jamazing.jamstory.events.PlayerEvent;
 	
 	
 	//	Class: Throwable
-	public class Throwable extends Sprite
+	public class Throwable extends Dynamic
 	{
-		
-		private var xSpeed:Number;			//	Current speed in the x direction
-		private var xAccel:Number;			//	Current acceleration in the y direction
-		private var ySpeed:Number;
-		private var yAccel:Number;
-		private var moving:Boolean;			//	True if the object is moving (has been thrown/not collided)
-		public var collidable:Collidable;	//	Collision box for checking collisions once thrown
-		
+	
 		//	Constructor: default
 		public function Throwable() 
 		{
@@ -38,33 +31,11 @@ package jamazing.jamstory.entity
 		//	Initialises the throwable once it's been added to the stage
 		private function onInit(e:Event = null):void
 		{
-			collidable = new Collidable(x, y, 5);
-			
-			xSpeed = 0;
-			ySpeed = 0;
-			xAccel = 0;
-			yAccel = 0;
-			moving = false;
+			hitbox = new Collidable(x, y, trueWidth);
+			isMoving = false;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
-			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(PlayerEvent.THROWABLE_COLLISION, onCollide);
-		}
-		
-		//	Listener: onTick
-		//	Updates the position each frame
-		public function onTick(e:Event):void
-		{
-			//	Update Movement
-			if (moving) {
-				x += xSpeed;
-				y += ySpeed;
-				ySpeed += yAccel;
-				xSpeed += xAccel;
-			}
-			//	Update the collision box position
-			collidable.x = x;
-			collidable.y = y;
 		}
 		
 		//	Listener: onCollide
@@ -87,7 +58,7 @@ package jamazing.jamstory.entity
 			
 			this.xAccel = xAccel;
 			this.yAccel = yAccel;
-			this.moving = true;
+			this.isMoving = true;
 		}
 		
 		//	Function: throwCartesian
@@ -99,7 +70,7 @@ package jamazing.jamstory.entity
 			this.ySpeed = ySpeed;
 			this.xAccel = xAccel;
 			this.yAccel = yAccel;
-			this.moving = true;
+			this.isMoving = true;
 		}
 		
 		//	Function: setAcceleration
