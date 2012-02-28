@@ -10,6 +10,7 @@ package jamazing.jamstory.entity
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.Point;
 	import jamazing.jamstory.entity.BoxCollidable;
 	
@@ -22,7 +23,7 @@ package jamazing.jamstory.entity
 		public var trueWidth:Number;
 		public var trueHeight:Number;
 		
-		//	Constructor: (int, int, int, int, int)
+		//	Constructor: default
 		public function Static() 
 		{
 			super();
