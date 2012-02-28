@@ -9,7 +9,9 @@ package jamazing.jamstory
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.media.Sound;
 	import jamazing.jamstory.engine.Camera;
+	import jamazing.jamstory.engine.Resource;
 	
 	import jamazing.jamstory.containers.Layer;
 	import jamazing.jamstory.events.JamStoryEvent;
@@ -55,6 +57,9 @@ package jamazing.jamstory
 			addChild(world);
 			addChild(overlay);
 			addChild(layer);
+			
+			var music:Sound = new Resource.SOUND_BGMUSIC();
+			music.play();
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);

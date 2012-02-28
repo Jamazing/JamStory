@@ -13,6 +13,8 @@ package jamazing.jamstory.entity
 	import flash.geom.Point;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.media.Sound;
+	import flash.media.SoundTransform;
 	
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.engine.Resource;
@@ -242,7 +244,11 @@ package jamazing.jamstory.entity
 			
 			if (Keys.isDown(Keys.W) && !currentState.isInAir()) {	// If W is pressed and the player is not in the air...
 				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER;											// ... the height at which he should jump is calculated ...
-				currentState = PlayerState.JUMP;																				// ... and his state is changed to indicate he is jumping
+				currentState = PlayerState.JUMP;					// ... and his state is changed to indicate he is jumping
+				
+				//	Jump sound with sound moderation
+				var jumpSound:Sound = new Resource.SOUND_JUMP();
+				jumpSound.play(0,0,new SoundTransform(0.3));
 			}
 		
 			

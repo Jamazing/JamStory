@@ -30,6 +30,16 @@ package jamazing.jamstory.engine
 		//		Note: The mimeType fakes an octet stream as flash will try to compile the embedded XML file otherwise.
 		[Embed(source="../../../../resources/level.xml" , mimeType="application/octet-stream")]
 		public static var LEVEL:Class
+		
+		//	The main Background music
+		[Embed(source = "../../../../resources/bongo.mp3")]
+		public static var SOUND_BGMUSIC:Class;
+		
+		//	The jumping noise
+		[Embed(source = "../../../../resources/jump.mp3")]
+		public static var SOUND_JUMP:Class;
+		
+		
 	}
 
 }
