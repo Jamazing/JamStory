@@ -7,6 +7,7 @@
 
 package jamazing.jamstory.entity 
 {
+	import jamazing.jamstory.language.Enum;
 	
 	//	Class: Direction
 	public final class Direction extends Enum

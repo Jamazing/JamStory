@@ -9,8 +9,9 @@ package jamazing.jamstory
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	
+	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.containers.World;
-	import jamazing.jamstory.util.Keys;
 	import jamazing.jamstory.containers.Background;
 	import jamazing.jamstory.containers.Overlay;
 	import jamazing.jamstory.entity.PlayerTarget;
@@ -53,6 +54,7 @@ package jamazing.jamstory
 		//	Throws the relevant type of tick event
 		private function onTick(e:Event):void
 		{
+			
 		}
 		
 	}

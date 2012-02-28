@@ -15,7 +15,7 @@ package jamazing.jamstory.containers
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.AntiAliasType;
-	import jamazing.jamstory.util.Resource;
+	import jamazing.jamstory.engine.Resource;
 	
 	//	Class: Overlay
 	public class Overlay extends Sprite

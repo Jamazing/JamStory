@@ -9,7 +9,7 @@ package jamazing.jamstory.containers
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import jamazing.jamstory.util.Resource;
+	import jamazing.jamstory.engine.Resource;
 	
 	//	Class: Background
 	public class Background extends Sprite

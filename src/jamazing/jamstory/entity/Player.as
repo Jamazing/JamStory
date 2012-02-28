@@ -11,13 +11,14 @@ package jamazing.jamstory.entity
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Point;
-	import jamazing.jamstory.object.Collidable.Collidable;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import jamazing.jamstory.events.PlayerEvent;
-	import jamazing.jamstory.util.Keys;	
+	
+	import jamazing.jamstory.engine.Keys;
+	import jamazing.jamstory.engine.Resource;
+	import jamazing.jamstory.object.Collidable.Collidable;
 	import jamazing.jamstory.entity.PlayerTarget;
-	import jamazing.jamstory.util.Resource;
+	import jamazing.jamstory.events.PlayerEvent;
 	import jamazing.jamstory.events.WorldEvent;
 	
 	
@@ -198,13 +199,13 @@ package jamazing.jamstory.entity
 
 		//	Getter: PlayerSpeed
 		//	This returns the speed of the player
-		public function get PlayerSpeed()
+		public function get PlayerSpeed():Number
 		{		
 			if (currentState.isGroundBased())
 			{
-				if (currentState = PlayerState.WALK)
+				if (currentState == PlayerState.WALK)
 					return WALK_SPEED;
-				else if (currentState = PlayerState.RUN)
+				else if (currentState == PlayerState.RUN)
 					return RUN_SPEED;
 			}
 			

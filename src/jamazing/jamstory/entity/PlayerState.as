@@ -8,6 +8,8 @@
 package jamazing.jamstory.entity 
 {
 	
+	import jamazing.jamstory.language.Enum;
+	
 	//	Class: PlayerState
 	public final class PlayerState extends Enum
 	{

@@ -5,7 +5,7 @@
 //		Static utility for easy access to all the embedded resources
 //		Avoids problems with embedded code being hidden through other classes
 
-package jamazing.jamstory.util 
+package jamazing.jamstory.engine 
 {
 
 	

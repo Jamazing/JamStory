@@ -4,7 +4,7 @@
 //	KeyHandler Utility
 //		Abstracts key pressing events for easy access
 
-package jamazing.jamstory.util 
+package jamazing.jamstory.engine 
 {	
 	import flash.display.Stage;
 	import flash.ui.Keyboard;

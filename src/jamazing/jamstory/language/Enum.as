@@ -6,7 +6,7 @@
 //		This is a typesafe and self-numering Enum implementation
 
 
-package jamazing.jamstory.entity 
+package jamazing.jamstory.language 
 {
 		
 	//	Class: Enum

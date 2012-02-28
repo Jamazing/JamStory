@@ -13,13 +13,15 @@ package jamazing.jamstory.containers
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
+	
+	import jamazing.jamstory.engine.Keys;
+	import jamazing.jamstory.engine.Resource;
 	import jamazing.jamstory.entity.TestPlayer;
-	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.object.Platform;
 	import jamazing.jamstory.object.Throwable;
-	import jamazing.jamstory.util.Keys;
+	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.events.PlayerEvent;
-	import jamazing.jamstory.util.Resource;
+	
 	
 	import jamazing.jamstory.entity.Player;
 	
