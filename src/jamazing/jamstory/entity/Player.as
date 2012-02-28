@@ -26,15 +26,15 @@ package jamazing.jamstory.entity
 	public class Player extends Sprite
 	{
 		//	Constants
-		static private const TWELVE:Number = 12;				//	??
+		static private const TWELVE:Number = 12;				//	12
 		static private const MOVE_OFFSET:Number = 12;			//	This controls by how many pixels will the player object displace when movement is initiated		
-		static private const GLOBAL_ACC_INTERVAL:Number = 10;	//	??
+		static private const GLOBAL_ACC_INTERVAL:Number = 10;	//	This specifies how long does it take for the player to switch from walking to running
 		static private const JUMP_SPEED:Number = 12;			//	Speed at which the player begins their jump
-		static private const IDLE_JUMP_OFFSET:Number = 50;		//	??
+		static private const IDLE_JUMP_OFFSET:Number = 50;		//	This specifies the height, at which the player will jump from idle
 		static private const JUMP_MODIFIER:Number = 12;			//	??
 		static private const WALK_SPEED:Number = 12;			//	Speed the player moves when "walking"
 		static private const RUN_SPEED:Number = 24;				//	Speed the player moves when "running"
-		static private const FALL_MULTIPLIER:Number = 1.5;		// 	??	(1.5 feels better for some reason)
+		static private const FALL_MULTIPLIER:Number = 1.5;		// 	This controls the speed, at which the player will fall; 1 means he will fall as fast as he jumps, but 1.5 feels better ingame
 
 		public var collidable:Collidable;			//	Collision box of the player (radial)
 		public var jamjar:Bitmap;					//	Bitmap image of the player character
@@ -44,8 +44,8 @@ package jamazing.jamstory.entity
 		private var currentState:PlayerState;		//	Enum state of the current player state
 		private var currentHeading:Direction;		//	Enum state of the direction currently heading
 
-		private var accelerationInterval:Number;	//	??
-		private var jumpTargetYOffset:Number;		//	??
+		private var accelerationInterval:Number;	//	This variable is used to count for how long has the player been walking
+		private var jumpTargetYOffset:Number;		//	This variable is used when calculating how far until the player's jump hight peek has been reached
 		
 		
 		//	Constructor: default
