@@ -5,7 +5,7 @@
 //		handles throwing and display of the reticule
 
 
-package jamazing.jamstory.entity 
+package jamazing.jamstory.living 
 {
 	import flash.display.Shape;
 	import flash.events.Event;

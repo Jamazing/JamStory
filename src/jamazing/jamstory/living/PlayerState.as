@@ -5,7 +5,7 @@
 //		The different states of movement the player can be in
 
 
-package jamazing.jamstory.entity 
+package jamazing.jamstory.living 
 {
 	
 	import jamazing.jamstory.language.Enum;

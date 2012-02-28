@@ -16,14 +16,11 @@ package jamazing.jamstory.containers
 	
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.engine.Resource;
-	import jamazing.jamstory.entity.TestPlayer;
-	import jamazing.jamstory.object.Platform;
-	import jamazing.jamstory.object.Throwable;
+	import jamazing.jamstory.entity.Platform;
+	import jamazing.jamstory.entity.Throwable;
 	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.events.PlayerEvent;
-	
-	
-	import jamazing.jamstory.entity.Player;
+	import jamazing.jamstory.living.Player;
 	
 	//	Class: World
 	public class World extends Sprite

@@ -5,13 +5,13 @@
 //		Temporary Class
 //		Represents a platform you can jump on and run around
 
-package jamazing.jamstory.object 
+package jamazing.jamstory.entity 
 {
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.geom.Point;
-	import jamazing.jamstory.object.Collidable.BoxCollidable;
-	import jamazing.jamstory.object.Collidable.Collidable;
+	import jamazing.jamstory.entity.Collidable.BoxCollidable;
+	import jamazing.jamstory.entity.Collidable;
 	
 	//	Class: Platform
 	public class Platform extends Sprite

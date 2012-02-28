@@ -6,10 +6,11 @@
 //		Has methods for checking hit detection
 
 
-package jamazing.jamstory.object.Collidable 
+package jamazing.jamstory.entity 
 {
 	import flash.events.Event;
 	import flash.geom.Point;
+	import jamazing.jamstory.entity.Collidable.BoxCollidable;
 
 	
 	//	Class: Collidable
@@ -17,8 +18,8 @@ package jamazing.jamstory.object.Collidable
 	{
 		public var x:Number;			//	x position (world relative)
 		public var y:Number;			//	y position (world relati
-		internal var radius:Number;		//	radius from center to edge
-		internal var members:Array; 	//	array of collidables
+		public var radius:Number;		//	radius from center to edge
+		public var members:Array; 	//	array of collidables
 		
 		
 		//	Constructor: (int, int, int)

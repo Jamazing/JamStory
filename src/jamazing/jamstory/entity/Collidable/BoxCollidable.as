@@ -4,9 +4,9 @@
 //	BoxCollidable
 //		A collidable box shaped object
 
-package jamazing.jamstory.object.Collidable 
+package jamazing.jamstory.entity.Collidable 
 {
-
+	import jamazing.jamstory.entity.Collidable;
 	
 	//	Class: BoxCollidable
 	public class BoxCollidable extends Collidable

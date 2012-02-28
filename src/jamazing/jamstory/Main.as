@@ -14,7 +14,7 @@ package jamazing.jamstory
 	import jamazing.jamstory.containers.World;
 	import jamazing.jamstory.containers.Background;
 	import jamazing.jamstory.containers.Overlay;
-	import jamazing.jamstory.entity.PlayerTarget;
+	import jamazing.jamstory.living.PlayerTarget;
 	
 	
 	//	Class: Main

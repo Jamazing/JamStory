@@ -7,7 +7,7 @@
 //		Note: Changes have been made in World to accomodate this testing.
 
 
-package jamazing.jamstory.entity 
+package jamazing.jamstory.living 
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;

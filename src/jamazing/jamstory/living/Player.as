@@ -5,7 +5,7 @@
 //		Represents the player in the level
 
 
-package jamazing.jamstory.entity 
+package jamazing.jamstory.living 
 {
 	import flash.display.ActionScriptVersion;
 	import flash.display.Bitmap;
@@ -16,8 +16,8 @@ package jamazing.jamstory.entity
 	
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.engine.Resource;
-	import jamazing.jamstory.object.Collidable.Collidable;
-	import jamazing.jamstory.entity.PlayerTarget;
+	import jamazing.jamstory.entity.Collidable;
+	import jamazing.jamstory.living.PlayerTarget;
 	import jamazing.jamstory.events.PlayerEvent;
 	import jamazing.jamstory.events.WorldEvent;
 	

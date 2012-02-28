@@ -7,11 +7,11 @@
 //		Supports parabolic trajectories (including straight lines)
 
 
-package jamazing.jamstory.object 
+package jamazing.jamstory.entity 
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import jamazing.jamstory.object.Collidable.Collidable;
+	import jamazing.jamstory.entity.Collidable;
 	import jamazing.jamstory.events.PlayerEvent;
 	
 	
