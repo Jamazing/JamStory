@@ -21,6 +21,7 @@ package jamazing.jamstory.containers
 	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.events.PlayerEvent;
 	import jamazing.jamstory.entity.Player;
+	import jamazing.jamstory.engine.Camera;
 	
 	//	Class: World
 	public class World extends Sprite
@@ -88,6 +89,8 @@ package jamazing.jamstory.containers
 			}
 			
 			testCollisions();
+			
+			Camera.setFocus(player);
 		}
 
 		//	Function: testCollisions

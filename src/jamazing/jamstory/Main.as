@@ -9,7 +9,10 @@ package jamazing.jamstory
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import jamazing.jamstory.engine.Camera;
 	
+	import jamazing.jamstory.containers.Layer;
+	import jamazing.jamstory.events.JamStoryEvent;
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.containers.World;
 	import jamazing.jamstory.containers.Background;
@@ -23,6 +26,9 @@ package jamazing.jamstory
 		private var background:Background;	//	Background container
 		private var world:World;			//	World container
 		private var overlay:Overlay;		//	UI Overlay container
+		
+		private var layer:Layer;
+		private var tickCount:int;
 		
 		//	Constructor: default
 		public function Main():void 
@@ -38,12 +44,17 @@ package jamazing.jamstory
 			background = new Background();
 			world = new World();
 			overlay = new Overlay();
+			layer = new Layer();
 			
 			var keys:Keys = new Keys(stage);	//	Initialise the static Keys Utility
+			var focusCam:Camera = new Camera(stage);
+			
+			tickCount = 0;
 			
 			addChild(background);
 			addChild(world);
 			addChild(overlay);
+			addChild(layer);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
@@ -53,7 +64,9 @@ package jamazing.jamstory
 		//	Throws the relevant type of tick event
 		private function onTick(e:Event):void
 		{
-			
+			tickCount++;
+			stage.dispatchEvent(new JamStoryEvent(JamStoryEvent.TICK, tickCount));
+			stage.dispatchEvent(new JamStoryEvent(JamStoryEvent.TICK_MAIN, tickCount));
 		}
 		
 	}

@@ -19,6 +19,9 @@ package jamazing.jamstory.entity
 	public class Throwable extends Dynamic
 	{
 	
+		private var bounces:int;
+		private var bouncesMax:int;
+		
 		//	Constructor: default
 		public function Throwable() 
 		{
@@ -33,6 +36,8 @@ package jamazing.jamstory.entity
 		{
 			hitbox = new Collidable(x, y, trueWidth);
 			isMoving = false;
+			bounces = 0;
+			bouncesMax = 2;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(PlayerEvent.THROWABLE_COLLISION, onCollide);
@@ -42,9 +47,14 @@ package jamazing.jamstory.entity
 		//	Reacts to any collisions by bouncing
 		private function onCollide(e:PlayerEvent):void
 		{
+			bounces++;
 			ySpeed *= -0.5;
 			xSpeed *= 0.5;
 			y = e.y;
+			if (bounces > bouncesMax) {
+				isMoving = false;
+				ySpeed = 0;
+			}
 		}
 		
 		//	Function: throwPolar
