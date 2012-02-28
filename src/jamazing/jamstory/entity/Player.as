@@ -2,77 +2,55 @@
 //	Author: Gordon D Mckendrick, Stefan Hristov, Ivan Mateev
 //
 //	Player Object
-//	Represents the player in the level
-//	Future versions should extend a generic entity class
-//	Presently extends BaseObject
-//	[TODO: Implement direciton]
+//		Represents the player in the level
+
 
 package jamazing.jamstory.entity 
 {
 	import flash.display.ActionScriptVersion;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import flash.events.GestureEvent;
 	import flash.geom.Point;
 	import jamazing.jamstory.object.Collidable.Collidable;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import jamazing.jamstory.events.PlayerEvent;
-	import jamazing.jamstory.object.BaseObject;
 	import jamazing.jamstory.util.Keys;	
 	import jamazing.jamstory.entity.PlayerTarget;
 	import jamazing.jamstory.util.Resource;
 	import jamazing.jamstory.events.WorldEvent;
 	
+	
 	//	Class: Player
-	//	Represents the player entity that the user controls
-	public class Player extends BaseObject
+	public class Player extends Sprite
 	{
-		/* Collidable object to handle collisions */
-		public var collidable:Collidable;
-		/* until here */
-		
-		/* Constants start here */
-		static private const TWELVE:Number = 12;
-		static private const MOVE_OFFSET:Number = 12;	// This controls by how many pixels will the player object displace when movement is initiated		
-		static private const GLOBAL_ACC_INTERVAL:Number = 10;
-		static private const JUMP_SPEED:Number = 12;
-		static private const IDLE_JUMP_OFFSET:Number = 50;
-		static private const JUMP_MODIFIER:Number = 12;
-		static private const WALK_SPEED:Number = 12;
-		static private const RUN_SPEED:Number = 24;
-		static private const FALL_MULTIPLIER:Number = 1.5;		// 1.5 feels better for some reason
-		/* until here */
+		//	Constants
+		static private const TWELVE:Number = 12;				//	??
+		static private const MOVE_OFFSET:Number = 12;			//	This controls by how many pixels will the player object displace when movement is initiated		
+		static private const GLOBAL_ACC_INTERVAL:Number = 10;	//	??
+		static private const JUMP_SPEED:Number = 12;			//	Speed at which the player begins their jump
+		static private const IDLE_JUMP_OFFSET:Number = 50;		//	??
+		static private const JUMP_MODIFIER:Number = 12;			//	??
+		static private const WALK_SPEED:Number = 12;			//	Speed the player moves when "walking"
+		static private const RUN_SPEED:Number = 24;				//	Speed the player moves when "running"
+		static private const FALL_MULTIPLIER:Number = 1.5;		// 	??	(1.5 feels better for some reason)
 
-		/* The following control image drawing */
-		public var jamjar:Bitmap;
-		/* until here */
+		public var collidable:Collidable;			//	Collision box of the player (radial)
+		public var jamjar:Bitmap;					//	Bitmap image of the player character
 		
-		/* The following will controll the movement and location */
-		private var currentState:PlayerState;
-		private var currentHeading:Direction;
-		/* until here */
+		private var reticule:PlayerTarget;			//	Targetting system
+		
+		private var currentState:PlayerState;		//	Enum state of the current player state
+		private var currentHeading:Direction;		//	Enum state of the direction currently heading
 
-		/* The following will controll acceleration */
-		private var accelerationInterval:Number;
-		/* until here */
-		
-		/* Targetting System */
-		private var reticule:PlayerTarget;
-		/* until here */
-		
-		/* When the player jumps, this variable specifies how far along the y-axis until he has to start falling down */
-		private var jumpTargetYOffset:Number;
-		/* Until here */
+		private var accelerationInterval:Number;	//	??
+		private var jumpTargetYOffset:Number;		//	??
 		
 		
 		//	Constructor: default
-		//	Ensure stage is initialised before initialising the player
 		public function Player() 
 		{
-			super();	//	Call base class constructor
-
-			//	Wait for the stage to initialize and then initialize player.
+			super();
 			if (stage) onInit();									
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);	
 		}
@@ -89,21 +67,17 @@ package jamazing.jamstory.entity
 			reticule = new PlayerTarget();
 			addChild(reticule);
 			
-			// These create the sprite...
+			//	These create the sprite...
 			jamjar = new Resource.CHARACTER_IMAGE();
 			jamjar.width = 75;
 			jamjar.height = 75;
-			addChild(jamjar); 	// ... and attach it to the player
+			addChild(jamjar);
 			jamjar.x = -jamjar.width/2;		//	Ensure registration point is in the center
 			jamjar.y = -jamjar.height/2;
 
 			// These control where the player will spawn, relative to the stage
 			x = stage.stageWidth / 10;
-			y = stage.stageHeight/2;// / 20;
-
-			// These control where the center of the player is
-			XLocation = x + jamjar.width / 2;
-			YLocation = y + jamjar.height / 2;
+			y = stage.stageHeight / 2;
 			
 			// Initialize the player state
 			currentState = new PlayerState(PlayerState.FALL);
@@ -119,6 +93,7 @@ package jamazing.jamstory.entity
 			stage.addEventListener(PlayerEvent.NOCOLLIDE, onNoCollide);
 		}
 
+		
 		//	Function: onNoCollide (PlayerEvent)
 		//	Envoked when a player steps of a ledge;
 		public function onNoCollide(removedCollisionEvent:PlayerEvent):void
@@ -126,6 +101,7 @@ package jamazing.jamstory.entity
 			if (currentState != PlayerState.JUMP)
 				currentState=PlayerState.FALL;
 		}
+		
 		
 		//	Function: onCollide (PlayerEvent)
 		//	Changes the player's states, depending on the collision;
@@ -140,6 +116,7 @@ package jamazing.jamstory.entity
 			}
 		}
 		
+		
 		//	Function: updateJumpLocation
 		//	This function gets called every frame If the player is in a jump state;
 		//  This updates his current location and also calculates how far until he starts falling down 
@@ -153,6 +130,7 @@ package jamazing.jamstory.entity
 				currentState = PlayerState.FALL; 		// ... the current state becomses "Falling"
 		}
 		
+		
 		// Function: updateFallLocaton
 		// This function gets called every frame If the player is in a fall state;
 		// This updates his current location;
@@ -160,16 +138,7 @@ package jamazing.jamstory.entity
 		{
 			y += JUMP_SPEED*FALL_MULTIPLIER;			
 		}
-
-		/*
-		//	Function: bounce
-		//	Makes the player jump by applying a force upwards
-		public function bounce():void
-		{
-			;//yForce = -(Math.abs(yForce) * 1.2) - 200;
-		}
-		* [TODO: Reimplement this completely!]
-		*/		
+		
 		
 		//	Function: updateMovementState (direction)
 		//	This function gets called every time there is an input from the keyboard;
@@ -199,7 +168,7 @@ package jamazing.jamstory.entity
 			if (currentState == PlayerState.IDLE)
 				return;
 			
-			if (currentState.IsGroundBased())
+			if (currentState.isGroundBased())
 			{
 				x += Direction.DirectionModifier(currentHeading) * (currentState==PlayerState.WALK ? WALK_SPEED : RUN_SPEED);
 			}
@@ -216,12 +185,12 @@ package jamazing.jamstory.entity
 			
 		}
 		
-		//	Function: applyHover (direction)
+		//	Function: applyHover
 		//  This function gets called every time there has been a change of direction;
 		//	It handles movement in mid-air
 		private function applyHover(newDirection:Direction):void
 		{
-			if (!currentState.IsInAir())	// If we are not mid-air...
+			if (!currentState.isInAir())	// If we are not mid-air...
 				return;							// ... ignore.
 			
 			x += MOVE_OFFSET * Direction.DirectionModifier(newDirection);				
@@ -231,7 +200,7 @@ package jamazing.jamstory.entity
 		//	This returns the speed of the player
 		public function get PlayerSpeed()
 		{		
-			if (currentState.IsGroundBased())
+			if (currentState.isGroundBased())
 			{
 				if (currentState = PlayerState.WALK)
 					return WALK_SPEED;
@@ -239,7 +208,7 @@ package jamazing.jamstory.entity
 					return RUN_SPEED;
 			}
 			
-			if (currentState.IsInAir())
+			if (currentState.isInAir())
 			{
 				return JUMP_SPEED;
 			}
@@ -266,11 +235,11 @@ package jamazing.jamstory.entity
 			}
 			else 
 			{
-				if(!currentState.IsInAir())								// ... If the player is not jumping and not falling
+				if(!currentState.isInAir())								// ... If the player is not jumping and not falling
 					currentState = PlayerState.IDLE;																								// ... he must be idle, so his state is changed to that
 			}
 			
-			if (Keys.isDown(Keys.W) && !currentState.IsInAir()) {	// If W is pressed and the player is not in the air...
+			if (Keys.isDown(Keys.W) && !currentState.isInAir()) {	// If W is pressed and the player is not in the air...
 				jumpTargetYOffset = IDLE_JUMP_OFFSET + JUMP_MODIFIER;											// ... the height at which he should jump is calculated ...
 				currentState = PlayerState.JUMP;																				// ... and his state is changed to indicate he is jumping
 			}

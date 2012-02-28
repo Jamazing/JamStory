@@ -1,7 +1,8 @@
 //	Copyright 2012 Jamazing Games
 //	Author: Ivan Mateev
 //	Contrib: Gordon D Mckendrick
-//	The World object that holds all level data
+//	The World
+//		Holds all level data
 
 package jamazing.jamstory.containers
 {
@@ -22,22 +23,17 @@ package jamazing.jamstory.containers
 	
 	import jamazing.jamstory.entity.Player;
 	
+	//	Class: World
 	public class World extends Sprite
 	{
 
-		/* This holds the last player event, which has been thrown */
-		private	var lastPlayerHitAnnouncement:PlayerEvent = null;
-		/* ends here */
+		private	var lastPlayerHitAnnouncement:PlayerEvent = null;	//	Holds the last PlayerEvent thrown
 
+		private var staticObjects:Array;	//	Array of Static level objects such as platforms
+		private var dynamicObjects:Array;	//	Array of Dynamic objects such as throwables
+		private var entities:Array;			//	Array of Living Entities, such as enemies
 		
-		private var staticObjects:Array;	//	This will contain the level objects
-		private var dynamicObjects:Array;	//	Objects for which collision detection is necessary
-		private var entities:Array;			//	Living Entities, such as enemies
-
-		static private const TWELVE:Number = 12;	// This is to remind me that there is something todo
-														// -Ivan
-		
-		public var player:Player;// TestPlayer;		//	The player object
+		public var player:Player;			//	The player object
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
 		
@@ -53,19 +49,16 @@ package jamazing.jamstory.containers
 		//	Initialises this, once the stage reference has been formed
 		public function onInit(e:Event = null):void
 		{
-			//	Memory Allocations
 			staticObjects = new Array();
 			dynamicObjects = new Array();
 			entities = new Array();
+			player = new Player;
 			
-			player = new Player;// TestPlayer();
 			loadLevel();
 			
-			//	Variable Initialisation
 			x = 0;
 			y = stage.stageHeight;
 			
-			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(PlayerEvent.THROW, onThrow);
@@ -98,10 +91,13 @@ package jamazing.jamstory.containers
 			testCollisions();
 		}
 
+		//	Function: testCollisions
+		//	Checks through possible collisions in the world and dispatches the events for thems
 		private function testCollisions():void
 		{
 			var hasPlayerEventOccured:Boolean = false;
 			
+			//	Check collisions between the player and staticObjects
 			for each (var platform:Platform in staticObjects) {
 				if (platform.isHit(player.collidable)) {
 					lastPlayerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height / 2, 0, player.PlayerSpeed);
@@ -116,6 +112,7 @@ package jamazing.jamstory.containers
 				if (lastPlayerHitAnnouncement!=null && !lastPlayerHitAnnouncement.HasNoMagnitude)
 					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, lastPlayerHitAnnouncement.x, lastPlayerHitAnnouncement.y, 0, player.PlayerSpeed));
 			
+			//	Check collisions between each dynamic object (non-player) and each static object
 			for each (var platform:Platform in staticObjects) {
 				for each (var throwable:Throwable in dynamicObjects) {
 					if (platform.isHit(throwable.collidable)) {
@@ -129,6 +126,8 @@ package jamazing.jamstory.containers
 		//	Loads the level data into objects
 		public function loadLevel():void
 		{
+			//	Load the XML as a byte array; to pass it through flash
+			//		XML data -> ByteArray -> String -> XML Object
 			var bytes:ByteArray = (new Resource.LEVEL()) as ByteArray;
 			var s:String = bytes.readUTFBytes( bytes.length);
 			var xml:XML = new XML(s);

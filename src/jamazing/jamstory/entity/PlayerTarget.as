@@ -4,6 +4,7 @@
 //		The targetting system for the player, as a graphical display
 //		handles throwing and display of the reticule
 
+
 package jamazing.jamstory.entity 
 {
 	import flash.display.Shape;
@@ -15,15 +16,17 @@ package jamazing.jamstory.entity
 	import flash.text.TextField;
 	import jamazing.jamstory.events.PlayerEvent;
 
+	
 	//	Class: PlayerTarget
 	public class PlayerTarget extends Sprite
 	{
+		private static const radius:int = 150;	//	radius from player to the visible crosshair marker
 		
-		private static const radius:int = 150;	//	radius from player to the reticule
-		private var reticule:Shape;
+		private var reticule:Shape;				//	Visual object for the crosshair
 
-		private var throwPower:Number;
-		private var charging:Boolean;
+		private var throwPower:Number;			//	Current level of power that has been built up
+		private var charging:Boolean;			//	True if the player is holding the mouse to charge the shot
+		
 		
 		//	Constructor: default
 		public function PlayerTarget() 
@@ -32,26 +35,22 @@ package jamazing.jamstory.entity
 				else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
 		
+		
 		//	Function: onInit
 		//	Initialises the reticule once the player and stage are created
 		private function onInit(e:Event = null):void
 		{
-			//	Memory Allocation
 			reticule = new Shape();
 			
-			//	Variable Initialisation
 			charging = false;
 			throwPower = 0;
 			
-			//	Graphics Initialisation
 			reticule.graphics.beginFill(0xFF0000);
 			reticule.graphics.drawCircle(radius, 0, 5);
 			reticule.graphics.endFill();
 			
-			//	Child Objects
 			addChild(reticule);
 			
-			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -62,7 +61,7 @@ package jamazing.jamstory.entity
 		//	Runs once per frame to update the positions
 		private function onTick(e:Event):void
 		{
-			rotation = getAimingAngle();
+			rotation = getAimingAngle();	//	Match the visual crosshair position to the position your mouse aims at
 			updateThrow();
 		}
 		
@@ -106,10 +105,10 @@ package jamazing.jamstory.entity
 		private function getAimingAngle():Number
 		{
 			//	Get the angle from the player to the cursor
-			var point:Point = localToGlobal(new Point(x, y));	//	Turn player to stage co-ordinates
-			var dx:Number = stage.mouseX - point.x;				//	Get mouse stage co-ordinates
+			var point:Point = localToGlobal(new Point(x, y));			//	Turn player to stage co-ordinates
+			var dx:Number = stage.mouseX - point.x;						//	Get mouse stage co-ordinates
 			var dy:Number = stage.mouseY - point.y;
-			var angle:Number = (180 / Math.PI) * Math.atan(dy / dx);	//	Calculate angle
+			var angle:Number = (180 / Math.PI) * Math.atan(dy / dx);	//	Calculate angle between the player and the mouse position
 			
 			//	Ensure the angle is correct for negative x
 			if (dx < 0) {

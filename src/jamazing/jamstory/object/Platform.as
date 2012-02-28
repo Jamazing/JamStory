@@ -13,18 +13,18 @@ package jamazing.jamstory.object
 	import jamazing.jamstory.object.Collidable.BoxCollidable;
 	import jamazing.jamstory.object.Collidable.Collidable;
 	
-	
+	//	Class: Platform
 	public class Platform extends Sprite
 	{
-		public var colour:int;	//	colour of the platform
-		public var collidable:BoxCollidable;
+		public var colour:int;					//	Colour of the platform
+		public var collidable:BoxCollidable;	//	Collision box for this platform.
 		
+		//	Constructor: (int, int, int, int, int)
 		public function Platform(x:int, y:int, width:int, height:int, colour:int = 0x0033FF  ) 
 		{
 			super();
 			this.colour = colour;
 			
-			//var point:Point = localToGlobal(new Point(x, y));
 			collidable = new BoxCollidable(x, y, width, height);
 			
 			//	Main graphics for the body
@@ -43,6 +43,9 @@ package jamazing.jamstory.object
 			this.y = y;
 		}
 		
+		
+		//	Function: isHit
+		//	Returns true if it's colliding with the given Collidable
 		public function isHit(c:Collidable):Boolean
 		{
 			return collidable.isHit(c);

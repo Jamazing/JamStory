@@ -15,38 +15,36 @@ package jamazing.jamstory.containers
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.AntiAliasType;
+	import jamazing.jamstory.util.Resource;
 	
-	
-		
+	//	Class: Overlay
 	public class Overlay extends Sprite
 	{
-		[Embed(source="../../../../resources/jamjar.png")]
-		private var foreImage:Class;
+		private var frontGraphic:Bitmap;	//	Big character image for the front of the screen
+		private var text:TextField;			//	Basic text overlay
 		
-		private var jamjar:Bitmap;
-		private var text:TextField;
-		
+		//	Constructor: default
 		public function Overlay() 
 		{
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
 		
+		//	Function: onInit
+		//	Initialises the overlay once added to the stage
 		private function onInit(e:Event = null):void
 		{
-			//	Memory Allocation
-			jamjar = new foreImage();
+			frontGraphic = new Resource.CHARACTER_IMAGE();
 			text = new TextField();
 			
-			//	Variable Initialisation
-			//		JamJar initialisation
-			jamjar.width = 250;
-			jamjar.height = 250;
-			jamjar.rotation = 45;
-			jamjar.x = 50;
-			jamjar.y = stage.stageHeight - 200;
+			//	JamJar initialisation
+			frontGraphic.width = 250;
+			frontGraphic.height = 250;
+			frontGraphic.rotation = 45;
+			frontGraphic.x = 50;
+			frontGraphic.y = stage.stageHeight - 200;
 			
-			//		Overlay Text "JamStory"
+			//	Overlay Text "JamStory"
 			text.text = "JamStory";
 			var format:TextFormat = text.getTextFormat();
 			format.font = "Showcard Gothic";
@@ -59,7 +57,7 @@ package jamazing.jamstory.containers
 			text.y = stage.stageHeight - 60;
 			
 			//	Child objects
-			addChild(jamjar);
+			addChild(frontGraphic);
 			addChild(text);
 			
 			//	Event Listeners

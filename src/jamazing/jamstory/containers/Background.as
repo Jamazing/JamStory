@@ -9,13 +9,12 @@ package jamazing.jamstory.containers
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import jamazing.jamstory.util.Resource;
 	
 	//	Class: Background
 	public class Background extends Sprite
 	{
-		[Embed(source="../../../../resources/kitchen.jpg")]
-		private var bgImage:Class;
-		private var staticBG:Bitmap;
+		private var staticBG:Bitmap;	//	Static background image of the game
 		
 		//	Constructor: default
 		public function Background() 
@@ -28,17 +27,14 @@ package jamazing.jamstory.containers
 		//	Initialises the object once it has a stage reference
 		public function onInit(e:Event = null):void
 		{
-			//	Memory Allocation
-			staticBG = new bgImage();
+			staticBG = new Resource.BACKGROUND_IMAGE();
+			
 			staticBG.width = stage.stageWidth;
 			staticBG.height = stage.stageHeight;
 			staticBG.alpha = 0.5;
 			
-			//	Children
 			addChild(staticBG);
 			
-			
-			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
 		

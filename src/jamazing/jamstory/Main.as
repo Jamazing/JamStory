@@ -1,7 +1,9 @@
 ﻿//	Copyright 2012 Jamazing Games©
 //	Author: Gordon Mckendrick
 //
-//	Main class for the JamStory game
+//	Main
+//		Controls the initialisation and game timing
+//		Throws events for each stage of the game
 
 package jamazing.jamstory
 {
@@ -12,7 +14,8 @@ package jamazing.jamstory
 	import jamazing.jamstory.containers.Background;
 	import jamazing.jamstory.containers.Overlay;
 	import jamazing.jamstory.entity.PlayerTarget;
-	// test commit
+	
+	
 	//	Class: Main
 	public class Main extends Sprite 
 	{
@@ -32,26 +35,22 @@ package jamazing.jamstory
 		//	Initialises the game once the stage is initialised
 		private function onInit(e:Event = null):void 
 		{	
-			//	Memory Allocation
 			background = new Background();
 			world = new World();
 			overlay = new Overlay();
 			
+			var keys:Keys = new Keys(stage);	//	Initialise the static Keys Utility
 			
-			var keys:Keys = new Keys(stage);
-			
-			//	Children
 			addChild(background);
 			addChild(world);
 			addChild(overlay);
 			
-			//	Event Listeners
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 		}
 		
 		//	Function: onTick
-		//	Crontrols the game each frame
+		//	Throws the relevant type of tick event
 		private function onTick(e:Event):void
 		{
 		}

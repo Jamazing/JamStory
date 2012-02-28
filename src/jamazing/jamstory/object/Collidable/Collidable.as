@@ -5,26 +5,32 @@
 //		Base for the collidable objects
 //		Has methods for checking hit detection
 
+
 package jamazing.jamstory.object.Collidable 
 {
 	import flash.events.Event;
 	import flash.geom.Point;
 
+	
+	//	Class: Collidable
 	public class Collidable
 	{
-		public var x:Number;
-		public var y:Number;
-		internal var radius:Number;
-		internal var members:Array; //array of collidables
+		public var x:Number;			//	x position (world relative)
+		public var y:Number;			//	y position (world relati
+		internal var radius:Number;		//	radius from center to edge
+		internal var members:Array; 	//	array of collidables
 		
-		//	Constructor: default
+		
+		//	Constructor: (int, int, int)
 		public function Collidable(x:int, y:int, radius:int)
 		{
+			members = new Array();
+			
 			this.x = x;
 			this.y = y;
 			this.radius = radius;
-			members = new Array();
 		}
+		
 		
 		//	Function: isHit
 		//	Returns true if the collidable is hitting it
@@ -37,10 +43,12 @@ package jamazing.jamstory.object.Collidable
 				
 			}else {
 				var distance:Number = (x - c.x) * (x - c.x) + (y - c.y) * (y - c.y);
-				var difference:Number = distance - ((radius + c.radius)*(radius + c.radius));
-				//	If hits, check every sub object
-				//	If there are no sub object - return
-				//	If any sub object (and their children) registers a hit - return true
+				var difference:Number = distance - ((radius + c.radius) * (radius + c.radius));
+				
+				//	If it hits, check every sub object
+				//		If any sub object (and their children) registers a hit - return true
+				//		If there are no sub object - return true
+				
 				if (difference <= 0) {
 					if (members.length > 0){
 						for each (var subCollidable:Collidable in members) {
@@ -58,6 +66,6 @@ package jamazing.jamstory.object.Collidable
 			return false;
 		}
 		
+		
 	}
-
 }
