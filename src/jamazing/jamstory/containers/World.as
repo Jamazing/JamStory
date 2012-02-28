@@ -97,7 +97,7 @@ package jamazing.jamstory.containers
 			var hasPlayerEventOccured:Boolean = false;
 			
 			//	Check collisions between the player and staticObjects
-			for each (var platform:Platform in staticObjects) {
+			for each (var platform:Static in staticObjects) {
 				if (platform.isHit(player.collidable)) {
 					lastPlayerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height / 2, 0, player.PlayerSpeed);
 
@@ -112,9 +112,9 @@ package jamazing.jamstory.containers
 					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, lastPlayerHitAnnouncement.x, lastPlayerHitAnnouncement.y, 0, player.PlayerSpeed));
 			
 			//	Check collisions between each dynamic object (non-player) and each static object
-			for each (var platform:Platform in staticObjects) {
+			for each (var platform:Static in staticObjects) {
 				for each (var throwable:Throwable in dynamicObjects) {
-					if (platform.isHit(throwable.collidable)) {
+					if (platform.isHit(throwable.hitbox)) {
 						throwable.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, platform.x, platform.y - platform.height/2));
 					}
 				}
@@ -141,8 +141,12 @@ package jamazing.jamstory.containers
 			//	loading the platforms
 			var statics:XMLList = xml.level.statics.obj;
 			for each (var p:XML in statics) {
-				var platform:Platform = new Platform(p.x, -p.y, p.width, p.height, p.colour);
+				var platform:Static = new Static();
+				platform.trueWidth = p.width;
+				platform.trueHeight = p.height;
 				staticObjects.push(platform);
+				platform.x = p.x;
+				platform.y = -p.y;
 				addChild(platform);
 			}
 			
