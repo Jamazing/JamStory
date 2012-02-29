@@ -39,7 +39,17 @@ package jamazing.jamstory.engine
 		[Embed(source = "../../../../resources/jump.mp3")]
 		public static var SOUND_JUMP:Class;
 		
+		//Jam being thrown
+		[Embed(source = "../../../../resources/JamThrowcopy.png")]
+		public static var JAM_THROW:Class;
 		
+		//Jam Hitting the ground
+		[Embed(source = "../../../../resources/JamHit#.png")]
+		public static var JAM_HIT:Class;
+		
+		//Jam splat
+		[Embed(source="../../../../resources/JamSplat.png")]
+		public static var JAM_SPLAT:Class;
 	}
 
 }

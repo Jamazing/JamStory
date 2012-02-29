@@ -20,7 +20,7 @@ package jamazing.jamstory.entity
 	{
 	
 		private var bounces:int;
-		private var bouncesMax:int;
+		public var bouncesMax:int;
 		
 		//	Constructor: default
 		public function Throwable() 

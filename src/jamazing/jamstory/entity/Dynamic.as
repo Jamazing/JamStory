@@ -37,7 +37,7 @@ package jamazing.jamstory.entity
 		
 		//	Listener: onTick
 		//	Updates the position each frame
-		protected function onTick(e:Event):void
+		private function onTick(e:Event):void
 		{
 			//	Update Movement
 			if (isMoving) {
