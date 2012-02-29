@@ -34,26 +34,14 @@ package jamazing.jamstory.entity
 			this.bitmap = bitmapData;
 	
 			super();
-			if (stage) onInit();
-			else addEventListener(Event.ADDED_TO_STAGE, onInit);
-		}
-		
-		private function onInit(e:Event = null):void
-		{
-			hitbox = new BoxCollidable(x, y, trueWidth, trueHeight);
 			
-			graphics.beginFill(0xFF6600);
-			graphics.drawRect( -trueWidth / 2, -trueHeight / 2, trueWidth, trueHeight);
-			graphics.endFill();
-			
-			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
 		
 		//	Function: isHit
 		//	Returns true if it's colliding with the given Collidable
 		public function isHit(c:Collidable):Boolean
 		{
-			return hitbox.isHit(c);
+			return hitbox!=null && hitbox.isHit(c);
 		}
 	}
 

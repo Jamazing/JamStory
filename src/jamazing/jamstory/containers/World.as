@@ -22,6 +22,7 @@ package jamazing.jamstory.containers
 	import jamazing.jamstory.events.PlayerEvent;
 	import jamazing.jamstory.entity.Player;
 	import jamazing.jamstory.engine.Camera;
+	import jamazing.jamstory.entity.Platform;
 	
 	//	Class: World
 	public class World extends Sprite
@@ -144,7 +145,7 @@ package jamazing.jamstory.containers
 			//	loading the platforms
 			var statics:XMLList = xml.level.statics.obj;
 			for each (var p:XML in statics) {
-				var platform:Static = new Static();
+				var platform:Platform = new Platform();// Static = new Static();
 				platform.trueWidth = p.width;
 				platform.trueHeight = p.height;
 				staticObjects.push(platform);
