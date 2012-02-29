@@ -13,6 +13,7 @@ package jamazing.jamstory.containers
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
+	import jamazing.jamstory.entity.Jam;
 	
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.engine.Resource;
@@ -165,21 +166,16 @@ package jamazing.jamstory.containers
 		//	Listens for the player throwing a new object
 		private function onThrow(e:PlayerEvent):void
 		{
-			var throwable:Throwable = new Throwable();
-			
-			//	Draw the thrown object for easy testing
-			throwable.graphics.beginFill(0x0066FF);
-			throwable.graphics.drawCircle(0, 0, 10);
-			throwable.graphics.endFill();
+			var jam:Jam = new Jam();
 			
 			//calculate position for the new shape
-			throwable.x = e.x;
-			throwable.y = e.y;
+			jam.x = e.x;
+			jam.y = e.y;
 			
 			//	Add to the display list
-			addChild(throwable);
-			dynamicObjects.push(throwable);
-			throwable.throwPolar(e.magnitude, e.angle);
+			addChild(jam);
+			dynamicObjects.push(jam);
+			jam.throwPolar(e.magnitude, e.angle);
 		}
 		
 		//	Function: toggleZoom (Boolean)
