@@ -35,7 +35,8 @@ package jamazing.jamstory.entity
 		{
 			// Initialize the sprite:
 			bitmap = new Resource.GENERIC_POWERUP();
-			bitmap.width = bitmap.height = 75 / 2;
+			bitmap.width /= 12;// ;-]
+			bitmap.height /= 12;
 			addChild(bitmap);
 			bitmap.x = bitmap.width / 2;
 			bitmap.y = bitmap.height / 2;			
