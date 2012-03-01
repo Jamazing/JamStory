@@ -33,7 +33,7 @@ package jamazing.jamstory.entity
 		static private const GLOBAL_ACC_INTERVAL:Number = 10;	//	This specifies how long does it take for the player to switch from walking to running
 		static private const JUMP_SPEED:Number = 12;			//	Speed at which the player begins their jump
 		static private const IDLE_JUMP_OFFSET:Number = 50;		//	This specifies the height, at which the player will jump from idle
-		static private const JUMP_MODIFIER:Number = 12;			//	??
+		static private const JUMP_MODIFIER:Number = 40;			//	Affects how high the player Jumps
 		static private const WALK_SPEED:Number = 12;			//	Speed the player moves when "walking"
 		static private const RUN_SPEED:Number = 24;				//	Speed the player moves when "running"
 		static private const FALL_MULTIPLIER:Number = 1.5;		// 	This controls the speed, at which the player will fall; 1 means he will fall as fast as he jumps, but 1.5 feels better ingame
@@ -116,13 +116,23 @@ package jamazing.jamstory.entity
 		//	Function: onCollide (PlayerEvent)
 		//	Changes the player's states, depending on the collision;
 		//	At present handles only jump/fall
-		public function onCollide(staticCollideEvent:PlayerEvent):void
+		public function onCollide(e:PlayerEvent):void
 		{
 			if (currentState == PlayerState.JUMP) {
 				currentState = PlayerState.JUMP;
 			}
 			else if (currentState == PlayerState.FALL) {
-				currentState = PlayerState.IDLE;
+				if (y < e.y){
+					currentState = PlayerState.IDLE;
+					y = e.y - 30;
+				}
+			}
+			else if ((currentState == PlayerState.WALK) || (currentState == PlayerState.RUN)) {
+				if (x < e.x) {
+					x--;
+				}else {
+					x++;
+				}
 			}
 		}		
 		
@@ -179,7 +189,11 @@ package jamazing.jamstory.entity
 			
 			if (currentState.isGroundBased())
 			{
-				x += Direction.DirectionModifier(currentHeading) * (currentState==PlayerState.WALK ? WALK_SPEED : RUN_SPEED);
+				if (isStuck) {
+					x += 0.2 * Direction.DirectionModifier(currentHeading) * (currentState==PlayerState.WALK ? WALK_SPEED : RUN_SPEED);
+				}else{
+					x += Direction.DirectionModifier(currentHeading) * (currentState==PlayerState.WALK ? WALK_SPEED : RUN_SPEED);
+				}
 			}
 			else if (currentState == PlayerState.JUMP)
 			{
