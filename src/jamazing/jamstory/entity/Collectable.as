@@ -41,6 +41,9 @@ package jamazing.jamstory.entity
 			bitmap.x = bitmap.width / 2;
 			bitmap.y = bitmap.height / 2;
 			bitmap.smoothing = true;
+			
+			// Initialize the hitbox
+			hitbox = new BoxCollidable(x , y, trueWidth,trueHeight);
 		}
 	}
 }

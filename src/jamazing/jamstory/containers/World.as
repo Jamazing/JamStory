@@ -99,19 +99,27 @@ package jamazing.jamstory.containers
 		//	Function: testCollisions
 		//	Checks through possible collisions in the world and dispatches the events for thems
 		private function testCollisions():void
-		{
-
-			
+		{	
 			var hasPlayerEventOccured:Boolean = false;
 			
 			//	Check collisions between the player and staticObjects
-			for each (var platform:Static in staticObjects) {
-				if (platform.isHit(player.collidable)) {
-					lastPlayerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, platform.x, platform.y - platform.height / 2, 0, player.PlayerSpeed);
+			for each (var staticObject:Static in staticObjects) {
+				if (staticObject as Platform != null)	// If the static object is a platform
+				{
+					if (staticObject.isHit(player.collidable)) {
+						lastPlayerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, staticObject.x, staticObject.y - staticObject.height / 2, 0, player.PlayerSpeed);
 
-					stage.dispatchEvent(lastPlayerHitAnnouncement);// used to be (, player.xSpeed, 0));
-					
-					hasPlayerEventOccured = true;
+						stage.dispatchEvent(lastPlayerHitAnnouncement);// used to be (, player.xSpeed, 0));
+						
+						hasPlayerEventOccured = true;
+					}
+				}
+				else if (staticObject as Collectable != null)	// Or if the static object is a collectable
+				{
+					if (staticObject.isHit(player.collidable))
+					{
+						staticObject.visible = false;
+					}
 				}
 			}
 
@@ -120,10 +128,13 @@ package jamazing.jamstory.containers
 					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, lastPlayerHitAnnouncement.x, lastPlayerHitAnnouncement.y, 0, player.PlayerSpeed));
 			
 			//	Check collisions between each dynamic object (non-player) and each static object
-			for each (var platform:Static in staticObjects) {
-				for each (var throwable:Throwable in dynamicObjects) {
-					if (platform.isHit(throwable.hitbox)) {
-						throwable.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, platform.x, platform.y - platform.height/2));
+			for each (var staticObject:Static in staticObjects) {
+				if (staticObject as Platform != null)
+				{
+					for each (var throwable:Throwable in dynamicObjects) {
+						if (staticObject.isHit(throwable.hitbox)) {
+							throwable.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, staticObject.x, staticObject.y - staticObject.height/2));
+						}
 					}
 				}
 			}
@@ -172,9 +183,9 @@ package jamazing.jamstory.containers
 			CollectableTest.y = -130;
 			addChild(CollectableTest);
 
-			var platformCounter = 3;	// This is because of the commented code below; uncommend and remove the counter to see issues
+			var platformCounter:int = 3;	// This is because of the commented code below; uncommend and remove the counter to see issues
 			
-			for each(var pl:Object in staticObjects)
+			for each(var pl:Static in staticObjects)
 			{
 				if (platformCounter < 0)
 					break;
@@ -186,6 +197,8 @@ package jamazing.jamstory.containers
 					platformCounter--;
 					
 					newCollectable = new Collectable();
+					newCollectable.trueWidth = pl.width;
+					newCollectable.trueHeight = pl.height;
 					staticObjects.push(newCollectable);
 					newCollectable.x = (pl as Platform).hitbox.x-50;
 					newCollectable.y = (pl as Platform).hitbox.y * 2;

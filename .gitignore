@@ -3,3 +3,6 @@
 /lib/
 /bin/
 /*.as3proj
+#I used some of the following, so just in case -Ivan
+*.cfdg
+*.svg
