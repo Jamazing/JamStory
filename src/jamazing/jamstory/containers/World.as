@@ -199,8 +199,8 @@ package jamazing.jamstory.containers
 					newCollectable.trueWidth = pl.width;
 					newCollectable.trueHeight = pl.height;
 					staticObjects.push(newCollectable);
-					newCollectable.x = (pl as Platform).hitbox.x-50;
-					newCollectable.y = (pl as Platform).hitbox.y * 2;
+					newCollectable.x = (pl as Platform).hitbox.x;
+					newCollectable.y = (pl as Platform).hitbox.y-40;
 					/* For some reasone
 					newCollectable.x = (pl as Platform).x;
 					newCollectable.y = (pl as Platform).y;

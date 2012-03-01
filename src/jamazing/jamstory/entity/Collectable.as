@@ -38,8 +38,8 @@ package jamazing.jamstory.entity
 			bitmap.width /= 12;// ;-]
 			bitmap.height /= 12;
 			addChild(bitmap);
-			bitmap.x = bitmap.width / 2;
-			bitmap.y = bitmap.height / 2;
+			bitmap.x = -bitmap.width / 2;
+			bitmap.y = -bitmap.height / 2;
 			bitmap.smoothing = true;
 			
 			// Initialize the hitbox
