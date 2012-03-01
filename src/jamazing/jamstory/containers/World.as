@@ -171,6 +171,33 @@ package jamazing.jamstory.containers
 			CollectableTest.x = 50
 			CollectableTest.y = -130;
 			addChild(CollectableTest);
+
+			var platformCounter = 3;	// This is because of the commented code below; uncommend and remove the counter to see issues
+			
+			for each(var pl:Object in staticObjects)
+			{
+				if (platformCounter < 0)
+					break;
+				
+				var newCollectable:Collectable = null;
+				
+				if (pl as Platform != null)
+				{
+					platformCounter--;
+					
+					newCollectable = new Collectable();
+					staticObjects.push(newCollectable);
+					newCollectable.x = (pl as Platform).hitbox.x-50;
+					newCollectable.y = (pl as Platform).hitbox.y * 2;
+					/* For some reasone
+					newCollectable.x = (pl as Platform).x;
+					newCollectable.y = (pl as Platform).y;
+					Yield  results, which are totaly unconsistent...
+					*/
+					addChild(newCollectable);
+				}
+				
+			}
 		}
 		
 		//	Listener: onThrow
