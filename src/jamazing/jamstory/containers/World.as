@@ -15,6 +15,7 @@ package jamazing.jamstory.containers
 	import flash.utils.ByteArray;
 	import jamazing.jamstory.entity.Collectable;
 	import jamazing.jamstory.entity.Jam;
+	import jamazing.jamstory.events.JamStoryEvent;
 	
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.engine.Resource;
@@ -65,6 +66,7 @@ package jamazing.jamstory.containers
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(PlayerEvent.THROW, onThrow);
+			stage.addEventListener(JamStoryEvent.CAMERA_POSITION, onCamera);
 		}
 		
 		
@@ -72,18 +74,6 @@ package jamazing.jamstory.containers
 		//	Listens for the new frame, and sets the x and y to keep the player in the center of the stage
 		public function onTick(e:Event):void
 		{
-			//	Update the world x and y so the player is always centered
-			//		Check the player is in bounds on the x-direction
-			if ((player.x < (length - stage.stageWidth / 2))
-				&& (player.x > stage.stageWidth/2)){
-				this.x = (stage.stageWidth / 2) - player.x;
-			}
-			
-			//	Check the player is in bounds on the y-direction
-			if (player.y > (ceiling - stage.stageHeight / 2)) {
-				this.y = (stage.stageHeight / 2) - player.y;
-			}
-			
 			//	Ensure the player stays in bounds
 			if (player.x < 0) {
 				player.x = 0;
@@ -95,13 +85,19 @@ package jamazing.jamstory.containers
 			
 			Camera.setFocus(player);
 		}
+		
+		//	Function: onCamera
+		//	Updates the viewing position to where the camera tells it to be
+		private function onCamera(e:JamStoryEvent):void
+		{
+				this.x = (stage.stageWidth/2) - e.x * 1;
+				this.y = (stage.stageHeight/2 + 80) - e.y * 1;
+		}
 
 		//	Function: testCollisions
 		//	Checks through possible collisions in the world and dispatches the events for thems
 		private function testCollisions():void
 		{
-
-			
 			var hasPlayerEventOccured:Boolean = false;
 			
 			//	Check collisions between the player and staticObjects
@@ -145,6 +141,7 @@ package jamazing.jamstory.containers
 				length = i.width;
 				ceiling = i.height;
 			}
+			Camera.setLimits(stage.stageWidth/2, length-stage.stageWidth/2, -ceiling,0);
 			
 			//	loading the platforms
 			var statics:XMLList = xml.level.statics.obj;

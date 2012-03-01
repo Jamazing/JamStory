@@ -20,10 +20,10 @@
 			<!--Screen Base for running on-->
 			<obj>
 				<x>550</x>
-				<y>0</y>
+				<y>-100</y>
 				<colour>0xFF0000</colour>
 				<width>1750</width>
-				<height>100</height>
+				<height>300</height>
 			</obj>
 			
 			<!--Platforms for jumping on-->

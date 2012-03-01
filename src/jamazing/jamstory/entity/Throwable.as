@@ -26,6 +26,9 @@ package jamazing.jamstory.entity
 		public function Throwable() 
 		{
 			super();
+			bounces = 0;
+			bouncesMax = 2;
+			
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
@@ -36,8 +39,6 @@ package jamazing.jamstory.entity
 		{
 			hitbox = new Collidable(x, y, trueWidth);
 			isMoving = false;
-			bounces = 0;
-			bouncesMax = 2;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(PlayerEvent.THROWABLE_COLLISION, onCollide);

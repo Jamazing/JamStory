@@ -20,6 +20,11 @@ package jamazing.jamstory.engine
 	{
 		public static var focus:DisplayObject;
 		public static var stageRef:Stage;
+		public static var xMinLimit:Number;
+		public static var yMinLimit:Number;
+		public static var xMaxLimit:Number;
+		public static var yMaxLimit:Number;
+		
 		
 		//	Constructor: default
 		public function Camera(stage:Stage, focusObject:DisplayObject = null) 
@@ -39,9 +44,32 @@ package jamazing.jamstory.engine
 		private function onTick(e:JamStoryEvent):void
 		{
 			if (focus){
-				var jsEvent:JamStoryEvent = new JamStoryEvent(JamStoryEvent.CAMERA_POSITION,0);
-				jsEvent.x = focus.x;
-				jsEvent.y = focus.y;
+				var jsEvent:JamStoryEvent = new JamStoryEvent(JamStoryEvent.CAMERA_POSITION, 0);
+				
+				//	Ensure focus is in bounds on x
+				if (focus.x < xMinLimit){
+					jsEvent.x = xMinLimit;
+
+				}else if (focus.x > xMaxLimit) {
+					jsEvent.x = xMaxLimit;
+
+				}else {
+					jsEvent.x = focus.x;
+					
+				}
+				
+				//	Ensure focus is in bounds on y
+				if (focus.y < yMinLimit) {
+					jsEvent.y = yMinLimit;
+					
+				}else if (focus.y > yMaxLimit) {
+					jsEvent.y = yMaxLimit;
+					
+				}else {
+					jsEvent.y = focus.y;
+					
+				}
+				
 				stageRef.dispatchEvent( jsEvent );
 			}
 		}
@@ -51,6 +79,16 @@ package jamazing.jamstory.engine
 		public static function setFocus(focusObject:DisplayObject):void
 		{
 			focus = focusObject;
+		}
+		
+		//	Function: setLimits
+		//	Sets the movement limits of this camera
+		public static function setLimits(xMin:Number, xMax:Number, yMin:Number, yMax:Number):void
+		{
+			xMinLimit = xMin;
+			xMaxLimit = xMax;
+			yMinLimit = yMin;
+			yMaxLimit = yMax;
 		}
 		
 	}

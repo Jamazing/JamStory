@@ -7,6 +7,7 @@
 
 package jamazing.jamstory
 {
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.media.Sound;
@@ -25,11 +26,10 @@ package jamazing.jamstory
 	public class Main extends Sprite 
 	{
 		
-		private var background:Background;	//	Background container
+		private var background:Layer;	//	Background container
 		private var world:World;			//	World container
 		private var overlay:Overlay;		//	UI Overlay container
 		
-		private var layer:Layer;
 		private var tickCount:int;
 		
 		//	Constructor: default
@@ -43,21 +43,33 @@ package jamazing.jamstory
 		//	Initialises the game once the stage is initialised
 		private function onInit(e:Event = null):void 
 		{	
-			background = new Background();
+			background = new Layer(-0.3);
 			world = new World();
 			overlay = new Overlay();
-			layer = new Layer();
 			
 			var keys:Keys = new Keys(stage);	//	Initialise the static Keys Utility
 			var focusCam:Camera = new Camera(stage);
-			
+	
 			tickCount = 0;
 			
+			//	Main background to avoid white spots
+			this.graphics.beginFill(0x0066FF);
+			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			this.graphics.endFill();
+			
+			
+			
+			//	Setup the background layer
 			addChild(background);
+			var art:Bitmap = new Resource.BACKGROUND_IMAGE();
+			art.alpha = 0.6;
+			background.addArt(0, 0, stage.stageWidth*1.5, stage.stageHeight*1.2, art);
+			
 			addChild(world);
 			addChild(overlay);
-			addChild(layer);
 			
+			
+			//	Add the music and play it to start (does not loop)
 			var music:Sound = new Resource.SOUND_BGMUSIC();
 			music.play();
 			

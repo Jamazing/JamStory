@@ -22,7 +22,7 @@ package jamazing.jamstory.entity
 		public function Jam() 
 		{
 			super();
-			bouncesMax = 1;
+			super.bouncesMax = 0;
 			if (stage) { onInit(); }
 			else { addEventListener(Event.ADDED_TO_STAGE, onInit); }
 		}
@@ -43,7 +43,7 @@ package jamazing.jamstory.entity
 			
 		}
 		
-		private function onTick(e:Event)
+		private function onTick(e:Event):void
 		{
 			if (isMoving)
 			{
