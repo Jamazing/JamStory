@@ -14,7 +14,9 @@ package jamazing.jamstory.containers
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 	import jamazing.jamstory.entity.Collectable;
+	import jamazing.jamstory.entity.Dynamic;
 	import jamazing.jamstory.entity.Jam;
+	import jamazing.jamstory.entity.JumpingEnemy;
 	import jamazing.jamstory.events.JamStoryEvent;
 	
 	import jamazing.jamstory.engine.Keys;
@@ -129,11 +131,26 @@ package jamazing.jamstory.containers
 			for each (var staticObject:Static in staticObjects) {
 				if (staticObject as Platform != null)
 				{
-					for each (var throwable:Throwable in dynamicObjects) {
+					/*
+					 * This gets transformed slightly
+					 * -Ivan
+					
+					 for each (var throwable:Throwable in dynamicObjects) {
 						if (staticObject.isHit(throwable.hitbox)) {
 							throwable.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, staticObject.x, staticObject.y - staticObject.height/2));
 						}
 					}
+					*/
+					for each (var dynamicObject:Dynamic in dynamicObjects)
+					{
+						if (dynamicObject as Throwable != null)
+						{
+							if (staticObject.isHit(dynamicObject.hitbox)) {
+								dynamicObject.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, staticObject.x, staticObject.y - staticObject.height/2));
+							}		
+						}
+					}
+					
 				}
 			}
 		}
@@ -175,6 +192,15 @@ package jamazing.jamstory.containers
 			player.y = -90;
 			
 			/* NOTE: This is only for test purposes! */
+			// Create a jumper:
+			
+			var enemy:JumpingEnemy = new JumpingEnemy();
+			dynamicObjects.push(enemy);
+			enemy.y = -90;
+			enemy.x = player.x+10;
+			addChild(enemy);
+			
+			
 			// Create a powerup:
 			var CollectableTest:Collectable = new Collectable();
 			staticObjects.push(CollectableTest);
@@ -201,11 +227,6 @@ package jamazing.jamstory.containers
 					staticObjects.push(newCollectable);
 					newCollectable.x = (pl as Platform).hitbox.x;
 					newCollectable.y = (pl as Platform).hitbox.y-40;
-					/* For some reasone
-					newCollectable.x = (pl as Platform).x;
-					newCollectable.y = (pl as Platform).y;
-					Yield  results, which are totaly unconsistent...
-					*/
 					addChild(newCollectable);
 				}
 				
