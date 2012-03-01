@@ -13,6 +13,7 @@ package jamazing.jamstory.containers
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
+	import jamazing.jamstory.entity.Collectable;
 	import jamazing.jamstory.entity.Jam;
 	
 	import jamazing.jamstory.engine.Keys;
@@ -99,6 +100,8 @@ package jamazing.jamstory.containers
 		//	Checks through possible collisions in the world and dispatches the events for thems
 		private function testCollisions():void
 		{
+
+			
 			var hasPlayerEventOccured:Boolean = false;
 			
 			//	Check collisions between the player and staticObjects
@@ -160,6 +163,14 @@ package jamazing.jamstory.containers
 			
 			player.x = 50;
 			player.y = -90;
+			
+			/* NOTE: This is only for test purposes! */
+			// Create a powerup:
+			var CollectableTest:Collectable = new Collectable();
+			staticObjects.push(CollectableTest);
+			CollectableTest.x = 50
+			CollectableTest.y = -130;
+			addChild(CollectableTest);
 		}
 		
 		//	Listener: onThrow

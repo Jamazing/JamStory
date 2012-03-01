@@ -43,6 +43,17 @@ package jamazing.jamstory.entity
 		{
 			return hitbox!=null && hitbox.isHit(c);
 		}
+		
+		/* Figured I should add this so all classes that extend wouldn't have to have their bitmap variable
+		 * Will post a poll about this after commit
+		 * -Ivan
+		 */
+		//	Function: changeAppearance
+		//	Changes the appearance.
+		protected function changeAppearance(bitmapData:Bitmap):void
+		{
+			bitmap = bitmapData;
+		}
 	}
 
 }

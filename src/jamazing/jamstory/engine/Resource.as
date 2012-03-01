@@ -50,6 +50,10 @@ package jamazing.jamstory.engine
 		//Jam splat
 		[Embed(source="../../../../resources/JamSplat.png")]
 		public static var JAM_SPLAT:Class;
+		
+		//Powerup
+		[Embed(source = "../../../../resources/powerup.png")]
+		public static var GENERIC_POWERUP:Class;
 	}
 
 }

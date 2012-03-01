@@ -49,6 +49,9 @@ package jamazing.jamstory.entity
 		private var accelerationInterval:Number;	//	This variable is used to count for how long has the player been walking
 		private var jumpTargetYOffset:Number;		//	This variable is used when calculating how far until the player's jump hight peek has been reached
 		
+		private var isStuck:Boolean;
+		
+		private var powerupsContainer:Array;
 		
 		//	Constructor: default
 		public function Player() 
@@ -83,11 +86,15 @@ package jamazing.jamstory.entity
 			y = stage.stageHeight / 2;
 			
 			// Initialize the player state
+			isStuck = false;
 			currentState = new PlayerState(PlayerState.FALL);
 			currentHeading = new Direction(Direction.RIGHT);
 			
 			// Initialize the acceleration counter variable
 			accelerationInterval = GLOBAL_ACC_INTERVAL;
+			
+			// Initialize the powerups container
+			powerupsContainer = new Array();
 			
 			// Initialize per-frame logic
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -117,8 +124,7 @@ package jamazing.jamstory.entity
 			else if (currentState == PlayerState.FALL) {
 				currentState = PlayerState.IDLE;
 			}
-		}
-		
+		}		
 		
 		//	Function: updateJumpLocation
 		//	This function gets called every frame If the player is in a jump state;
@@ -130,7 +136,7 @@ package jamazing.jamstory.entity
 			y -= JUMP_SPEED;									// Update the current location along the y-axis
 			
 			if (jumpTargetYOffset <= 0)							// If the jump peek has been reached ...
-				currentState = PlayerState.FALL; 		// ... the current state becomses "Falling"
+				currentState = PlayerState.FALL; 					// ... the current state becomses "Falling"
 		}
 		
 		
