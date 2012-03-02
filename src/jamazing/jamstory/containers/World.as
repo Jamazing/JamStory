@@ -32,9 +32,12 @@ package jamazing.jamstory.containers
 	//	Class: World
 	public class World extends Sprite
 	{
+		private const MAX_JAM:int = 5;			//	Determines the jam limit
+		
+		private	var lastPlayerHitAnnouncement:PlayerEvent = null;	//	Holds the last PlayerEvent thrown	
 
-		private	var lastPlayerHitAnnouncement:PlayerEvent = null;	//	Holds the last PlayerEvent thrown
-
+		private var jamCount:int;				//	Counts how much jam do we have in the world
+		
 		private var staticObjects:Array;	//	Array of Static level objects such as platforms
 		private var dynamicObjects:Array;	//	Array of Dynamic objects such as throwables
 		private var entities:Array;			//	Array of Living Entities, such as enemies
@@ -55,6 +58,8 @@ package jamazing.jamstory.containers
 		//	Initialises this, once the stage reference has been formed
 		public function onInit(e:Event = null):void
 		{
+			jamCount = 0;
+			
 			staticObjects = new Array();
 			dynamicObjects = new Array();
 			entities = new Array();
@@ -83,10 +88,41 @@ package jamazing.jamstory.containers
 				player.x = length-100;
 			}
 			
+			//	Test collisions
 			testCollisions();
+			
+			//	Test jam limits
+			testJam();
 			
 			Camera.setFocus(player);
 		}
+		
+		//	Function: testJam
+		//	Removes jam if necesary (and possible)
+		private function testJam():void
+		{
+				for (var index:int = 0; index != dynamicObjects.length; index++)	// Traverse over all jam
+				{
+					if (jamCount <= MAX_JAM)	// If in jam limits ...
+						return;						// ... no need to fix up, so return
+							
+					if (dynamicObjects[index] as Jam != null)			// If the seclected object is a jam...
+					{
+						if ((dynamicObjects[index] as Jam).isSplatted)		// ... and is splatted
+						{
+							removeChild(dynamicObjects[index]);					// ... remove it from the world
+							dynamicObjects.splice(index, 1);					// ... remove it from the array
+							
+							index = 0;					// ... reset the indexer
+							
+							jamCount--;
+							
+							continue;											// ... start over
+						}
+					}
+				}
+		}
+		
 		
 		//	Function: onCamera
 		//	Updates the viewing position to where the camera tells it to be
@@ -109,7 +145,7 @@ package jamazing.jamstory.containers
 					if (staticObject.isHit(player.collidable)) {
 						lastPlayerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, staticObject.x, staticObject.y - staticObject.height / 2, 0, player.PlayerSpeed);
 
-						stage.dispatchEvent(lastPlayerHitAnnouncement);// used to be (, player.xSpeed, 0));
+						stage.dispatchEvent(lastPlayerHitAnnouncement);
 						
 						hasPlayerEventOccured = true;
 					}
@@ -247,8 +283,11 @@ package jamazing.jamstory.containers
 			addChild(jam);
 			dynamicObjects.push(jam);
 			jam.throwPolar(e.magnitude, e.angle);
+			
+			//	Update count
+			jamCount++;
 		}
-		
+				
 		//	Function: toggleZoom (Boolean)
 		//	Set true to zoom the world view or not
 		public function toggleZoom(isZoomed:Boolean):void

@@ -63,6 +63,11 @@ package jamazing.jamstory.entity
 			}
 		}
 		
+		public function get isSplatted():Boolean
+		{
+			return splatted;
+		}
+		
 	}
 
 }

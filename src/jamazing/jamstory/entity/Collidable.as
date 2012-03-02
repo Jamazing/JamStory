@@ -17,7 +17,7 @@ package jamazing.jamstory.entity
 	public class Collidable
 	{
 		public var x:Number;			//	x position (world relative)
-		public var y:Number;			//	y position (world relati
+		public var y:Number;			//	y position (world relative)
 		public var radius:Number;		//	radius from center to edge
 		public var members:Array; 		//	array of collidables
 		
