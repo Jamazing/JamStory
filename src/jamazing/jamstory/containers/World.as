@@ -101,7 +101,7 @@ package jamazing.jamstory.containers
 		//	Removes jam if necesary (and possible)
 		private function testJam():void
 		{
-				for (var index:int = 0; index != dynamicObjects.length; index++)	// Traverse over all jam
+				for (var index:int = 0; index != dynamicObjects.length; index++)	// Traverse over all dynamics
 				{
 					if (jamCount <= MAX_JAM)	// If in jam limits ...
 						return;						// ... no need to fix up, so return
@@ -113,9 +113,9 @@ package jamazing.jamstory.containers
 							removeChild(dynamicObjects[index]);					// ... remove it from the world
 							dynamicObjects.splice(index, 1);					// ... remove it from the array
 							
-							index = 0;					// ... reset the indexer
+							index = 0;											// ... reset the indexer
 							
-							jamCount--;
+							jamCount--;											// ... decrease jam count
 							
 							continue;											// ... start over
 						}
@@ -226,15 +226,6 @@ package jamazing.jamstory.containers
 			
 			player.x = 50;
 			player.y = -90;
-			
-			/* NOTE: This is only for test purposes! */
-			// Create a jumper:
-			
-			var enemy:JumpingEnemy = new JumpingEnemy();
-			dynamicObjects.push(enemy);
-			enemy.y = -90;
-			enemy.x = player.x+10;
-			addChild(enemy);
 			
 			
 			// Create a powerup:
