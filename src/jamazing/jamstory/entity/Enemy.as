@@ -4,7 +4,7 @@ package jamazing.jamstory.entity
 	import jamazing.jamstory.engine.Resource;
 	import jamazing.jamstory.events.PlayerEvent;
 	
-	public class Enemy extends Dynamic 
+	public class Enemy extends Living 
 	{
 		private const JUMP_HEIGHT:Number = 12;	// Maximum jump height in pixels
 		private const MOVE_SPEED:Number = 12;	// Speed
@@ -17,8 +17,8 @@ package jamazing.jamstory.entity
 		//	This is used when checking if is stuck
 		private var collisionCount:int;
 
-		//	This controls whether the character is jumping
-		private var isJumping:Boolean;
+		/* Probably should be reimplemented in a different way; Wasn't in the original design! This goes along with extra kill() */
+		private var isDead:Boolean;
 		
 		//	Constructor;
 		public function Enemy() 
@@ -40,9 +40,13 @@ package jamazing.jamstory.entity
 			/* BUG: Creates two enemies for some reason - investigate why */
 			trace("Enemy created");
 			
+			/* NOTE: This should go to living? */
 			isJumping = false;
 			
-			/* TODO: This should be refined to go to dynamic? */
+			/* Only temporary */
+			isDead = false;
+			
+			/* TODO: This should be refined to go to Dynamic? */
 			bitmap = new Resource.CHARACTER_IMAGE();
 			bitmap.width = 75;
 			bitmap.height = 75;
@@ -51,8 +55,6 @@ package jamazing.jamstory.entity
 			bitmap.y = -bitmap.height / 2;
 			/* Till here */
 
-
-			
 			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(PlayerEvent.COLLIDE, onCollide);
 		}
@@ -92,7 +94,20 @@ package jamazing.jamstory.entity
 					 * Sides: swapDestinations
 			*/
 			
+			/*	*Stuck management*
+			 * 1/Increase collision count
+			 * 2/If colisions count is 5
+			 * 	-> Stuck, so kill()
+			 */
+			
 			trace("Collide - "+e.toString());
+		}
+
+		// This implements jumping
+		override public function jump():void 
+		{
+			super.jump();
+			ySpeed = -Math.sqrt(JUMP_HEIGHT / (2 * yAccel));
 		}
 		
 		// This returns the direction, based on current location and future destination
@@ -100,6 +115,15 @@ package jamazing.jamstory.entity
 		{
 			// If current heading is to the left of current location, return -1, else return 1
 			return currentHeadingX < x ? -1 : 1;
+		}
+		
+		/* This wasn't in the design, but is here until we implement a proper living */
+		override public function kill():void 
+		{
+			bitmap.visible = false;
+			isDead = true;
+
+			super.kill();
 		}
 
 		
