@@ -16,9 +16,8 @@ package jamazing.jamstory.containers
 	import jamazing.jamstory.entity.Collectable;
 	import jamazing.jamstory.entity.Dynamic;
 	import jamazing.jamstory.entity.Jam;
-	import jamazing.jamstory.entity.JumpingEnemy;
 	import jamazing.jamstory.events.JamStoryEvent;
-	
+	import jamazing.jamstory.entity.Enemy;
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.engine.Resource;
 	import jamazing.jamstory.entity.Static;
@@ -220,6 +219,12 @@ package jamazing.jamstory.containers
 				platform.y = -p.y;
 				addChild(platform);
 			}
+			
+			//	Add an anemy:
+			var EnemyTest:Enemy = new Enemy();
+			addChild(EnemyTest);
+			EnemyTest.x = 100;
+			EnemyTest.y = -90;			
 			
 			//	Add the player
 			addChild(player);
