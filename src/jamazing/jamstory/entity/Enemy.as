@@ -19,11 +19,17 @@ package jamazing.jamstory.entity
 
 		/* Probably should be reimplemented in a different way; Wasn't in the original design! This goes along with extra kill() */
 		private var isDead:Boolean;
+
+		/*	I couldn't remember how were we supposed to implement the frame counting-related features, so I added this as a temporary solution
+		 * -Ivan
+		 */
+		private var frameCounter:int = 0;
 		
 		//	Constructor;
 		public function Enemy() 
 		{
 			super();
+			
 			if (stage)
 			{
 				onInit();
@@ -54,16 +60,37 @@ package jamazing.jamstory.entity
 			bitmap.x = -bitmap.width/2;		//	Ensure registration point is in the center
 			bitmap.y = -bitmap.height / 2;
 			/* Till here */
+			
+			yAccel = 0;
+			xAccel = 0;
+			ySpeed = 0;
+			xSpeed = 0;
 
 			addEventListener(Event.ENTER_FRAME, onTick);
+			addEventListener(Event.EXIT_FRAME, onFrameEnd);
 			addEventListener(PlayerEvent.COLLIDE, onCollide);
+		}
+		
+		/*	I couldn't remember how were we supposed to implement the frame counting-related features, so I added this as a temporary solution
+		 * -Ivan
+		 */
+		private function onFrameEnd(e:Event):void
+		{
+			frameCounter += frameCounter==100 ? 0 : 1;	// To avoid any strange memory issues or overflows or whatevers
 		}
 		
 		//	onTick
 		//	Updates object on every frame
-		private function onTick(e:Event)
+		private function onTick(e:Event):void
 		{
-			// if it's the n-th tick - jump
+			// if it's the n-th tick - jump [
+			if (frameCounter % 10 == 0)
+			{
+				isJumping = true;
+				isMoving = true;
+				jump();
+				
+			}
 			
 			if (!isJumping)
 			{
@@ -81,6 +108,7 @@ package jamazing.jamstory.entity
 			}
 
 			// if (5th frame && colCount>0: colCount--)
+			
 			
 		}
 		
@@ -107,7 +135,7 @@ package jamazing.jamstory.entity
 		override public function jump():void 
 		{
 			super.jump();
-			ySpeed = -Math.sqrt(JUMP_HEIGHT / (2 * yAccel));
+			ySpeed = -Math.sqrt(JUMP_HEIGHT / (2 * 1));	// I am not quite sure how to document this... in the wiki, maybe? -Ivan
 		}
 		
 		// This returns the direction, based on current location and future destination
@@ -117,7 +145,7 @@ package jamazing.jamstory.entity
 			return currentHeadingX < x ? -1 : 1;
 		}
 		
-		/* This wasn't in the design, but is here until we implement a proper living */
+		/* This wasn't in the design, but is here until we implement a proper die logic */
 		override public function kill():void 
 		{
 			bitmap.visible = false;
@@ -126,7 +154,12 @@ package jamazing.jamstory.entity
 			super.kill();
 		}
 
-		
+		/*	This wasn't in the design, but again - until we implement proper die logic */
+		// 	This is a getter, instead of making isDead public to preserve encapsulation!
+		public function get IsDead():Boolean
+		{
+			return isDead;
+		}
 	}
 
 }
