@@ -224,7 +224,8 @@ package jamazing.jamstory.containers
 			var EnemyTest:Enemy = new Enemy();
 			addChild(EnemyTest);
 			EnemyTest.x = 100;
-			EnemyTest.y = -90;			
+			EnemyTest.y = -90;
+			EnemyTest.setDirections(EnemyTest.x + 20, EnemyTest.x - 20);
 			
 			//	Add the player
 			addChild(player);

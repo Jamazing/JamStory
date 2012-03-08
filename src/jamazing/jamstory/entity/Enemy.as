@@ -6,8 +6,10 @@ package jamazing.jamstory.entity
 	
 	public class Enemy extends Living 
 	{
-		private const JUMP_HEIGHT:Number = 12;	// Maximum jump height in pixels
+		private const JUMP_HEIGHT:Number = -12;	// Maximum jump height in pixels
 		private const MOVE_SPEED:Number = 12;	// Speed
+		
+		private var jumpHeightOffset = 0;	/* [Note] This wasn't in the design, but i couldn't really figure out how we are doing this */
 		
 		/* These hold the current heading and the future heading of the character */
 		private var currentHeadingX:Number;
@@ -64,7 +66,8 @@ package jamazing.jamstory.entity
 			yAccel = 0;
 			xAccel = 0;
 			ySpeed = 0;
-			xSpeed = 0;
+			xSpeed = 1;
+			isMoving = true;
 
 			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(Event.EXIT_FRAME, onFrameEnd);
@@ -84,31 +87,28 @@ package jamazing.jamstory.entity
 		private function onTick(e:Event):void
 		{
 			// if it's the n-th tick - jump [
-			if (frameCounter % 10 == 0)
+			if (frameCounter == 50)
 			{
-				isJumping = true;
-				isMoving = true;
-				jump();
-				
+				;//jump();
 			}
-			
+
 			if (!isJumping)
 			{
-				if (this.x - currentHeadingX < 1)// if we are close to the destination
+				var test = this.x - currentHeadingX;
+				if (test == 0)// if we are at the destination
 				{
 					/* Swap the headings */
-					var temporaryVariable = currentHeadingX;
+					var temporaryVariable:* = currentHeadingX;
 					currentHeadingX = futureHeadingX;
 					futureHeadingX = temporaryVariable;
 					/* Till here */
 					
 					//Set new xSpeed
-					xSpeed = Math.abs(xSpeed) * direction;
+					xSpeed = xSpeed * (-1);
 				}
 			}
-
-			// if (5th frame && colCount>0: colCount--)
 			
+			// if (5th frame && colCount>0: colCount--)
 			
 		}
 		
@@ -135,7 +135,12 @@ package jamazing.jamstory.entity
 		override public function jump():void 
 		{
 			super.jump();
-			ySpeed = -Math.sqrt(JUMP_HEIGHT / (2 * 1));	// I am not quite sure how to document this... in the wiki, maybe? -Ivan
+			trace("jump");
+		}
+		
+		private function get newYSpeed():Number
+		{
+			return Math.sqrt(2 * 1 * jumpHeightOffset);
 		}
 		
 		// This returns the direction, based on current location and future destination
@@ -143,7 +148,7 @@ package jamazing.jamstory.entity
 		{
 			// If current heading is to the left of current location, return -1, else return 1
 			return currentHeadingX < x ? -1 : 1;
-		}
+		}		
 		
 		/* This wasn't in the design, but is here until we implement a proper die logic */
 		override public function kill():void 
@@ -159,6 +164,12 @@ package jamazing.jamstory.entity
 		public function get IsDead():Boolean
 		{
 			return isDead;
+		}
+		
+		public function setDirections(x1:Number, x2:Number):void
+		{
+			futureHeadingX = x2;
+			currentHeadingX = x1;
 		}
 	}
 
