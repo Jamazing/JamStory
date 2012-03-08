@@ -51,9 +51,9 @@ package jamazing.jamstory.containers
 		
 		public var selectedJam:int;			//	0 - sticky, 1 - slippy, 2 - bouncy
 		public static const colours:Array = new Array(
-											new ColorTransform(1,1,1,1,100),
-											new ColorTransform(1,1,1,1,0,100),
-											new ColorTransform(1,1,1,1,0,0,100)
+											new ColorTransform(1,1,1,1,	0,0,0),
+											new ColorTransform(0.8,0.8,0.8,1,	70,	100, 0),
+											new ColorTransform(1,1,1,1,	0,	0,	100)
 											);
 											//	Array of colour transforms for jam and player colour
 		
@@ -80,7 +80,15 @@ package jamazing.jamstory.containers
 			
 			x = 0;
 			y = stage.stageHeight;
-			selectedJam = 1;
+			
+			//	Initialise jam selection
+			selectedJam = 0;
+			//	Switch the player's colour, to make it easy to see
+			//		Uses a new bitmap, to avoid bitmap data containing artefacts between transforms
+			var bmp:Bitmap = new Resource.CHARACTER_IMAGE();
+			var bmpData:BitmapData = bmp.bitmapData;
+			bmpData.colorTransform(bmpData.rect, colours[selectedJam]);
+			player.jamjar.bitmapData = bmpData;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
@@ -271,12 +279,12 @@ package jamazing.jamstory.containers
 			}
 			
 			//	Add an anemy:
-			for (var enemyCounter:int = 0; enemyCounter < 5; enemyCounter++)
+			for (var enemyCounter:int = 0; enemyCounter < 3; enemyCounter++)
 			{
 				var EnemyTest:Enemy = new Enemy();
 				addChild(EnemyTest);
-				EnemyTest.x = 150 + 200*enemyCounter;
-				EnemyTest.y = -90;
+				EnemyTest.x = 300 + 200*enemyCounter;
+				EnemyTest.y = -85;
 				EnemyTest.setDirections(EnemyTest.x + (enemyCounter*15+20), EnemyTest.x - (enemyCounter*15+20));
 				dynamicObjects.push(EnemyTest);
 			}
@@ -285,7 +293,7 @@ package jamazing.jamstory.containers
 			addChild(player);
 			
 			player.x = 50;
-			player.y = -90;
+			player.y = -85;
 			
 			
 			// Create a powerup:

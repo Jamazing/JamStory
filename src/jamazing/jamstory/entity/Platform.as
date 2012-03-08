@@ -27,12 +27,6 @@ package jamazing.jamstory.entity
 		private function onInit(e:Event = null):void
 		{
 			hitbox = new BoxCollidable(x, y, trueWidth, trueHeight);
-			bitmap = new Resource.IMAGE_PLATFORM();
-			bitmap.width = width;
-			bitmap.height = 30;
-			addChild(bitmap);
-			bitmap.x = -bitmap.width / 2;
-			bitmap.y = -height / 2 + bitmap.height / 2;
 			
 			graphics.beginFill(0xFF6600);
 			graphics.drawRect( -trueWidth / 2, -trueHeight / 2, trueWidth, trueHeight);

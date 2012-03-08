@@ -176,7 +176,7 @@ package jamazing.jamstory.entity
 			jamjar.visible = true;
 			reticule.respawn();
 			x = 50;
-			y = -90;
+			y = -85;
 		}
 		
 		/* until here */
