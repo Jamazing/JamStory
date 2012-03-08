@@ -101,8 +101,10 @@ package jamazing.jamstory.entity
 			addEventListener(Event.ENTER_FRAME, onTick);
 			stage.addEventListener(PlayerEvent.COLLIDE, onCollide);
 			stage.addEventListener(PlayerEvent.NOCOLLIDE, onNoCollide);
+			stage.addEventListener(PlayerEvent.PLAYER_DIE, onDie);
 		}
 
+		
 		
 		//	Function: onNoCollide (PlayerEvent)
 		//	Envoked when a player steps of a ledge;
@@ -148,6 +150,25 @@ package jamazing.jamstory.entity
 			if (jumpTargetYOffset <= 0)							// If the jump peek has been reached ...
 				currentState = PlayerState.FALL; 					// ... the current state becomses "Falling"
 		}
+
+		/* THIS IS TEMPORARY */
+		
+		private var isDead:Boolean = false;
+		
+		private function onDie(e:PlayerEvent):void
+		{
+			die();
+		}
+		
+		private function die():void
+		{
+			isDead = true;
+			jamjar.visible = false;
+			reticule.kill();
+//			reticule = null;
+		}
+		
+		/* until here */
 		
 		
 		// Function: updateFallLocaton
@@ -248,6 +269,11 @@ package jamazing.jamstory.entity
 		//	This listener checks for key input, manages states and fires events to check if there is a collision
 		private function onTick(e:Event):void
 		{
+			if (isDead)
+			{
+				return;
+			}
+			
 			if (Keys.isDown(Keys.A) && !Keys.isDown(Keys.D)) {						// If A is pressed...
 				updateMovementState(Direction.LEFT);			// ... we want to go left
 				applyHover(Direction.LEFT);

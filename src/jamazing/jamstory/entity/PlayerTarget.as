@@ -55,11 +55,23 @@ package jamazing.jamstory.entity
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
+
+		/* THIS SHOULD BE REMOVED */
+		public var isDead:Boolean = false;
+		
+		public function kill():void
+		{
+			isDead = true;
+			reticule.visible = false;
+		}
 		
 		//	Function: onTick
 		//	Runs once per frame to update the positions
 		private function onTick(e:Event):void
 		{
+			if (isDead)/* Temporary */
+				return;
+				
 			rotation = getAimingAngle();	//	Match the visual crosshair position to the position your mouse aims at
 			updateThrow();
 		}
@@ -79,6 +91,9 @@ package jamazing.jamstory.entity
 		//	When the mouse is released, the player should throw
 		private function onMouseUp(e:MouseEvent):void
 		{
+			if (isDead)/* Temporary */
+				return;
+				
 			if(charging){
 				throwJam();
 			}

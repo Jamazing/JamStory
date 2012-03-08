@@ -63,6 +63,8 @@ package jamazing.jamstory.entity
 			bitmap.y = -bitmap.height / 2;
 			/* Till here */
 			
+			hitbox = new Collidable(x, y, trueWidth);			
+			
 			yAccel = 0;
 			xAccel = 0;
 			ySpeed = 0;
@@ -86,6 +88,10 @@ package jamazing.jamstory.entity
 		//	Updates object on every frame
 		private function onTick(e:Event):void
 		{
+			if (isDead)
+			{
+				return;
+			}
 			// if it's the n-th tick - jump [
 			/*if (frameCounter == 50)
 			{
@@ -165,7 +171,7 @@ package jamazing.jamstory.entity
 		{
 			return isDead;
 		}
-		
+				
 		public function setDirections(x1:Number, x2:Number):void
 		{
 			futureHeadingX = x2;

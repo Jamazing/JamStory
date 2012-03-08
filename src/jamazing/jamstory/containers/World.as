@@ -195,6 +195,18 @@ package jamazing.jamstory.containers
 				}
 			}
 
+			/* TEMPORARY: Player die logic! */
+			for each (var dynamicObject:Dynamic in dynamicObjects)
+			{
+				if (dynamicObject as Enemy != null)
+				{
+					if (dynamicObject.isHit(player.collidable))	// If player hits Enemy => Die
+					{
+						stage.dispatchEvent(new PlayerEvent(PlayerEvent.PLAYER_DIE, player.x, player.y, 0, 0));
+					}
+				}				
+			}
+			
 			if (!hasPlayerEventOccured)
 				if (lastPlayerHitAnnouncement!=null && !lastPlayerHitAnnouncement.HasNoMagnitude)
 					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, lastPlayerHitAnnouncement.x, lastPlayerHitAnnouncement.y, 0, player.PlayerSpeed));
@@ -263,6 +275,7 @@ package jamazing.jamstory.containers
 			EnemyTest.x = 100;
 			EnemyTest.y = -90;
 			EnemyTest.setDirections(EnemyTest.x + 20, EnemyTest.x - 20);
+			dynamicObjects.push(EnemyTest);
 			
 			//	Add the player
 			addChild(player);
