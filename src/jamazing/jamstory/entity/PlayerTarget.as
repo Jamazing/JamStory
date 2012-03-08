@@ -27,7 +27,6 @@ package jamazing.jamstory.entity
 		private var throwPower:Number;			//	Current level of power that has been built up
 		private var charging:Boolean;			//	True if the player is holding the mouse to charge the shot
 		
-		
 		//	Constructor: default
 		public function PlayerTarget() 
 		{

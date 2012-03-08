@@ -6,7 +6,11 @@
 
 package jamazing.jamstory.containers
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Shape;
+	import flash.events.KeyboardEvent;
+	import flash.geom.ColorTransform;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.display.Sprite;
@@ -45,6 +49,14 @@ package jamazing.jamstory.containers
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
 		
+		public var selectedJam:int;			//	0 - sticky, 1 - slippy, 2 - bouncy
+		public static const colours:Array = new Array(
+											new ColorTransform(1,1,1,1,100),
+											new ColorTransform(1,1,1,1,0,100),
+											new ColorTransform(1,1,1,1,0,0,100)
+											);
+											//	Array of colour transforms for jam and player colour
+		
 		// Constructor: default
 		public function World() 
 		{
@@ -68,13 +80,38 @@ package jamazing.jamstory.containers
 			
 			x = 0;
 			y = stage.stageHeight;
+			selectedJam = 1;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 			addEventListener(PlayerEvent.THROW, onThrow);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onDown);
 			stage.addEventListener(JamStoryEvent.CAMERA_POSITION, onCamera);
 		}
 		
+		//	Temporary function for selecting types of jam
+		public function onDown(e:KeyboardEvent):void
+		{
+			if (e.keyCode == Keys.Q) {
+				selectedJam++;
+				trace("key Q");
+				
+				if (selectedJam > 2) {
+					selectedJam = 0;
+				}
+			
+				//	Switch the player's colour, to make it easy to see
+				//		Uses a new bitmap, to avoid bitmap data containing artefacts between transforms
+				var bmp:Bitmap = new Resource.CHARACTER_IMAGE();
+				var bmpData:BitmapData = bmp.bitmapData;
+				bmpData.colorTransform(bmpData.rect, colours[selectedJam]);
+				player.jamjar.bitmapData = bmpData;
+				
+			}else {
+				trace("key H");
+			}
+			
+		}
 		
 		//	Listener: onTick
 		//	Listens for the new frame, and sets the x and y to keep the player in the center of the stage
@@ -270,7 +307,7 @@ package jamazing.jamstory.containers
 		//	Listens for the player throwing a new object
 		private function onThrow(e:PlayerEvent):void
 		{
-			var jam:Jam = new Jam();
+			var jam:Jam = new Jam(colours[selectedJam]);
 			
 			//calculate position for the new shape
 			jam.x = e.x;

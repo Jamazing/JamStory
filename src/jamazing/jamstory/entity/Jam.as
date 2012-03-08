@@ -1,6 +1,7 @@
 //	Copyright 2012 Jamazing Games©
-//	Author: 
-//
+//	Author: John Robb
+//	Contrib: Gordon D Mckendrick
+//	
 //	Jam
 //	Base Jam class that can be collided with by the player etc
 
@@ -9,6 +10,7 @@ package jamazing.jamstory.entity
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.Event;
+	import flash.geom.ColorTransform;
 	import jamazing.jamstory.entity.Throwable;
 	import jamazing.jamstory.engine.Resource;
 	
@@ -17,10 +19,12 @@ package jamazing.jamstory.entity
 	{
 		private var JamEnum:JamTypes;
 		private var splatted:Boolean;
+		public var colour:ColorTransform;
 		
 		//	Constructor: default
-		public function Jam() 
+		public function Jam(colour:ColorTransform = null) 
 		{
+			this.colour = colour;
 			super();
 			super.bouncesMax = 0;
 			if (stage) { onInit(); }
@@ -34,6 +38,7 @@ package jamazing.jamstory.entity
 			bitmap = new Resource.JAM_THROW();
 			bitmap.width = 40;
 			bitmap.height = 60;
+			bitmap.bitmapData.colorTransform(bitmap.bitmapData.rect, colour);
 			addChild(bitmap);
 			
 			bitmap.x = -bitmap.width / 2;
@@ -52,6 +57,7 @@ package jamazing.jamstory.entity
 			else if(!splatted)
 			{
 				var bitmapData:Bitmap = new Resource.JAM_SPLAT();
+				bitmapData.bitmapData.colorTransform(bitmapData.bitmapData.rect, colour);
 				splatted = true;
 				bitmap.bitmapData = bitmapData.bitmapData;
 				bitmap.width = 50;
@@ -67,7 +73,6 @@ package jamazing.jamstory.entity
 		{
 			return splatted;
 		}
-		
 	}
 
 }

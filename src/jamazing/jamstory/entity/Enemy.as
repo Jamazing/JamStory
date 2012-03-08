@@ -9,7 +9,7 @@ package jamazing.jamstory.entity
 		private const JUMP_HEIGHT:Number = -12;	// Maximum jump height in pixels
 		private const MOVE_SPEED:Number = 12;	// Speed
 		
-		private var jumpHeightOffset = 0;	/* [Note] This wasn't in the design, but i couldn't really figure out how we are doing this */
+		private var jumpHeightOffset:Number = 0;	/* [Note] This wasn't in the design, but i couldn't really figure out how we are doing this */
 		
 		/* These hold the current heading and the future heading of the character */
 		private var currentHeadingX:Number;
@@ -43,7 +43,7 @@ package jamazing.jamstory.entity
 		}
 		
 		//	onInit
-		private function onInit(e:Event = null)
+		private function onInit(e:Event = null):void
 		{
 			/* BUG: Creates two enemies for some reason - investigate why */
 			trace("Enemy created");
@@ -87,14 +87,14 @@ package jamazing.jamstory.entity
 		private function onTick(e:Event):void
 		{
 			// if it's the n-th tick - jump [
-			if (frameCounter == 50)
+			/*if (frameCounter == 50)
 			{
-				;//jump();
-			}
+				//jump();
+			}*/
 
 			if (!isJumping)
 			{
-				var test = this.x - currentHeadingX;
+				var test:int = this.x - currentHeadingX;
 				if (test == 0)// if we are at the destination
 				{
 					/* Swap the headings */
@@ -113,7 +113,7 @@ package jamazing.jamstory.entity
 		}
 		
 		// Controls collisions
-		private function onCollide(e:PlayerEvent)
+		private function onCollide(e:PlayerEvent):void
 		{
 			/* Design:
 				 * Check which side it colides with:
