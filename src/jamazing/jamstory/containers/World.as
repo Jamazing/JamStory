@@ -107,8 +107,9 @@ package jamazing.jamstory.containers
 				bmpData.colorTransform(bmpData.rect, colours[selectedJam]);
 				player.jamjar.bitmapData = bmpData;
 				
-			}else {
-				trace("key H");
+			}
+			if (e.keyCode == Keys.R) {
+				player.respawn();
 			}
 			
 		}

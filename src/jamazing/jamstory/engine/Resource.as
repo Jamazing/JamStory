@@ -18,6 +18,11 @@ package jamazing.jamstory.engine
 		{
 		}
 		
+		//	The main platform graphic - TEMPORARY
+		[Embed(source = "../../../../resources/platform.png")]
+		public static var IMAGE_PLATFORM:Class;
+				
+		
 		//	The player's character image.
 		[Embed(source = "../../../../resources/jamjar.png")]
 		public static var CHARACTER_IMAGE:Class;
@@ -25,6 +30,7 @@ package jamazing.jamstory.engine
 		//	The main static background image.
 		[Embed(source = "../../../../resources/kitchen.jpg")]
 		public static var BACKGROUND_IMAGE:Class;
+		
 		
 		//	The level data as an XML
 		//		Note: The mimeType fakes an octet stream as flash will try to compile the embedded XML file otherwise.

@@ -65,6 +65,12 @@ package jamazing.jamstory.entity
 			reticule.visible = false;
 		}
 		
+		public function respawn():void
+		{
+			isDead = false;
+			reticule.visible = true;
+		}
+		
 		//	Function: onTick
 		//	Runs once per frame to update the positions
 		private function onTick(e:Event):void

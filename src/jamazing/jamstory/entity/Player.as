@@ -168,6 +168,17 @@ package jamazing.jamstory.entity
 //			reticule = null;
 		}
 		
+		//	Temporary respawning
+		//	Respawns the player at the start of the level
+		public function respawn():void
+		{
+			isDead = false;
+			jamjar.visible = true;
+			reticule.respawn();
+			x = 50;
+			y = -90;
+		}
+		
 		/* until here */
 		
 		
