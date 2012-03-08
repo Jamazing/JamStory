@@ -271,12 +271,15 @@ package jamazing.jamstory.containers
 			}
 			
 			//	Add an anemy:
-			var EnemyTest:Enemy = new Enemy();
-			addChild(EnemyTest);
-			EnemyTest.x = 100;
-			EnemyTest.y = -90;
-			EnemyTest.setDirections(EnemyTest.x + 20, EnemyTest.x - 20);
-			dynamicObjects.push(EnemyTest);
+			for (var enemyCounter:int = 0; enemyCounter < 5; enemyCounter++)
+			{
+				var EnemyTest:Enemy = new Enemy();
+				addChild(EnemyTest);
+				EnemyTest.x = 150 + 200*enemyCounter;
+				EnemyTest.y = -90;
+				EnemyTest.setDirections(EnemyTest.x + (enemyCounter*15+20), EnemyTest.x - (enemyCounter*15+20));
+				dynamicObjects.push(EnemyTest);
+			}
 			
 			//	Add the player
 			addChild(player);
