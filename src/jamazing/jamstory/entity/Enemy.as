@@ -1,6 +1,7 @@
 package jamazing.jamstory.entity 
 {
 	import flash.events.Event;
+	import flash.geom.ColorTransform;
 	import jamazing.jamstory.engine.Resource;
 	import jamazing.jamstory.events.PlayerEvent;
 	
@@ -56,6 +57,7 @@ package jamazing.jamstory.entity
 			
 			/* TODO: This should be refined to go to Dynamic? */
 			bitmap = new Resource.CHARACTER_IMAGE();
+			bitmap.bitmapData.colorTransform(bitmap.bitmapData.rect, new ColorTransform(0.3, 0.3, 0.3));
 			bitmap.width = 75;
 			bitmap.height = 75;
 			addChild(bitmap);
