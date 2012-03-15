@@ -3,6 +3,7 @@ package jamazing.jamstory.entity
 	import flash.events.Event;
 	import flash.geom.ColorTransform;
 	import jamazing.jamstory.engine.Resource;
+	import jamazing.jamstory.events.JamStoryEvent;
 	import jamazing.jamstory.events.PlayerEvent;
 	
 	public class Enemy extends Living 
@@ -33,27 +34,18 @@ package jamazing.jamstory.entity
 		{
 			super();
 			
-			if (stage)
-			{
-				onInit();
-			}
-			else
-			{
-				addEventListener(Event.ADDED_TO_STAGE, onInit);
-			}
+			if (stage) onInit();
+			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
 		
 		//	onInit
 		private function onInit(e:Event = null):void
 		{
-			/* BUG: Creates two enemies for some reason - investigate why */
-			trace("Enemy created");
-			
 			/* NOTE: This should go to living? */
 			isJumping = false;
 			
 			/* Only temporary */
-			isDead = false;
+			isAlive = true;
 			
 			/* TODO: This should be refined to go to Dynamic? */
 			bitmap = new Resource.CHARACTER_IMAGE();
@@ -61,58 +53,44 @@ package jamazing.jamstory.entity
 			bitmap.width = 75;
 			bitmap.height = 75;
 			addChild(bitmap);
-			bitmap.x = -bitmap.width/2;		//	Ensure registration point is in the center
+			bitmap.x = -bitmap.width / 2;		//	Ensure registration point is in the center
 			bitmap.y = -bitmap.height / 2;
 			/* Till here */
-			
-			hitbox = new Collidable(x, y, trueWidth);			
+			trueWidth = 60;
+			trueHeight = 60;
+			hitbox = new Collidable(x, y, trueWidth/2);			
 			
 			yAccel = 0;
 			xAccel = 0;
 			ySpeed = 0;
 			xSpeed = 1;
 			isMoving = true;
-
-			addEventListener(Event.ENTER_FRAME, onTick);
-			addEventListener(Event.EXIT_FRAME, onFrameEnd);
+			
+			moveSpeed = 2;
+			
+			removeEventListener(Event.ADDED_TO_STAGE, onInit);
+			stage.addEventListener(JamStoryEvent.TICK_MAIN, onTick);
 			addEventListener(PlayerEvent.COLLIDE, onCollide);
-		}
-		
-		/*	I couldn't remember how were we supposed to implement the frame counting-related features, so I added this as a temporary solution
-		 * -Ivan
-		 */
-		private function onFrameEnd(e:Event):void
-		{
-			frameCounter += frameCounter==100 ? 0 : 1;	// To avoid any strange memory issues or overflows or whatevers
 		}
 		
 		//	onTick
 		//	Updates object on every frame
-		private function onTick(e:Event):void
+		private function onTick(e:JamStoryEvent):void
 		{
-			if (isDead)
-			{
-				return;
-			}
-			// if it's the n-th tick - jump [
-			/*if (frameCounter == 50)
-			{
-				//jump();
-			}*/
-
-			if (!isJumping)
+			if (!isAlive) return;
+			xSpeed = moveSpeed;
+			if (!isSlippy)
 			{
 				var test:int = this.x - currentHeadingX;
-				if (test == 0)// if we are at the destination
+				if (Math.abs(test) < 5)// if we are at the destination
 				{
 					/* Swap the headings */
 					var temporaryVariable:* = currentHeadingX;
 					currentHeadingX = futureHeadingX;
 					futureHeadingX = temporaryVariable;
-					/* Till here */
 					
 					//Set new xSpeed
-					xSpeed = xSpeed * (-1);
+					moveSpeed *= -1;
 				}
 			}
 			
@@ -137,13 +115,6 @@ package jamazing.jamstory.entity
 			 */
 			
 			trace("Collide - "+e.toString());
-		}
-
-		// This implements jumping
-		override public function jump():void 
-		{
-			super.jump();
-			trace("jump");
 		}
 		
 		private function get newYSpeed():Number

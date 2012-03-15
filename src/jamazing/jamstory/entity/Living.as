@@ -35,6 +35,10 @@ package jamazing.jamstory.entity
 		public function Living() 
 		{
 			super();
+			xSpeed = 0;
+			ySpeed = 0;
+			xAccel = 0;
+			yAccel = 1;
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
@@ -47,10 +51,6 @@ package jamazing.jamstory.entity
 			isSlippy = false;
 			stickyEscape = 0;
 			isMoving = true;
-			xSpeed = 0;
-			ySpeed = 0;
-			xAccel = 0;
-			yAccel = 1;
 			isJumping = false;
 			isAlive = true;
 			canWalk = true;
@@ -58,7 +58,6 @@ package jamazing.jamstory.entity
 			timesJumped = 0;
 			maxJumps = 1;
 			jumpHeight = 20;
-			moveSpeed = 0;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			stage.addEventListener(JamStoryEvent.TICK_MAIN, onTick);

@@ -210,7 +210,7 @@ package jamazing.jamstory.containers
 			}
 			//	Check collisions between the player and jam
 			for each (var dynobj:Dynamic in dynamicObjects) {
-				if ((dynobj is Jam)) {
+				if (dynobj is Jam) {
 					var jam:Jam = dynobj as Jam;
 					if (jam == null) break;
 					if (!jam.isSplatted) break;
@@ -224,6 +224,29 @@ package jamazing.jamstory.containers
 				}
 			}
 
+			//	Check collions between enemies and jam
+			for each (var enemyobj:Dynamic in dynamicObjects) {
+				
+				if (enemyobj is Enemy) {
+					
+					var enemy:Enemy = enemyobj as Enemy;
+					for each (var jamobj:Dynamic in dynamicObjects) {
+						if (jamobj is Jam) {
+							var jam:Jam = jamobj as Jam;
+							if (jam == null) break;
+							if (!jam.isSplatted) break;
+							
+							var side:int = jam.isHit(enemy.hitbox);
+							if (side != Collidable.SIDE_NONE) {
+								if (jam.type == Jam.BOUNCEY) enemy.onBouncey(side, jam.hitbox);
+								else if (jam.type == Jam.SLIPPY) enemy.onSlippy(side, jam.hitbox);
+								else if (jam.type == Jam.STICKY) enemy.onSticky(side, jam.hitbox);
+							}
+						}
+					}
+				}
+			}
+			
 			/* TEMPORARY: Player die logic! */
 			for each (var dynamicObject:Dynamic in dynamicObjects)
 			{
@@ -298,7 +321,7 @@ package jamazing.jamstory.containers
 			{
 				var EnemyTest:Enemy = new Enemy();
 				addChild(EnemyTest);
-				EnemyTest.x = 300 + 200*enemyCounter;
+				EnemyTest.x = 1300 + 200*enemyCounter;
 				EnemyTest.y = -85;
 				EnemyTest.setDirections(EnemyTest.x + (enemyCounter*15+20), EnemyTest.x - (enemyCounter*15+20));
 				dynamicObjects.push(EnemyTest);
