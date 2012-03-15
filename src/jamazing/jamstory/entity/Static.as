@@ -39,9 +39,13 @@ package jamazing.jamstory.entity
 		
 		//	Function: isHit
 		//	Returns true if it's colliding with the given Collidable
-		public function isHit(c:Collidable):Boolean
+		public function isHit(c:Collidable):int
 		{
-			return hitbox!=null && hitbox.isHit(c);
+			if (hitbox) {
+				return hitbox.isHit(c);
+			}else {
+				return Collidable.SIDE_NONE;
+			}
 		}
 		
 		/* Figured I should add this so all classes that extend wouldn't have to have their bitmap variable

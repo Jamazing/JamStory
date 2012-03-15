@@ -9,6 +9,7 @@
 package jamazing.jamstory.events 
 {
 	import flash.events.Event;
+	import jamazing.jamstory.entity.Collidable;
 	
 	
 	//	Class: PlayerEvent
@@ -25,7 +26,8 @@ package jamazing.jamstory.events
 		public var y:Number;			//	y position this occured at
 		public var angle:Number;		//	Direction of the action
 		public var magnitude:Number;	//	Magnitude of the event (such as throwing strength, or collision strength)
-		
+		public var side:int;
+		public var collidable:Collidable;
 		
 		//	Constructor: (String, Number, Number, Number, Number, Boolean, Boolean)
 		public function PlayerEvent(type:String,x:Number, y:Number, angle:Number = 0, magnitude:Number = 0, bubbles:Boolean = true, cancelable:Boolean = false) 

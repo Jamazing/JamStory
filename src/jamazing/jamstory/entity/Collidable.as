@@ -16,6 +16,14 @@ package jamazing.jamstory.entity
 	//	Class: Collidable
 	public class Collidable
 	{
+		//	Returns of sides that can be hit
+		public static const SIDE_NONE:int = 0;
+		public static const SIDE_TOP:int = 1;
+		public static const SIDE_LEFT:int = 2;
+		public static const SIDE_BOTTOM:int = 3;
+		public static const SIDE_RIGHT:int = 4;
+		
+		
 		public var x:Number;			//	x position (world relative)
 		public var y:Number;			//	y position (world relative)
 		public var radius:Number;		//	radius from center to edge
@@ -35,7 +43,7 @@ package jamazing.jamstory.entity
 		
 		//	Function: isHit
 		//	Returns true if the collidable is hitting it
-		public function isHit(c:Collidable):Boolean
+		public function isHit(c:Collidable):int
 		{
 			//	If it's a box collidable, process it as such
 			//	Otherwise, treat it as a standard, radial collidable
@@ -53,18 +61,21 @@ package jamazing.jamstory.entity
 				if (difference <= 0) {
 					if (members.length > 0){
 						for each (var subCollidable:Collidable in members) {
-							if (subCollidable.isHit(c)) {
-								return true;
-							}
+							return subCollidable.isHit(c);
 						}
-						return false;
+						return SIDE_NONE;
 					}else {
-						return true;
+						//	Return which side was hit based on the angle between the objects
+						var hitAngle:Number = (180 / Math.PI) * (Math.atan2((c.y - y), (c.x - x)));
+						if ((hitAngle > -45) && (hitAngle < 45)) return SIDE_RIGHT;
+						if ((hitAngle > 45) && (hitAngle < 135)) return SIDE_TOP;
+						if (((hitAngle > 135) && (hitAngle < 180)) || ((hitAngle > -180) &&(hitAngle < -135))) return SIDE_LEFT;
+						if ((hitAngle > -135) && (hitAngle < -45)) return SIDE_RIGHT;
 					}
 					
 				}
 			}
-			return false;
+			return SIDE_NONE;
 		}
 		
 	}

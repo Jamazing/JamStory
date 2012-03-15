@@ -18,6 +18,7 @@ package jamazing.jamstory.containers
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 	import jamazing.jamstory.entity.Collectable;
+	import jamazing.jamstory.entity.Collidable;
 	import jamazing.jamstory.entity.Dynamic;
 	import jamazing.jamstory.entity.Jam;
 	import jamazing.jamstory.events.JamStoryEvent;
@@ -37,7 +38,7 @@ package jamazing.jamstory.containers
 	{
 		private const MAX_JAM:int = 5;			//	Determines the jam limit
 		
-		private	var lastPlayerHitAnnouncement:PlayerEvent = null;	//	Holds the last PlayerEvent thrown	
+		private	var collisionEvent:PlayerEvent = null;	//	Holds the last PlayerEvent thrown	
 
 		private var jamCount:int;				//	Counts how much jam do we have in the world
 		
@@ -49,6 +50,7 @@ package jamazing.jamstory.containers
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
 		
+		//	Controls for the player colour
 		public var selectedJam:int;			//	0 - sticky, 1 - slippy, 2 - bouncy
 		public static const colours:Array = new Array(
 											new ColorTransform(1,1,1,1,	0,0,0),
@@ -88,7 +90,7 @@ package jamazing.jamstory.containers
 			var bmp:Bitmap = new Resource.CHARACTER_IMAGE();
 			var bmpData:BitmapData = bmp.bitmapData;
 			bmpData.colorTransform(bmpData.rect, colours[selectedJam]);
-			player.jamjar.bitmapData = bmpData;
+			player.bitmap.bitmapData = bmpData;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
@@ -102,7 +104,6 @@ package jamazing.jamstory.containers
 		{
 			if (e.keyCode == Keys.Q) {
 				selectedJam++;
-				trace("key Q");
 				
 				if (selectedJam > 2) {
 					selectedJam = 0;
@@ -113,7 +114,7 @@ package jamazing.jamstory.containers
 				var bmp:Bitmap = new Resource.CHARACTER_IMAGE();
 				var bmpData:BitmapData = bmp.bitmapData;
 				bmpData.colorTransform(bmpData.rect, colours[selectedJam]);
-				player.jamjar.bitmapData = bmpData;
+				player.bitmap.bitmapData = bmpData;
 				
 			}
 			if (e.keyCode == Keys.R) {
@@ -187,17 +188,19 @@ package jamazing.jamstory.containers
 			for each (var staticObject:Static in staticObjects) {
 				if (staticObject as Platform != null)	// If the static object is a platform
 				{
-					if (staticObject.isHit(player.collidable)) {
-						lastPlayerHitAnnouncement = new PlayerEvent(PlayerEvent.COLLIDE, staticObject.x, staticObject.y - staticObject.height / 2, 0, player.PlayerSpeed);
-
-						stage.dispatchEvent(lastPlayerHitAnnouncement);
+					var side:int = staticObject.isHit(player.hitbox);
+					if (side != Collidable.SIDE_NONE) {
+						collisionEvent = new PlayerEvent(PlayerEvent.COLLIDE, staticObject.x, staticObject.y - staticObject.height / 2, 0, player.PlayerSpeed);
 						
+						collisionEvent.side = side;
+						collisionEvent.collidable = staticObject.hitbox;
+						stage.dispatchEvent(collisionEvent);
 						hasPlayerEventOccured = true;
 					}
 				}
 				else if (staticObject as Collectable != null)	// Or if the static object is a collectable
 				{
-					if (staticObject.isHit(player.collidable))
+					if (staticObject.isHit(player.hitbox))
 					{
 						staticObject.visible = false;
 					}
@@ -209,7 +212,7 @@ package jamazing.jamstory.containers
 			{
 				if (dynamicObject as Enemy != null)
 				{
-					if (dynamicObject.isHit(player.collidable))	// If player hits Enemy => Die
+					if (dynamicObject.isHit(player.hitbox))	// If player hits Enemy => Die
 					{
 						stage.dispatchEvent(new PlayerEvent(PlayerEvent.PLAYER_DIE, player.x, player.y, 0, 0));
 					}
@@ -217,8 +220,8 @@ package jamazing.jamstory.containers
 			}
 			
 			if (!hasPlayerEventOccured)
-				if (lastPlayerHitAnnouncement!=null && !lastPlayerHitAnnouncement.HasNoMagnitude)
-					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, lastPlayerHitAnnouncement.x, lastPlayerHitAnnouncement.y, 0, player.PlayerSpeed));
+				if (collisionEvent!=null && !collisionEvent.HasNoMagnitude)
+					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, collisionEvent.x, collisionEvent.y, 0, player.PlayerSpeed));
 			
 			//	Check collisions between each dynamic object (non-player) and each static object
 			for each (var staticObject:Static in staticObjects) {

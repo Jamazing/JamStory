@@ -17,7 +17,7 @@ package jamazing.jamstory.entity
 		public var ySpeed:Number;
 		public var xAccel:Number;			//	Amount that the xSpeed changes each frame
 		public var yAccel:Number;
-		public var isMoving:Boolean;		//	True if the object is currently in motion
+		public var isMoving:Boolean = true;		//	True if the object is currently in motion
 		
 		//	Constructor: default
 		public function Dynamic() 
