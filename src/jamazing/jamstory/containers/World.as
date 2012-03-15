@@ -11,10 +11,12 @@ package jamazing.jamstory.containers
 	import flash.display.Shape;
 	import flash.events.KeyboardEvent;
 	import flash.geom.ColorTransform;
+	import flash.net.DynamicPropertyOutput;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.text.engine.ElementFormat;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 	import jamazing.jamstory.entity.Collectable;
@@ -206,13 +208,28 @@ package jamazing.jamstory.containers
 					}
 				}
 			}
+			//	Check collisions between the player and jam
+			for each (var dynobj:Dynamic in dynamicObjects) {
+				if ((dynobj is Jam)) {
+					var jam:Jam = dynobj as Jam;
+					if (jam == null) break;
+					if (!jam.isSplatted) break;
+					
+					var side:int = jam.isHit(player.hitbox);
+					if (side != Collidable.SIDE_NONE) {
+						if (jam.type == Jam.BOUNCEY) player.onBouncey(side, jam.hitbox);
+						else if (jam.type == Jam.SLIPPY) player.onSlippy(side, jam.hitbox);
+						else if (jam.type == Jam.STICKY) player.onSticky(side, jam.hitbox);
+					}
+				}
+			}
 
 			/* TEMPORARY: Player die logic! */
 			for each (var dynamicObject:Dynamic in dynamicObjects)
 			{
-				if (dynamicObject as Enemy != null)
+				if ((dynamicObject is Enemy) && (dynamicObject as Enemy != null))
 				{
-					if (dynamicObject.isHit(player.hitbox))	// If player hits Enemy => Die
+					if (dynamicObject.isHit(player.hitbox) != Collidable.SIDE_NONE)	// If player hits Enemy => Die
 					{
 						stage.dispatchEvent(new PlayerEvent(PlayerEvent.PLAYER_DIE, player.x, player.y, 0, 0));
 					}
@@ -227,23 +244,18 @@ package jamazing.jamstory.containers
 			for each (var staticObject:Static in staticObjects) {
 				if (staticObject as Platform != null)
 				{
-					/*
-					 * This gets transformed slightly
-					 * -Ivan
-					
-					 for each (var throwable:Throwable in dynamicObjects) {
-						if (staticObject.isHit(throwable.hitbox)) {
-							throwable.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, staticObject.x, staticObject.y - staticObject.height/2));
-						}
-					}
-					*/
 					for each (var dynamicObject:Dynamic in dynamicObjects)
 					{
-						if (dynamicObject as Throwable != null)
-						{
-							if (staticObject.isHit(dynamicObject.hitbox)) {
-								dynamicObject.dispatchEvent(new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, staticObject.x, staticObject.y - staticObject.height/2));
-							}		
+						if (dynamicObject as Throwable != null) {
+							
+							var side:int = staticObject.isHit(dynamicObject.hitbox);
+							if (side != Collidable.SIDE_NONE) {
+								
+								var dynamicEvent:PlayerEvent = new PlayerEvent(PlayerEvent.THROWABLE_COLLISION, staticObject.x, staticObject.y - staticObject.height/2);
+								dynamicEvent.side = side;
+								dynamicEvent.collidable = staticObject.hitbox;
+								dynamicObject.dispatchEvent(dynamicEvent);
+							}
 						}
 					}
 					
@@ -335,11 +347,11 @@ package jamazing.jamstory.containers
 		//	Listens for the player throwing a new object
 		private function onThrow(e:PlayerEvent):void
 		{
-			var jam:Jam = new Jam(colours[selectedJam]);
+			var jam:Jam = new Jam(selectedJam, colours[selectedJam]);
 			
 			//calculate position for the new shape
-			jam.x = e.x;
-			jam.y = e.y;
+			jam.x = e.x+10;
+			jam.y = e.y-20;
 			
 			//	Add to the display list
 			addChild(jam);

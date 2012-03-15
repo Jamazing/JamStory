@@ -68,9 +68,9 @@ package jamazing.jamstory.entity
 						//	Return which side was hit based on the angle between the objects
 						var hitAngle:Number = (180 / Math.PI) * (Math.atan2((c.y - y), (c.x - x)));
 						if ((hitAngle > -45) && (hitAngle < 45)) return SIDE_RIGHT;
-						if ((hitAngle > 45) && (hitAngle < 135)) return SIDE_TOP;
+						if ((hitAngle > 45) && (hitAngle < 135)) return SIDE_BOTTOM;
 						if (((hitAngle > 135) && (hitAngle < 180)) || ((hitAngle > -180) &&(hitAngle < -135))) return SIDE_LEFT;
-						if ((hitAngle > -135) && (hitAngle < -45)) return SIDE_RIGHT;
+						if ((hitAngle > -135) && (hitAngle < -45)) return SIDE_TOP;
 					}
 					
 				}

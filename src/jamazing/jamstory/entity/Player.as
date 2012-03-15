@@ -47,8 +47,6 @@ package jamazing.jamstory.entity
 		private var accelerationInterval:Number;	//	This variable is used to count for how long has the player been walking
 		private var jumpTargetYOffset:Number;		//	This variable is used when calculating how far until the player's jump hight peek has been reached
 		
-		private var isStuck:Boolean;
-		
 		private var powerupsContainer:Array;
 		
 		//	Constructor: default
@@ -119,7 +117,8 @@ package jamazing.jamstory.entity
 				
 			}else if (e.side == Collidable.SIDE_LEFT) {
 				xSpeed = 0;
-				x = (c.x - c.width / 2) - trueWidth/2;
+				x = (c.x - c.width / 2) - trueWidth / 2;
+				isSlippy = false;
 				
 			}else if (e.side == Collidable.SIDE_BOTTOM) {
 				ySpeed *= -1;
@@ -127,8 +126,10 @@ package jamazing.jamstory.entity
 				
 			}else if (e.side == Collidable.SIDE_RIGHT) {
 				xSpeed = 0;
-				x = (c.x + c.width / 2) + trueWidth/2;
+				x = (c.x + c.width / 2) + trueWidth / 2;
+				isSlippy = false;
 			}
+			
 			
 		}		
 		
@@ -152,7 +153,7 @@ package jamazing.jamstory.entity
 		//	Respawns the player at the start of the level
 		public function respawn():void
 		{
-			isAlive = false;
+			isAlive = true;
 			bitmap.visible = true;
 			reticule.respawn();
 			x = 50;
@@ -222,14 +223,23 @@ package jamazing.jamstory.entity
 			if (!isAlive) return;
 			
 			if (Keys.isDown(Keys.A)) {
-				xSpeed = -moveSpeed;
+				if ((!isStuck) && (!isSlippy)) xSpeed = -moveSpeed;
+				if (stickyEscape % 2 == 0) stickyEscape += 5;
 				
 			}else if (Keys.isDown(Keys.D)) {
-				xSpeed = moveSpeed;
+				if ((!isStuck) && (!isSlippy)) xSpeed = moveSpeed;
+				if (stickyEscape % 2 == 0) stickyEscape += 5;
 			}
 			
 			if (Keys.isDown(Keys.W)) {
-				jump();
+				if (!isStuck) {
+					isSlippy = false;
+					jump();
+				}
+			}
+			
+			if (x < 0) {
+				respawn();
 			}
 		}				
 	}

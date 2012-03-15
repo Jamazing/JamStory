@@ -49,12 +49,30 @@ package jamazing.jamstory.entity
 		private function onCollide(e:PlayerEvent):void
 		{
 			bounces++;
-			ySpeed *= -0.5;
-			xSpeed *= 0.5;
-			y = e.y;
 			if (bounces > bouncesMax) {
 				isMoving = false;
-				ySpeed = 0;
+			}
+
+			var c:BoxCollidable = e.collidable as BoxCollidable;
+			if (e.side == Collidable.SIDE_TOP) {
+				ySpeed *= -0.5;
+				y = (c.y - c.height / 2);
+				rotation = 0;
+				
+			}else if (e.side == Collidable.SIDE_LEFT) {
+				xSpeed *= -0.5;
+				x = (c.x - c.width / 2);
+				rotation = -90;
+				
+			}else if (e.side == Collidable.SIDE_BOTTOM) {
+				ySpeed *= -1;
+				y = (c.y + c.height / 2);
+				rotation = 0;
+				
+			}else if (e.side == Collidable.SIDE_RIGHT) {
+				xSpeed *= -0.5;
+				x = (c.x + c.width / 2);
+				rotation = 90;
 			}
 		}
 		

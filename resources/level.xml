@@ -9,8 +9,8 @@
 	
 	<level>
 		<info>
-			<width>1200</width>
-			<height>1000</height>
+			<width>2400</width>
+			<height>600</height>
 			<playerstart>200</playerstart>
 		</info>
 		
@@ -19,10 +19,10 @@
 			
 			<!--Screen Base for running on-->
 			<obj>
-				<x>550</x>
+				<x>1200</x>
 				<y>-100</y>
 				<colour>0xFF0000</colour>
-				<width>1750</width>
+				<width>5000</width>
 				<height>300</height>
 			</obj>
 			

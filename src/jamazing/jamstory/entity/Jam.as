@@ -17,14 +17,20 @@ package jamazing.jamstory.entity
 	//	Class: Jam
 	public class Jam extends Throwable
 	{
+		public static const STICKY:int = 0;
+		public static const SLIPPY:int = 1;
+		public static const BOUNCEY:int = 2;
+		
 		private var JamEnum:JamTypes;
 		private var splatted:Boolean;
 		public var colour:ColorTransform;
+		public var type:int;
 		
 		//	Constructor: default
-		public function Jam(colour:ColorTransform = null) 
+		public function Jam(type:int = 0, colour:ColorTransform = null) 
 		{
 			this.colour = colour;
+			this.type = type;
 			super();
 			super.bouncesMax = 0;
 			if (stage) { onInit(); }
@@ -40,6 +46,10 @@ package jamazing.jamstory.entity
 			bitmap.height = 60;
 			bitmap.bitmapData.colorTransform(bitmap.bitmapData.rect, colour);
 			addChild(bitmap);
+			
+			trueWidth = 30;
+			trueHeight = 30;
+			hitbox = new Collidable(x, y, trueWidth);
 			
 			bitmap.x = -bitmap.width / 2;
 			bitmap.y = -bitmap.height / 2;
@@ -62,7 +72,6 @@ package jamazing.jamstory.entity
 				bitmap.bitmapData = bitmapData.bitmapData;
 				bitmap.width = 50;
 				bitmap.height = 75;
-				rotation = 0;
 			
 				bitmap.x = -bitmap.width / 2;
 				bitmap.y = -bitmap.height / 2;

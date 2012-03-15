@@ -93,7 +93,7 @@ package jamazing.jamstory.entity
 		}
 		
 		//	Moves this collidable and updates it's sides
-		public function set X(x:Number):void
+		public function set xPos(x:Number):void
 		{
 			this.x = x;
 			
@@ -116,7 +116,7 @@ package jamazing.jamstory.entity
 		}
 		
 		//	Moves this collidable and updates it's sides
-		public function set Y(y:Number):void
+		public function set yPos(y:Number):void
 		{
 			this.y = y;
 			
