@@ -13,6 +13,7 @@ package jamazing.jamstory.entity
 	import flash.geom.ColorTransform;
 	import jamazing.jamstory.entity.Throwable;
 	import jamazing.jamstory.engine.Resource;
+	import jamazing.jamstory.events.PlayerEvent;
 	
 	//	Class: Jam
 	public class Jam extends Throwable
@@ -25,12 +26,16 @@ package jamazing.jamstory.entity
 		private var splatted:Boolean;
 		public var colour:ColorTransform;
 		public var type:int;
+		public var collisions:int;
+		public var collisionsMax:int;
+		public var isAlive:Boolean;
 		
 		//	Constructor: default
 		public function Jam(type:int = 0, colour:ColorTransform = null) 
 		{
 			this.colour = colour;
 			this.type = type;
+			
 			super();
 			super.bouncesMax = 0;
 			if (stage) { onInit(); }
@@ -50,6 +55,7 @@ package jamazing.jamstory.entity
 			trueWidth = 30;
 			trueHeight = 30;
 			hitbox = new Collidable(x, y, trueWidth);
+			isAlive = true;
 			
 			bitmap.x = -bitmap.width / 2;
 			bitmap.y = -bitmap.height / 2;

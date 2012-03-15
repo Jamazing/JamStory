@@ -60,7 +60,7 @@ package jamazing.jamstory.entity
 			trueHeight = 60;
 			hitbox = new Collidable(x, y, trueWidth/2);			
 			
-			yAccel = 0;
+			yAccel = 1;
 			xAccel = 0;
 			ySpeed = 0;
 			xSpeed = 1;
@@ -92,30 +92,39 @@ package jamazing.jamstory.entity
 					//Set new xSpeed
 					moveSpeed *= -1;
 				}
+			}else {
+				if (Math.random() > 0.5) stickyEscape++;
 			}
 			
 			// if (5th frame && colCount>0: colCount--)
 			
 		}
 		
-		// Controls collisions
-		private function onCollide(e:PlayerEvent):void
+		public function onCollide(e:PlayerEvent):void
 		{
-			/* Design:
-				 * Check which side it colides with:
-					 * Top <-> ySpeed := 0
-					 * Bottom <-> ySpeed *= -1
-					 * Sides: swapDestinations
-			*/
+			var c:BoxCollidable = e.collidable as BoxCollidable;
+			if (e.side == Collidable.SIDE_TOP) {
+				ySpeed = 0;
+				y = (c.y - c.height / 2) - trueHeight/2;
+				isJumping = false;
+				
+			}else if (e.side == Collidable.SIDE_LEFT) {
+				xSpeed = 0;
+				x = (c.x - c.width / 2) - trueWidth / 2;
+				isSlippy = false;
+				
+			}else if (e.side == Collidable.SIDE_BOTTOM) {
+				ySpeed *= -1;
+				y = (c.y + c.height / 2) + trueHeight/2;
+				
+			}else if (e.side == Collidable.SIDE_RIGHT) {
+				xSpeed = 0;
+				x = (c.x + c.width / 2) + trueWidth / 2;
+				isSlippy = false;
+			}
 			
-			/*	*Stuck management*
-			 * 1/Increase collision count
-			 * 2/If colisions count is 5
-			 * 	-> Stuck, so kill()
-			 */
 			
-			trace("Collide - "+e.toString());
-		}
+		}	
 		
 		private function get newYSpeed():Number
 		{

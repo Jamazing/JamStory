@@ -208,6 +208,29 @@ package jamazing.jamstory.containers
 					}
 				}
 			}
+			
+			//	Check collisions between enemies and the statics
+			//	Check collisions between the player and staticObjects
+			for each (var enemyobj:Dynamic in dynamicObjects) {
+				if (enemyobj is Enemy) {
+					var enemy:Enemy = enemyobj as Enemy;
+					for each (var staticObject:Static in staticObjects) {
+						if (staticObject as Platform != null)	// If the static object is a platform
+						{
+							var side:int = staticObject.isHit(enemy.hitbox);
+							if (side != Collidable.SIDE_NONE) {
+								var enemyCollision:PlayerEvent = new PlayerEvent(PlayerEvent.COLLIDE, staticObject.x, staticObject.y - staticObject.height / 2, 0, 0, false);
+								
+								enemyCollision.side = side;
+								enemyCollision.collidable = staticObject.hitbox;
+								enemy.dispatchEvent(enemyCollision);
+							}
+						}
+					}
+				}
+			}
+			
+			
 			//	Check collisions between the player and jam
 			for each (var dynobj:Dynamic in dynamicObjects) {
 				if (dynobj is Jam) {
@@ -217,9 +240,9 @@ package jamazing.jamstory.containers
 					
 					var side:int = jam.isHit(player.hitbox);
 					if (side != Collidable.SIDE_NONE) {
-						if (jam.type == Jam.BOUNCEY) player.onBouncey(side, jam.hitbox);
-						else if (jam.type == Jam.SLIPPY) player.onSlippy(side, jam.hitbox);
-						else if (jam.type == Jam.STICKY) player.onSticky(side, jam.hitbox);
+						if (jam.type == Jam.BOUNCEY) player.onBouncey(side, jam);
+						else if (jam.type == Jam.SLIPPY) player.onSlippy(side, jam);
+						else if (jam.type == Jam.STICKY) player.onSticky(side, jam);
 					}
 				}
 			}
@@ -238,9 +261,9 @@ package jamazing.jamstory.containers
 							
 							var side:int = jam.isHit(enemy.hitbox);
 							if (side != Collidable.SIDE_NONE) {
-								if (jam.type == Jam.BOUNCEY) enemy.onBouncey(side, jam.hitbox);
-								else if (jam.type == Jam.SLIPPY) enemy.onSlippy(side, jam.hitbox);
-								else if (jam.type == Jam.STICKY) enemy.onSticky(side, jam.hitbox);
+								if (jam.type == Jam.BOUNCEY) enemy.onBouncey(side, jam);
+								else if (jam.type == Jam.SLIPPY) enemy.onSlippy(side, jam);
+								else if (jam.type == Jam.STICKY) enemy.onSticky(side, jam);
 							}
 						}
 					}

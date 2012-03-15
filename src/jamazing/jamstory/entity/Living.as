@@ -29,6 +29,7 @@ package jamazing.jamstory.entity
 		public var isStuck:Boolean;
 		public var isSlippy:Boolean;
 		public var stickyEscape:int;
+		public var stickyJam:Jam;
 		
 		
 		//	Constructor: default
@@ -75,6 +76,7 @@ package jamazing.jamstory.entity
 					ySpeed = -35;
 					stickyEscape = 0;
 					isStuck = false;
+					stickyJam.collisions += 5;
 				}
 				stickyEscape--;
 				if (stickyEscape < 0) {
@@ -116,17 +118,21 @@ package jamazing.jamstory.entity
 			}
 		}
 		
-		public function onSticky(side:int, c:Collidable):void
+		public function onSticky(side:int, jam:Jam):void
 		{
+			var c:Collidable = jam.hitbox;
 			isStuck = true;
 			ySpeed = 0;
 			xSpeed = 0;
 			y = c.y - trueHeight / 2;
-			x -= (x - c.x)/10;
+			x -= (x - c.x) / 10;
+			stickyJam = jam;
 		}
 		
-		public function onBouncey(side:int, c:Collidable):void
+		public function onBouncey(side:int, jam:Jam):void
 		{
+			var c:Collidable = jam.hitbox;
+			
 			if (side == Collidable.SIDE_TOP) {
 				ySpeed *= -1.3;
 				y = (c.y - c.radius) - trueHeight/2;
@@ -147,11 +153,19 @@ package jamazing.jamstory.entity
 			if (ySpeed < -50) {
 				ySpeed = -50;
 			}
+			jam.collisions++;
 		}
 		
-		public function onSlippy(side:int, c:Collidable):void
+		public function onSlippy(side:int, jam:Jam):void
 		{
+			var c:Collidable = jam.hitbox;
+			
+			if (!isSlippy) {
+				jam.collisions++;
+			}
+			
 			isSlippy = true;
+			
 		}
 	}
 
