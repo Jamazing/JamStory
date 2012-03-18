@@ -137,6 +137,8 @@ package jamazing.jamstory.entity
 			b = sides[SIDE_RIGHT]
 			b.y = y;
 		}
+		
+
 	}
 
 }

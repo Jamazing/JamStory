@@ -85,7 +85,11 @@ package jamazing.jamstory.entity
 			}
 			
 			if (isSlippy) {
-				xSpeed += 2*(xSpeed/(Math.abs(xSpeed)));
+				if (isJumping) {
+					ySpeed += 2 * (ySpeed / Math.abs(ySpeed));
+				}
+				else
+					xSpeed += 2*(xSpeed/(Math.abs(xSpeed)));
 				if (xSpeed > moveSpeed) xSpeed = moveSpeed;
 			}else {
 				xSpeed *= 0.3;
