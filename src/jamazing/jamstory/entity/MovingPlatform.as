@@ -17,7 +17,8 @@ package jamazing.jamstory.entity
 	
 	public class MovingPlatform extends Dynamic 
 	{
-		private var headings:Queue = null;
+		private var headings:Queue;
+		private var distanceToNextHeading:Number;
 		
 		// Constructor 
 		public function MovingPlatform(inputX:Number, inputY:Number, inputWidth:Number, inputHeight:Number, inputSpeed:Number = 1) 
@@ -28,6 +29,7 @@ package jamazing.jamstory.entity
 			headings = new Queue();									// Initialize queue
 			headings.Enque(new Point(inputX, inputY));				// Add initial point to headings
 			
+			distanceToNextHeading = 0;								// Initialize distance
 			
 			if (stage)	onInit();
 			else	addEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -46,11 +48,11 @@ package jamazing.jamstory.entity
 		private function changeDirection():void
 		{
 			if (headings == null || currentHeading == null || headings.isEmpty())	// If something is not right
-				return;										// just return
+				return;										// just return				
 				
-			headings.Enque(currentHeading);				//	Add the current heading to the back of the queue
-			
-			currentHeading = headings.Deque();			//	Take the new heading from the front of the queue
+			headings.Enque(headings.Deque());				//	Add the current heading to the back of the queue
+						
+			distanceToNextHeading = Point.distance(currentLocation, currentHeading);	// Update the distance variable
 		}
 		
 		private function onTick(e:JamStoryEvent):void
@@ -60,21 +62,23 @@ package jamazing.jamstory.entity
 				changeDirection();							// ... change direction
 				// Note: try adding a return here - may induce one frame delay if needed?
 			}
-				
-			return;
 		}
-		
+
+		//	Getter: currentLocation
+		//	Returns the current location as a point
 		private function get currentLocation():Point
 		{
 			return new Point(x, y);
 		}
-		
+
+		//	Getter: currentHeading
+		//	Returns the current heading as a point
 		private function get currentHeading():Point
 		{
-			if (headings == null || headings.isEmpty())
-				return null;
+			if (headings == null || headings.isEmpty())	// if something is wrong...
+				return null;								// ... return null
 				
-			return headings.Front;
+			return headings.Front;						// return the front of the queue
 		}
 		
 	}
