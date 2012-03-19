@@ -30,15 +30,38 @@ package jamazing.jamstory.language
 				Deque();	
 		}
 		
-		//	Function: Deque
-		//	Removes an element from the front of the queue and returns it; returns null if there are no elements to return
-		public function Deque():*
+		//	Getter: Front
+		//	Looks at what the first element is
+		public function get Front():*
 		{
 			if (size == 0)		// If there are no elements to return ...
 				return null;		// ... return null
 			
-			var returnValue:* = container[size-1];	// This variable will contain the 
-
+			return container[size-1];	// return the last element
+		}
+		
+		//	Setter: Back
+		//	Same as Enque
+		/* Not sure if usefull or just syntactic sugar; Since there is a getter of front, made sense to have a setter of back... */
+		public function set Back(value:*):void
+		{
+			if (value == null)	// If value is null ...
+				return;				// ... cant push nulls
+			
+			Enque(value);
+		}
+		
+		//	Function: Deque
+		//	Removes an element from the front of the queue and returns it; returns null if there are no elements to return
+		public function Deque():*
+		{
+			var returnValue:* = Front;				// Get the front of the queue
+			
+			if (returnValue == null)					// If nothing was at the front ...
+			{
+				return null;								// ... queue must be empty, so return null :-]
+			}
+			
 			container.splice(size-1);				// Remove the last element; contrary to slice, this works in-place
 			
 			return returnValue;						// And return the value of the last element
