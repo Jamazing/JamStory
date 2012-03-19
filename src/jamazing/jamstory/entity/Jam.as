@@ -22,13 +22,19 @@ package jamazing.jamstory.entity
 		public static const SLIPPY:int = 1;
 		public static const BOUNCEY:int = 2;
 		
+		private static const MAX_BOUNCE:int = 3;	// Maximum bounce count
+		
+		private var bounces = null;				// Bounces counter
+		
 		private var JamEnum:JamTypes;
 		private var splatted:Boolean;
+		
 		public var colour:ColorTransform;
 		public var type:int;
 		public var collisions:int;
 		public var collisionsMax:int;
 		public var isAlive:Boolean;
+		
 		
 		//	Constructor: default
 		public function Jam(type:int = 0, colour:ColorTransform = null) 
@@ -38,6 +44,10 @@ package jamazing.jamstory.entity
 			
 			super();
 			super.bouncesMax = 0;
+			
+			if (type == BOUNCEY)		// If jam is bouncy
+				bounces = MAX_BOUNCE;		// Initialize the bounces counter 
+			
 			if (stage) { onInit(); }
 			else { addEventListener(Event.ADDED_TO_STAGE, onInit); }
 		}
@@ -64,6 +74,18 @@ package jamazing.jamstory.entity
 			
 		}
 		
+		public function Use():void
+		{
+			if (!isBouncy)
+				return;
+				
+			bounces--;
+			
+			if (bounces < 0)		// Not added to onTick, since bounces could be null in other jams
+				isAlive = false;
+		}
+
+		
 		private function onTick(e:Event):void
 		{
 			if (isMoving)
@@ -82,6 +104,11 @@ package jamazing.jamstory.entity
 				bitmap.x = -bitmap.width / 2;
 				bitmap.y = -bitmap.height / 2;
 			}
+		}
+
+		public function get isBouncy():Boolean
+		{
+			return type == BOUNCEY;
 		}
 		
 		public function get isSplatted():Boolean

@@ -158,17 +158,44 @@ package jamazing.jamstory.containers
 					{
 						if ((dynamicObjects[index] as Jam).isSplatted)		// ... and is splatted
 						{
-							removeChild(dynamicObjects[index]);					// ... remove it from the world
-							dynamicObjects.splice(index, 1);					// ... remove it from the array
+							removeSingleJam(index);
 							
 							index = 0;											// ... reset the indexer
-							
-							jamCount--;											// ... decrease jam count
-							
+														
 							continue;											// ... start over
 						}
 					}
 				}
+		}
+		
+		//	Function: forceTestJam
+		//	Removes jam, which is not alive anymore; this function is forced, hence the name
+		private function forceTestJam():void
+		{
+			for (var index:int = 0; index != dynamicObjects.length; index++)	// Go over all members
+			{
+				/* Obviously this needs to be refactored due to code reuse */
+				if (dynamicObjects[index] as Jam != null)	// if the selected object is jam
+				{
+					if (!(dynamicObjects[index] as Jam).isAlive)
+					{
+						removeSingleJam(index);
+						
+						return;
+					}
+				}
+			}
+		}
+
+		//	Function: removeSingleJam
+		//	Removes a single jam at a given index
+		private function removeSingleJam(index:int):void
+		{
+			removeChild(dynamicObjects[index]);					// ... remove it from the world
+			
+			dynamicObjects.splice(index, 1);					// ... remove it from the array							
+
+			jamCount--;											// ... decrease jam count
 		}
 		
 		
@@ -240,7 +267,13 @@ package jamazing.jamstory.containers
 					
 					var side:int = jam.isHit(player.hitbox);
 					if (side != Collidable.SIDE_NONE) {
-						if (jam.type == Jam.BOUNCEY) player.onBouncey(side, jam);
+						if (jam.type == Jam.BOUNCEY) {
+							player.onBouncey(side, jam);
+							jam.Use();
+							
+							if (!jam.isAlive)
+								forceTestJam();			// I feel this is an inefective way of doing this, but i guess it will do for now; -Ivan
+						}
 						else if (jam.type == Jam.SLIPPY) player.onSlippy(side, jam);
 						else if (jam.type == Jam.STICKY) player.onSticky(side, jam);
 					}
