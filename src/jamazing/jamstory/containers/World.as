@@ -294,7 +294,15 @@ package jamazing.jamstory.containers
 							
 							var side:int = jam.isHit(enemy.hitbox);
 							if (side != Collidable.SIDE_NONE) {
-								if (jam.type == Jam.BOUNCEY) enemy.onBouncey(side, jam);
+								if (jam.type == Jam.BOUNCEY) {
+									enemy.onBouncey(side, jam);
+
+									jam.Use();
+									
+									if (!jam.isAlive)
+										forceTestJam();			// I feel this is an inefective way of doing this, but i guess it will do for now; -Ivan
+									
+								}
 								else if (jam.type == Jam.SLIPPY) enemy.onSlippy(side, jam);
 								else if (jam.type == Jam.STICKY) enemy.onSticky(side, jam);
 							}
