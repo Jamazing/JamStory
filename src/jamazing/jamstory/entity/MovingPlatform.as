@@ -72,9 +72,6 @@ package jamazing.jamstory.entity
 		
 		private function onTick(e:Event):void
 		{	
-			/* Sorry for using the Point class and ugly code here, I should have looked into how operator== works for this data type in the first place.
-				-Ivan
-			*/
 			if (remDistanceToNextHeading<=1)					// If currentHeading has been reached...
 			{
 				changeDirection();							// ... change direction
