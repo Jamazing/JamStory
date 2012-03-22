@@ -238,6 +238,25 @@ package jamazing.jamstory.containers
 				}
 			}
 			
+			for each( var dynamicObject:Dynamic in dynamicObjects)
+			{
+				if (dynamicObject as MovingPlatform != null)
+				{
+					var side:int = dynamicObject.isHit(player.hitbox);
+					if (side != Collidable.SIDE_NONE) {
+						collisionEvent = new PlayerEvent(PlayerEvent.COLLIDE, dynamicObject.x, dynamicObject.y - dynamicObject.height / 2, dynamicObject.xSpeed, player.PlayerSpeed);
+						
+						collisionEvent.xSpeed = dynamicObject.xSpeed;
+						collisionEvent.ySpeed = dynamicObject.ySpeed;
+						
+						collisionEvent.side = side;
+						collisionEvent.collidable = dynamicObject.hitbox;
+						stage.dispatchEvent(collisionEvent);
+						hasPlayerEventOccured = true;
+					}					
+				}
+			}
+			
 			//	Check collisions between enemies and the statics
 			//	Check collisions between the player and staticObjects
 			for each (var enemyobj:Dynamic in dynamicObjects) {
@@ -434,6 +453,7 @@ package jamazing.jamstory.containers
 			/* Moving platform hardcoded stuff */
 
 			var count:int = 0;
+			var specY:Number = 0;
 			
 			for each(var pl:Static in staticObjects)
 			{
@@ -444,10 +464,14 @@ package jamazing.jamstory.containers
 						count++;
 						continue;
 					}
+					else if (count == 1)
+					{
+						specY = pl.y-100;
+					}
 					else if (count > 3)
 						break;
 					
-					var dynamicPl:MovingPlatform = new MovingPlatform(pl.x+900, pl.y - 100, pl.trueWidth, pl.trueHeight, [new Point(pl.x + 1050, pl.y - 200)], Math.random()+int(Math.random()*10));
+					var dynamicPl:MovingPlatform = new MovingPlatform(pl.x+900, specY, pl.trueWidth, pl.trueHeight, [new Point(pl.x + 1050, specY)], 1);
 					dynamicObjects.push(dynamicPl);
 					addChild(dynamicPl);
 					

@@ -28,7 +28,10 @@ package jamazing.jamstory.events
 		public var magnitude:Number;	//	Magnitude of the event (such as throwing strength, or collision strength)
 		public var side:int;
 		public var collidable:Collidable;
-		
+
+		/* TEMP */
+		public var xSpeed:Number = 0;
+		public var ySpeed:Number = 0;
 		//	Constructor: (String, Number, Number, Number, Number, Boolean, Boolean)
 		public function PlayerEvent(type:String,x:Number, y:Number, angle:Number = 0, magnitude:Number = 0, bubbles:Boolean = true, cancelable:Boolean = false) 
 		{

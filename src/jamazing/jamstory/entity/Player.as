@@ -109,10 +109,13 @@ package jamazing.jamstory.entity
 		//	At present handles only jump/fall
 		public function onCollide(e:PlayerEvent):void
 		{
+			x += e.xSpeed;
+			y += e.ySpeed;
+
 			var c:BoxCollidable = e.collidable as BoxCollidable;
 			if (e.side == Collidable.SIDE_TOP) {
 				ySpeed = 0;
-				y = (c.y - c.height / 2) - trueHeight/2;
+				y = (c.y - c.height / 2) - trueHeight / 2;
 				isJumping = false;
 				
 			}else if (e.side == Collidable.SIDE_LEFT) {
