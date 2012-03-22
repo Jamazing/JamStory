@@ -20,9 +20,10 @@ package jamazing.jamstory.entity
 		public var isMoving:Boolean = true;		//	True if the object is currently in motion
 		
 		//	Constructor: default
-		public function Dynamic() 
+//		public function Dynamic()
+		public function Dynamic(x:Number = 0, y:Number = 0, width:Number = 0, height:Number = 0, bitmapData:Bitmap = null) /* Constructor didn't have parameters */
 		{	
-			super();
+			super(x,y,width,height,bitmapData);
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}

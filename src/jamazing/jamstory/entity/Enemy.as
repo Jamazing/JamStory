@@ -1,5 +1,4 @@
 package jamazing.jamstory.entity 
-package jamazing.jamstory.entity 
 {
 	import flash.events.Event;
 	import flash.geom.ColorTransform;

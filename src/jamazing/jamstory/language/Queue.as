@@ -37,7 +37,7 @@ package jamazing.jamstory.language
 			if (size == 0)		// If there are no elements to return ...
 				return null;		// ... return null
 			
-			return container[size-1];	// return the last element
+			return container[0];	// return the last element
 		}
 		
 		//	Setter: Back
@@ -62,7 +62,7 @@ package jamazing.jamstory.language
 				return null;								// ... queue must be empty, so return null :-]
 			}
 			
-			container.splice(size-1);				// Remove the last element; contrary to slice, this works in-place
+			container.splice(0,1);				// Remove the last element; contrary to slice, this works in-place
 			
 			return returnValue;						// And return the value of the last element
 		}
@@ -86,6 +86,34 @@ package jamazing.jamstory.language
 		public function isEmpty():Boolean
 		{
 			return size == 0;
+		}
+		
+		//	Function: toString
+		//	Returns a string representation of the queue
+		public function toString()
+		{
+			if (isEmpty())				// If queue is empty ...
+				return "[Empty Queue]";		// ... return empty queue message.
+			
+			var returnValue:String = new String();								// This variable will hold the entire representation					
+			
+			var elementRepresentation:String = null;							// This variable will hold the string representations of seperate contents
+						
+			for (var containerIterator:int = 0; containerIterator != container.length; containerIterator++)	// Go over every element in the queue
+			{
+				try																							// Try to get it's string representation
+				{
+					elementRepresentation = new String(container[containerIterator].toString());				// ... attempt to get it
+				}
+				catch (Exception)																			// Catch if the element doesn't have one
+				{
+					elementRepresentation = "[Element " + containerIterator.toString() + "]";					// ... and indicate that it's an element
+				}
+				
+				returnValue += elementRepresentation + (containerIterator == container.length-1 ? '' : ',');// Update the return value
+			}			
+			
+			return returnValue;
 		}
 		
 	}

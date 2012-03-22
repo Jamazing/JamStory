@@ -11,14 +11,21 @@ package jamazing.test_queue
 		
 		public function QT() 
 		{
-			var qTest:Queue = new Queue(5);
+			var q:Queue = new Queue();
 			
-			for (var index:int = 0; index < 10; index++)
-				qTest.Enque(index);
+			q.Enque(1);
+			q.Enque(2);
+			q.Enque(3);
 			
-			while(qTest.size!=0)
-				trace(qTest.Deque());
+			trace(q);
 			
+			q.Deque();
+			q.Enque(1);
+			
+			trace(q);	
+			
+			q.Deque();
+			trace(q);
 			
 		}
 		

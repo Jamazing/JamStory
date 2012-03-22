@@ -23,6 +23,7 @@ package jamazing.jamstory.containers
 	import jamazing.jamstory.entity.Collidable;
 	import jamazing.jamstory.entity.Dynamic;
 	import jamazing.jamstory.entity.Jam;
+	import jamazing.jamstory.entity.MovingPlatform;
 	import jamazing.jamstory.events.JamStoryEvent;
 	import jamazing.jamstory.entity.Enemy;
 	import jamazing.jamstory.engine.Keys;
@@ -428,6 +429,35 @@ package jamazing.jamstory.containers
 				}
 				
 			}
+			
+			/* Moving platform hardcoded stuff */
+
+			var count:int = 0;
+			
+			for each(var pl:Static in staticObjects)
+			{
+				if (pl is Platform)
+				{
+					if (count==0)
+					{
+						count++;
+						continue;
+					}
+					else if (count > 3)
+						break;
+					
+					var dynamicPl:MovingPlatform = new MovingPlatform(pl.x, pl.y - 100, pl.trueWidth, pl.trueHeight);
+					dynamicPl.addHeading(pl.x + 100, pl.y - 200);
+					dynamicObjects.push(dynamicPl);
+					addChild(dynamicPl);
+					
+					count++;
+					
+					
+				}
+				
+			}
+
 		}
 		
 		//	Listener: onThrow
