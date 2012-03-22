@@ -35,6 +35,7 @@ package jamazing.jamstory.containers
 	import jamazing.jamstory.entity.Player;
 	import jamazing.jamstory.engine.Camera;
 	import jamazing.jamstory.entity.Platform;
+	import flash.geom.Point;
 	
 	//	Class: World
 	public class World extends Sprite
@@ -446,8 +447,7 @@ package jamazing.jamstory.containers
 					else if (count > 3)
 						break;
 					
-					var dynamicPl:MovingPlatform = new MovingPlatform(pl.x, pl.y - 100, pl.trueWidth, pl.trueHeight);
-					dynamicPl.addHeading(pl.x + 100, pl.y - 200);
+					var dynamicPl:MovingPlatform = new MovingPlatform(pl.x+900, pl.y - 100, pl.trueWidth, pl.trueHeight, [new Point(pl.x + 1050, pl.y - 200)], Math.random()+int(Math.random()*10));
 					dynamicObjects.push(dynamicPl);
 					addChild(dynamicPl);
 					

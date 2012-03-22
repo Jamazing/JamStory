@@ -23,19 +23,26 @@ package jamazing.jamstory.entity
 		private var platformSpeed:Number;
 		
 		// Constructor 
-		public function MovingPlatform(inputX:Number, inputY:Number, inputWidth:Number, inputHeight:Number, inputSpeed:Number = 0.2, inputBitmapData:Bitmap=null) 
-		{
+		public function MovingPlatform(inputX:Number, inputY:Number, inputWidth:Number, inputHeight:Number, inputHeadings:Array, inputSpeed:Number = 4, inputBitmapData:Bitmap=null) 
+		{	
 			super(inputX, inputY, inputWidth, inputHeight, inputBitmapData);
-			
+
 			headings = new Queue();									// Initialize queue
+
+			for each(var heading:Point in inputHeadings)
+			{
+				headings.Enque(heading);
+			}
+
 			headings.Enque(new Point(inputX, inputY));				// Add initial point to headings
 			
-			distanceToNextHeading = 0;								// Initialize distance
 			
+//			changeDirection();
+						
 			platformSpeed = inputSpeed;
 			
-			visible = false;
-			
+			updateSpeed();
+						
 			if (stage)	onInit();
 			else	addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
@@ -43,7 +50,7 @@ package jamazing.jamstory.entity
 		//	Function: onInit
 		//	Initialisation once added to the stage
 		private function onInit(e:Event = null):void
-		{	
+		{			
 			visible = true;
 			
 			hitbox = new BoxCollidable(x, y, trueWidth, trueHeight);
@@ -51,7 +58,7 @@ package jamazing.jamstory.entity
 			graphics.beginFill(0xFF6600);
 			graphics.drawRect( -trueWidth / 2, -trueHeight / 2, trueWidth, trueHeight);
 			graphics.endFill();
-			
+					
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
 		}
@@ -68,25 +75,34 @@ package jamazing.jamstory.entity
 			headings.Enque(prevHeading);					//	Add the current heading to the back of the queue
 			
 			distanceToNextHeading = remDistanceToNextHeading	// Update the distance variable
-		}
-		
-		private function onTick(e:Event):void
-		{	
-			if (remDistanceToNextHeading<=1)					// If currentHeading has been reached...
-			{
-				changeDirection();							// ... change direction
-				// Note: try adding a return here - may induce one frame delay if needed?
-			}
 			
-			/* Using a vector equation:
+			updateSpeed();
+		}
+
+		private function onTick(e:Event):void
+		{			
+			//	Since the platform moves platformSpeed-units at a time ...
+			if (remDistanceToNextHeading<=platformSpeed)					// If there is nowhere left to go...
+			{
+				changeDirection();												// ... change direction
+			}
+
+			updateSpeed();
+		}
+
+		//	Function: updateSpeed
+		//	Updates the xSpeed and ySpeed values using a vector equation:
+			/*
 				* 	v = a + t*b, where:
 				* - a is the current location
 				* - b is the current heading (given by the vector between the current heading and the current location)
 				* - t is the platform speed
 			*/
-			
-			xSpeed = platformSpeed * (currentHeading.x - currentLocation.x)/2;
-			ySpeed = platformSpeed * (currentHeading.y - currentLocation.y)/2;
+		private function updateSpeed():void
+		{ 	
+			// Divided by remDistanceToNextHeading, because we need the unit vector
+			xSpeed = platformSpeed * (currentHeading.x - currentLocation.x) / remDistanceToNextHeading;
+			ySpeed = platformSpeed * (currentHeading.y - currentLocation.y) / remDistanceToNextHeading;			
 		}
 
 		//  Getter: remDistanceToNextHeading

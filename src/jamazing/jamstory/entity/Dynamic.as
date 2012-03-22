@@ -21,9 +21,9 @@ package jamazing.jamstory.entity
 		
 		//	Constructor: default
 //		public function Dynamic()
-		public function Dynamic(x:Number = 0, y:Number = 0, width:Number = 0, height:Number = 0, bitmapData:Bitmap = null) /* Constructor didn't have parameters */
+		public function Dynamic(inputX:Number = 0, inputY:Number = 0, inputWidth:Number = 0, inputHeight:Number = 0, inputBitmapData:Bitmap = null) /* Constructor didn't have parameters */
 		{	
-			super(x,y,width,height,bitmapData);
+			super(inputX,inputY,inputWidth,inputHeight,inputBitmapData);
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}

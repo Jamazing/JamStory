@@ -24,16 +24,18 @@ package jamazing.jamstory.entity
 		public var trueHeight:Number;
 		
 		//	Constructor: default
-		public function Static(x:Number = 0, y:Number = 0, width:Number = 0, height:Number = 0, bitmapData:Bitmap = null) 
+		public function Static(inputX:Number = 0, inputY:Number = 0, inputWidth:Number = 0, inputHeight:Number = 0, inputBitmapData:Bitmap = null)
 		{
-			this.trueWidth = width;
-			this.trueHeight = height;
-			this.x = x;
-			this.y = y;
+			trueWidth = inputWidth;
+			trueHeight = inputHeight;
+			x = inputX;
+			y = inputY;
+						
+			bitmap = inputBitmapData;
 			
-			this.bitmap = bitmapData;
-	
 			super();
+			super.x = inputX;
+			super.y = inputY;
 			
 		}
 		
