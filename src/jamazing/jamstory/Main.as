@@ -25,10 +25,9 @@ package jamazing.jamstory
 	//	Class: Main
 	public class Main extends Sprite 
 	{
-		
 		private var background:Layer;	//	Background container
-		private var world:World;			//	World container
-		private var overlay:Overlay;		//	UI Overlay container
+		private var world:World;		//	World container
+		private var overlay:Overlay;	//	UI Overlay container
 		
 		private var tickCount:int;
 		
@@ -44,7 +43,7 @@ package jamazing.jamstory
 		private function onInit(e:Event = null):void 
 		{	
 			background = new Layer(-0.3);
-			world = new World();
+			world = new World(levels[0]);	//	Load the specified array index level
 			overlay = new Overlay();
 			
 			var keys:Keys = new Keys(stage);	//	Initialise the static Keys Utility
@@ -56,8 +55,6 @@ package jamazing.jamstory
 			this.graphics.beginFill(0x0066FF);
 			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			this.graphics.endFill();
-			
-			
 			
 			//	Setup the background layer
 			addChild(background);

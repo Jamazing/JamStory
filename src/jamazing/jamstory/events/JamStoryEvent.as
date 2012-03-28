@@ -16,7 +16,8 @@ package jamazing.jamstory.events
 		public static const TICK_MAIN:String = "TICK_MAIN";				//	Main game lisenters that move objects etc during the game
 		public static const TICK_PAUSE:String = "TICK_PAUSE";			//	Things that work during pause menus
 		public static const CAMERA_POSITION:String = "CAMERA_POSITION";	//	Update of the camera positon
-		
+		public static const LEVEL_START:String = "LEVEL_START";			//	Signals that the level has been started
+		public static const LEVEL_END:String = "LEVEL_END";				//	Called when the player reaches the level end
 		public var tickCount:int;	//	Tick from the start of the program, that the event was called on
 		public var x:Number;
 		public var y:Number;

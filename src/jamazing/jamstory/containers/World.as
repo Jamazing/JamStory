@@ -40,7 +40,8 @@ package jamazing.jamstory.containers
 	//	Class: World
 	public class World extends Sprite
 	{
-		private const MAX_JAM:int = 5;			//	Determines the jam limit
+		private var levelData:Class;		//	The levelData class that will be loaded
+		private const MAX_JAM:int = 5;		//	Determines the jam limit
 		
 		private	var collisionEvent:PlayerEvent = null;	//	Holds the last PlayerEvent thrown	
 
@@ -57,15 +58,16 @@ package jamazing.jamstory.containers
 		//	Controls for the player colour
 		public var selectedJam:int;			//	0 - sticky, 1 - slippy, 2 - bouncy
 		public static const colours:Array = new Array(
-											new ColorTransform(1,1,1,1,	0,0,0),
-											new ColorTransform(0.8,0.8,0.8,1,	70,	100, 0),
-											new ColorTransform(1,1,1,1,	0,	0,	100)
+												new ColorTransform(1,1,1,1,	0,0,0),
+												new ColorTransform(0.8,0.8,0.8,1,	70,	100, 0),
+												new ColorTransform(1,1,1,1,	0,	0,	100)
 											);
 											//	Array of colour transforms for jam and player colour
 		
 		// Constructor: default
-		public function World() 
+		public function World(levelData:Class) 
 		{
+			this.levelData = levelData;
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
 		}
@@ -377,7 +379,7 @@ package jamazing.jamstory.containers
 		{
 			//	Load the XML as a byte array; to pass it through flash
 			//		XML data -> ByteArray -> String -> XML Object
-			var bytes:ByteArray = (new Resource.LEVEL()) as ByteArray;
+			var bytes:ByteArray = (new levelData() ) as ByteArray;
 			var s:String = bytes.readUTFBytes( bytes.length);
 			var xml:XML = new XML(s);
 			

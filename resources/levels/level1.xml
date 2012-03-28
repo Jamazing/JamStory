@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<info>
+		<name></name>
+		<id></id>
+	</info>
+	<art>
+	</art>
+	
+	<level>
+		<info>
+			<width>2400</width>
+			<height>600</height>
+			<playerstart>200</playerstart>
+		</info>
+		
+		<!--Static Objects such as platforms-->
+		<statics>
+			
+			<!--Screen Base for running on-->
+			<obj>
+				<x>1200</x>
+				<y>-100</y>
+				<colour>0xFF0000</colour>
+				<width>5000</width>
+				<height>300</height>
+			</obj>
+			
+			<!--Platforms for jumping on-->
+			<obj>
+				<x>250</x>
+				<y>100</y>
+				<colour>0xFFFF00</colour>
+				<width>150</width>
+				<height>70</height>
+			</obj>
+			
+			<obj>
+				<x>425</x>
+				<y>120</y>
+				<colour>0xFF00FF</colour>
+				<width>100</width>
+				<height>80</height>
+			</obj>
+			
+			<obj>
+				<x>600</x>
+				<y>180</y>
+				<colour>0xFF0000</colour>
+				<width>100</width>
+				<height>20</height>
+			</obj>
+			
+			<!--Columns for jumping along-->
+			<obj>
+				<x>750</x>
+				<y>100</y>
+				<colour>0xFF0000</colour>
+				<width>150</width>
+				<height>200</height>
+			</obj>
+			
+			<obj>
+				<x>900</x>
+				<y>150</y>
+				<colour>0xFF0000</colour>
+				<width>75</width>
+				<height>250</height>
+			</obj>
+			
+		</statics>
+		
+	</level>
+	
+	
+</data>

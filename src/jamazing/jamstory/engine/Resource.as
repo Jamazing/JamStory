@@ -20,46 +20,59 @@ package jamazing.jamstory.engine
 		
 		//	The main platform graphic - TEMPORARY
 		[Embed(source = "../../../../resources/platform.png")]
-		public static var IMAGE_PLATFORM:Class;
+		public static const IMAGE_PLATFORM:Class;
 				
 		
 		//	The player's character image.
 		[Embed(source = "../../../../resources/jamjar.png")]
-		public static var CHARACTER_IMAGE:Class;
+		public static const CHARACTER_IMAGE:Class;
 		
 		//	The main static background image.
 		[Embed(source = "../../../../resources/kitchen.jpg")]
-		public static var BACKGROUND_IMAGE:Class;
+		public static const BACKGROUND_IMAGE:Class;
 		
 		
 		//	The level data as an XML
 		//		Note: The mimeType fakes an octet stream as flash will try to compile the embedded XML file otherwise.
-		[Embed(source="../../../../resources/level.xml" , mimeType="application/octet-stream")]
-		public static var LEVEL:Class
+		[Embed(source="../../../../resources/levels/level0.xml" , mimeType="application/octet-stream")]
+		private static const LEVEL0:Class
+		
+		[Embed(source="../../../../resources/levels/level1.xml" , mimeType="application/octet-stream")]
+		private static const LEVEL1:Class
+		
+		[Embed(source="../../../../resources/levels/level2.xml" , mimeType="application/octet-stream")]
+		private static const LEVEL2:Class
+		
+		public static const LEVELS:Array = new Array(
+										Resource.LEVEL0,
+										Resource.LEVEL1,
+										Resource.LEVEL2
+										);
+		
 		
 		//	The main Background music
 		[Embed(source = "../../../../resources/bongo.mp3")]
-		public static var SOUND_BGMUSIC:Class;
+		public static const SOUND_BGMUSIC:Class;
 		
 		//	The jumping noise
 		[Embed(source = "../../../../resources/jump.mp3")]
-		public static var SOUND_JUMP:Class;
+		public static const SOUND_JUMP:Class;
 		
 		//Jam being thrown
 		[Embed(source = "../../../../resources/JamThrowcopy.png")]
-		public static var JAM_THROW:Class;
+		public static const JAM_THROW:Class;
 		
 		//Jam Hitting the ground
 		[Embed(source = "../../../../resources/JamHit#.png")]
-		public static var JAM_HIT:Class;
+		public static const JAM_HIT:Class;
 		
 		//Jam splat
 		[Embed(source="../../../../resources/JamSplat.png")]
-		public static var JAM_SPLAT:Class;
+		public static const JAM_SPLAT:Class;
 		
 		//Powerup
 		[Embed(source = "../../../../resources/powerup.png")]
-		public static var GENERIC_POWERUP:Class;
+		public static const GENERIC_POWERUP:Class;
 	}
 
 }
