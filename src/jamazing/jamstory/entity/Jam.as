@@ -33,7 +33,6 @@ package jamazing.jamstory.entity
 		public var type:int;
 		public var collisions:int;
 		public var collisionsMax:int;
-		public var isAlive:Boolean;
 		
 		
 		//	Constructor: default

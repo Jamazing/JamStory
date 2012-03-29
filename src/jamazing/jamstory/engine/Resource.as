@@ -19,16 +19,16 @@ package jamazing.jamstory.engine
 		}
 		
 		//	The main platform graphic - TEMPORARY
-		[Embed(source = "../../../../resources/platform.png")]
+		[Embed(source = "../../../../resources/gfx/platform.png")]
 		public static const IMAGE_PLATFORM:Class;
 				
 		
 		//	The player's character image.
-		[Embed(source = "../../../../resources/jamjar.png")]
+		[Embed(source = "../../../../resources/gfx/jamjar.png")]
 		public static const CHARACTER_IMAGE:Class;
 		
 		//	The main static background image.
-		[Embed(source = "../../../../resources/kitchen.jpg")]
+		[Embed(source = "../../../../resources/gfx/kitchen.jpg")]
 		public static const BACKGROUND_IMAGE:Class;
 		
 		
@@ -51,27 +51,40 @@ package jamazing.jamstory.engine
 		
 		
 		//	The main Background music
-		[Embed(source = "../../../../resources/bongo.mp3")]
+		[Embed(source = "../../../../resources/audio/bongo.mp3")]
 		public static const SOUND_BGMUSIC:Class;
 		
 		//	The jumping noise
-		[Embed(source = "../../../../resources/jump.mp3")]
+		[Embed(source = "../../../../resources/audio/jump.mp3")]
 		public static const SOUND_JUMP:Class;
 		
+		[Embed(source = "../../../../resources/audio/death.mp3")]
+		public static const SOUND_DEATH:Class;
+		
+		[Embed(source = "../../../../resources/audio/enemy_jammed.mp3")]
+		public static const SOUND_JAMMED:Class;
+		
+		[Embed(source = "../../../../resources/audio/throw.mp3")]
+		public static const SOUND_THROW:Class;
+		
+		[Embed(source = "../../../../resources/audio/water_splash.mp3")]
+		public static const SOUND_SPLASH:Class;
+		
+		
 		//Jam being thrown
-		[Embed(source = "../../../../resources/JamThrowcopy.png")]
+		[Embed(source = "../../../../resources/gfx/JamThrowcopy.png")]
 		public static const JAM_THROW:Class;
 		
 		//Jam Hitting the ground
-		[Embed(source = "../../../../resources/JamHit#.png")]
+		[Embed(source = "../../../../resources/gfx/JamHit.png")]
 		public static const JAM_HIT:Class;
 		
 		//Jam splat
-		[Embed(source="../../../../resources/JamSplat.png")]
+		[Embed(source="../../../../resources/gfx/JamSplat.png")]
 		public static const JAM_SPLAT:Class;
 		
 		//Powerup
-		[Embed(source = "../../../../resources/powerup.png")]
+		[Embed(source = "../../../../resources/gfx/powerup.png")]
 		public static const GENERIC_POWERUP:Class;
 	}
 

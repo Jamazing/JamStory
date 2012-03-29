@@ -16,6 +16,7 @@ package jamazing.jamstory.entity
 	import flash.media.Sound;
 	import flash.media.SoundTransform;
 	import jamazing.jamstory.events.JamStoryEvent;
+	import jamazing.jamstory.events.SoundEvent;
 	
 	import jamazing.jamstory.engine.Keys;
 	import jamazing.jamstory.engine.Resource;
@@ -139,15 +140,20 @@ package jamazing.jamstory.entity
 		private function onDie(e:PlayerEvent):void
 		{
 			kill();
+			die();
 		}
 		
 		//	Function: die
 		//	Kills the player as an object; killing all sub objects
 		override protected function die():void
 		{
-			isAlive = false;
-			bitmap.visible = false;
-			reticule.kill();
+			if (isAlive){
+				isAlive = false;
+				bitmap.visible = false;
+				reticule.kill();
+				var emitter:Dynamic = new Dynamic(this.x, this.y);
+				stage.dispatchEvent(new SoundEvent(SoundEvent.PLAY, new Resource.SOUND_DEATH(), emitter, 1));
+			}
 		}
 		
 		//	Temporary respawning
@@ -235,6 +241,9 @@ package jamazing.jamstory.entity
 			if (Keys.isDown(Keys.W)) {
 				if (!isStuck) {
 					isSlippy = false;
+					if (!isJumping) 
+						stage.dispatchEvent(new SoundEvent(SoundEvent.PLAY, new Resource.SOUND_JUMP, this,1,0.5));
+					
 					jump();
 				}
 			}

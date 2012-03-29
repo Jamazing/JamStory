@@ -12,6 +12,7 @@ package jamazing.jamstory.containers
 	import flash.events.KeyboardEvent;
 	import flash.geom.ColorTransform;
 	import flash.net.DynamicPropertyOutput;
+	import flash.net.Responder;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.display.Sprite;
@@ -31,6 +32,7 @@ package jamazing.jamstory.containers
 	import jamazing.jamstory.engine.Resource;
 	import jamazing.jamstory.entity.Static;
 	import jamazing.jamstory.entity.Throwable;
+	import jamazing.jamstory.events.SoundEvent;
 	import jamazing.jamstory.events.WorldEvent;
 	import jamazing.jamstory.events.PlayerEvent;
 	import jamazing.jamstory.entity.Player;
@@ -56,6 +58,7 @@ package jamazing.jamstory.containers
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
 		public var isAlive:Boolean;
+		public var soundControls:Array;
 		
 		//	Controls for the player colour
 		public var selectedJam:int;			//	0 - sticky, 1 - slippy, 2 - bouncy
@@ -85,7 +88,7 @@ package jamazing.jamstory.containers
 			staticObjects = new Array();
 			dynamicObjects = new Array();
 			entities = new Array();
-			player = new Player;
+			player = new Player();
 			
 			loadLevel();
 			
@@ -102,6 +105,14 @@ package jamazing.jamstory.containers
 			player.bitmap.bitmapData = bmpData;
 			
 			Camera.setFocus(player);
+			
+			//	Add the music and play it to start (does not loop) - attached to the player
+			///THIS ONLY HAS GRAPHICS AS AN EXAMPLE
+			var emitter:Dynamic = new Dynamic(1000, -85);
+			emitter.graphics.beginFill(0x0066FF);
+			emitter.graphics.drawCircle(1000, -85, 30);
+			emitter.graphics.endFill();
+			addChild(emitter);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
@@ -368,10 +379,6 @@ package jamazing.jamstory.containers
 				}				
 			}
 			
-			if (!hasPlayerEventOccured)
-				if (collisionEvent!=null && !collisionEvent.HasNoMagnitude)
-					stage.dispatchEvent(new PlayerEvent(PlayerEvent.NOCOLLIDE, collisionEvent.x, collisionEvent.y, 0, player.PlayerSpeed));
-			
 			//	Check collisions between each dynamic object (non-player) and each static object
 			for each (var staticObject:Static in staticObjects) {
 				if (staticObject as Platform != null)
@@ -521,6 +528,8 @@ package jamazing.jamstory.containers
 			//calculate position for the new shape
 			jam.x = e.x+10;
 			jam.y = e.y-20;
+			
+			stage.dispatchEvent(new SoundEvent(SoundEvent.PLAY, new Resource.SOUND_THROW(), jam, 1));
 			
 			//	Add to the display list
 			addChild(jam);

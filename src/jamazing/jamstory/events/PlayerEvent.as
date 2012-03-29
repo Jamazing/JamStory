@@ -17,7 +17,7 @@ package jamazing.jamstory.events
 	{
 		public static const THROWABLE_COLLISION:String = "THROWABLE_COLLISION";	//	When a throwable object collides with something (likely the ground)
 		public static const COLLIDE:String = "COLLISION";						//	When a player collides with something
-		public static const NOCOLLIDE:String = "NO_COLLISION";					//	When a player falls off a ledge
+		//public static const NOCOLLIDE:String = "NO_COLLISION";					//	When a player falls off a ledge
 		public static const PLAYER_DIE:String = "PLAYER_DIE";
 		public static const JAM:String = "JAM";									//	When a player is touching jam;
 		public static const THROW:String = "THROW";								//	When a player throws a new jam

@@ -8,7 +8,9 @@
 package jamazing.jamstory.entity 
 {
 	import flash.events.Event;
+	import jamazing.jamstory.engine.Resource;
 	import jamazing.jamstory.events.JamStoryEvent;
+	import jamazing.jamstory.events.SoundEvent;
 
 	//	Class: Living
 	public class Living extends Dynamic
@@ -20,8 +22,6 @@ package jamazing.jamstory.entity
 		public var canWalk:Boolean;		//	True if it is able to use the move functionality
 		public var canFly:Boolean;		//	True if it is able to use the fly functionality
 		public var canJump:Boolean;		//	True if it is able to use the jump functionality
-		
-		public var isAlive:Boolean;		//	True if it is still alive
 		
 		public var jumpHeight:Number;
 		public var moveSpeed:Number;
@@ -131,6 +131,9 @@ package jamazing.jamstory.entity
 		
 		public function onSticky(side:int, jam:Jam):void
 		{
+			if (!isStuck)
+				stage.dispatchEvent(new SoundEvent(SoundEvent.PLAY, new Resource.SOUND_JAMMED, jam));
+				
 			var c:Collidable = jam.hitbox;
 			isStuck = true;
 			ySpeed = 0;
@@ -138,10 +141,15 @@ package jamazing.jamstory.entity
 			y = c.y - trueHeight / 2;
 			x -= (x - c.x) / 10;
 			stickyJam = jam;
+			
+			
+				
 		}
 		
 		public function onBouncey(side:int, jam:Jam):void
 		{
+			stage.dispatchEvent(new SoundEvent(SoundEvent.PLAY, new Resource.SOUND_JAMMED, jam));
+				
 			var c:Collidable = jam.hitbox;
 			
 			if (side == Collidable.SIDE_TOP) {
@@ -169,6 +177,9 @@ package jamazing.jamstory.entity
 		
 		public function onSlippy(side:int, jam:Jam):void
 		{
+			if (!isSlippy)
+				stage.dispatchEvent(new SoundEvent(SoundEvent.PLAY, new Resource.SOUND_JAMMED, jam));
+				
 			var c:Collidable = jam.hitbox;
 			
 			if (!isSlippy) {

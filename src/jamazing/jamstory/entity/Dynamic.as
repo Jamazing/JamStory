@@ -17,12 +17,14 @@ package jamazing.jamstory.entity
 		public var ySpeed:Number;
 		public var xAccel:Number;			//	Amount that the xSpeed changes each frame
 		public var yAccel:Number;
-		public var isMoving:Boolean = true;		//	True if the object is currently in motion
+		public var isMoving:Boolean = true;	//	True if the object is currently in motion
+		public var isAlive:Boolean;			//	True if it is still alive
 		
 		//	Constructor: default
 		//	public function Dynamic()
 		public function Dynamic(inputX:Number = 0, inputY:Number = 0, inputWidth:Number = 0, inputHeight:Number = 0, inputBitmapData:Bitmap = null) /* Constructor didn't have parameters */
 		{	
+			isAlive = true;
 			super(inputX,inputY,inputWidth,inputHeight,inputBitmapData);
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);

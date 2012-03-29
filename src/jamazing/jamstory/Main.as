@@ -11,8 +11,13 @@ package jamazing.jamstory
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
 	import jamazing.jamstory.engine.Camera;
 	import jamazing.jamstory.engine.Resource;
+	import jamazing.jamstory.engine.SoundManager;
+	import jamazing.jamstory.entity.Dynamic;
+	import jamazing.jamstory.events.SoundEvent;
 	
 	import jamazing.jamstory.containers.Layer;
 	import jamazing.jamstory.events.JamStoryEvent;
@@ -25,12 +30,16 @@ package jamazing.jamstory
 	//	Class: Main
 	public class Main extends Sprite 
 	{
+		trace("program start");
+		
 		private var background:Layer;	//	Background container
 		//private var world:World;		//	World container
 		private var game:Game;
 		private var overlay:Overlay;	//	UI Overlay container
 		
 		private var tickCount:int;
+		
+		private var soundManager:SoundManager;
 		
 		//	Constructor: default
 		public function Main():void 
@@ -68,13 +77,14 @@ package jamazing.jamstory
 			//addChild(world);
 			addChild(overlay);
 			
+			soundManager = new SoundManager(stage);
 			
-			//	Add the music and play it to start (does not loop)
-			var music:Sound = new Resource.SOUND_BGMUSIC();
-			music.play();
+			var emitter:Dynamic = new Dynamic(1000, -85);
+			stage.dispatchEvent(new SoundEvent(SoundEvent.PLAY, new Resource.SOUND_BGMUSIC(), emitter,1.5));
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
+
 		}
 		
 		//	Function: onTick
