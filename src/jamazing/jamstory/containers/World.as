@@ -23,6 +23,7 @@ package jamazing.jamstory.containers
 	import jamazing.jamstory.entity.Collidable;
 	import jamazing.jamstory.entity.Dynamic;
 	import jamazing.jamstory.entity.Jam;
+	import jamazing.jamstory.entity.LevelEnd;
 	import jamazing.jamstory.entity.MovingPlatform;
 	import jamazing.jamstory.events.JamStoryEvent;
 	import jamazing.jamstory.entity.Enemy;
@@ -54,6 +55,7 @@ package jamazing.jamstory.containers
 		public var player:Player;			//	The player object
 		public var length:Number;			//	x value for the end of the level
 		public var ceiling:Number;			//	y value for the ceiling of the level
+		public var isAlive:Boolean;
 		
 		//	Controls for the player colour
 		public var selectedJam:int;			//	0 - sticky, 1 - slippy, 2 - bouncy
@@ -67,6 +69,7 @@ package jamazing.jamstory.containers
 		// Constructor: default
 		public function World(levelData:Class) 
 		{
+			isAlive = true;
 			this.levelData = levelData;
 			if (stage) onInit();
 			else addEventListener(Event.ADDED_TO_STAGE, onInit);
@@ -97,6 +100,8 @@ package jamazing.jamstory.containers
 			var bmpData:BitmapData = bmp.bitmapData;
 			bmpData.colorTransform(bmpData.rect, colours[selectedJam]);
 			player.bitmap.bitmapData = bmpData;
+			
+			Camera.setFocus(player);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onInit);
 			addEventListener(Event.ENTER_FRAME, onTick);
@@ -129,10 +134,23 @@ package jamazing.jamstory.containers
 			
 		}
 		
+		public function kill():void
+		{
+			isAlive = false;
+			
+			removeEventListener(Event.ENTER_FRAME, onTick);
+			removeEventListener(PlayerEvent.THROW, onThrow);
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, onDown);
+			stage.removeEventListener(JamStoryEvent.CAMERA_POSITION, onCamera);
+		
+			player.kill();
+		}
+		
 		//	Listener: onTick
 		//	Listens for the new frame, and sets the x and y to keep the player in the center of the stage
 		public function onTick(e:Event):void
 		{
+			if (!isAlive) return;
 			//	Ensure the player stays in bounds
 			if (player.x < 0) {
 				player.x = 0;
@@ -145,8 +163,6 @@ package jamazing.jamstory.containers
 			
 			//	Test jam limits
 			testJam();
-			
-			Camera.setFocus(player);
 		}
 		
 		//	Function: testJam
@@ -233,9 +249,15 @@ package jamazing.jamstory.containers
 				}
 				else if (staticObject as Collectable != null)	// Or if the static object is a collectable
 				{
+					
+					
 					if (staticObject.isHit(player.hitbox))
 					{
-						staticObject.visible = false;
+						if (staticObject is LevelEnd) {
+							(staticObject as LevelEnd).onCollide();
+						}else{
+							staticObject.visible = false;
+						}
 					}
 				}
 			}
@@ -246,7 +268,7 @@ package jamazing.jamstory.containers
 				{
 					var side:int = dynamicObject.isHit(player.hitbox);
 					if (side != Collidable.SIDE_NONE) {
-						collisionEvent = new PlayerEvent(PlayerEvent.COLLIDE, dynamicObject.x, dynamicObject.y - dynamicObject.height / 2, dynamicObject.xSpeed, player.PlayerSpeed);
+						collisionEvent = new PlayerEvent(PlayerEvent.COLLIDE, dynamicObject.x, dynamicObject.y - dynamicObject.height / 2);
 						
 						collisionEvent.xSpeed = dynamicObject.xSpeed;
 						collisionEvent.ySpeed = dynamicObject.ySpeed;
@@ -420,6 +442,10 @@ package jamazing.jamstory.containers
 			player.x = 50;
 			player.y = -85;
 			
+			
+			var levelend:LevelEnd =  new LevelEnd(length - 100, -85);
+			staticObjects.push(levelend);
+			addChild(levelend);
 			
 			// Create a powerup:
 			var CollectableTest:Collectable = new Collectable();

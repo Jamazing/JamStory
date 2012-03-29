@@ -102,6 +102,11 @@ package jamazing.jamstory.entity
 		//	Kills this living entity, and ensures all behaviour is stopped
 		public function kill():void
 		{
+			die();
+		}
+		
+		protected function die():void
+		{
 			isAlive = false;
 			visible = false;
 		}

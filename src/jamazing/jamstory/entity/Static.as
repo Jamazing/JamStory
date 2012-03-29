@@ -34,9 +34,6 @@ package jamazing.jamstory.entity
 			bitmap = inputBitmapData;
 			
 			super();
-			super.x = inputX;
-			super.y = inputY;
-			
 		}
 		
 		//	Function: isHit

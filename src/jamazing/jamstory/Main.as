@@ -26,7 +26,8 @@ package jamazing.jamstory
 	public class Main extends Sprite 
 	{
 		private var background:Layer;	//	Background container
-		private var world:World;		//	World container
+		//private var world:World;		//	World container
+		private var game:Game;
 		private var overlay:Overlay;	//	UI Overlay container
 		
 		private var tickCount:int;
@@ -42,12 +43,14 @@ package jamazing.jamstory
 		//	Initialises the game once the stage is initialised
 		private function onInit(e:Event = null):void 
 		{	
+			var focusCam:Camera = new Camera(stage);
 			background = new Layer(-0.3);
-			world = new World(levels[0]);	//	Load the specified array index level
+			//world = new World(Resource.LEVELS[0]);	//	Load the specified array index level
 			overlay = new Overlay();
+			game = new Game(stage);
 			
 			var keys:Keys = new Keys(stage);	//	Initialise the static Keys Utility
-			var focusCam:Camera = new Camera(stage);
+			
 	
 			tickCount = 0;
 			
@@ -62,7 +65,7 @@ package jamazing.jamstory
 			art.alpha = 0.6;
 			background.addArt(0, 0, stage.stageWidth*1.5, stage.stageHeight*1.2, art);
 			
-			addChild(world);
+			//addChild(world);
 			addChild(overlay);
 			
 			

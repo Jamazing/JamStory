@@ -4,18 +4,15 @@
 //	MovingPlatform
 //		Represents a moving platform
 
-/*
- * At present is just a placeholder
- */
-
-
 package jamazing.jamstory.entity 
 {
 	import flash.display.Bitmap;
+	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import jamazing.jamstory.language.Queue;
 	import jamazing.jamstory.events.JamStoryEvent;
+	
 	public class MovingPlatform extends Dynamic 
 	{
 		private var headings:Queue;
@@ -35,11 +32,9 @@ package jamazing.jamstory.entity
 			}
 
 			headings.Enque(new Point(inputX, inputY));				// Add initial point to headings
-			
-			
-//			changeDirection();
 						
 			platformSpeed = inputSpeed;
+			isMoving = true;
 			
 			updateSpeed();
 						
@@ -80,7 +75,7 @@ package jamazing.jamstory.entity
 		}
 
 		private function onTick(e:Event):void
-		{			
+		{	
 			//	Since the platform moves platformSpeed-units at a time ...
 			if (remDistanceToNextHeading<=platformSpeed)					// If there is nowhere left to go...
 			{

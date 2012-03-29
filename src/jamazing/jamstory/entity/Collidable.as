@@ -78,5 +78,12 @@ package jamazing.jamstory.entity
 			return SIDE_NONE;
 		}
 		
+		public function set xPos(x:Number):void {
+			this.x  = x;
+		}
+		
+		public function set yPos(y:Number):void {
+			this.y = y;
+		}
 	}
 }

@@ -20,7 +20,7 @@ package jamazing.jamstory.entity
 		public var isMoving:Boolean = true;		//	True if the object is currently in motion
 		
 		//	Constructor: default
-//		public function Dynamic()
+		//	public function Dynamic()
 		public function Dynamic(inputX:Number = 0, inputY:Number = 0, inputWidth:Number = 0, inputHeight:Number = 0, inputBitmapData:Bitmap = null) /* Constructor didn't have parameters */
 		{	
 			super(inputX,inputY,inputWidth,inputHeight,inputBitmapData);
@@ -49,9 +49,9 @@ package jamazing.jamstory.entity
 			}
 			
 			//	Update the collision box position
-			if(hitbox){
-				hitbox.x = x;
-				hitbox.y = y;
+			if (hitbox) {
+				hitbox.xPos = x;
+				hitbox.yPos = y;
 			}
 		}
 		

@@ -132,20 +132,18 @@ package jamazing.jamstory.entity
 				x = (c.x + c.width / 2) + trueWidth / 2;
 				isSlippy = false;
 			}
-			
-			
 		}		
 		
 		//	Listener: onDie
 		//	Listens for the player being killed 
 		private function onDie(e:PlayerEvent):void
 		{
-			die();
+			kill();
 		}
 		
 		//	Function: die
 		//	Kills the player as an object; killing all sub objects
-		private function die():void
+		override protected function die():void
 		{
 			isAlive = false;
 			bitmap.visible = false;
